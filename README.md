@@ -215,7 +215,7 @@ Built by a project manager exploring the intersection of AI and product delivery
 - **Sessions:** ~8 working sessions
 - **Methodology:** PMI-aligned, Agile delivery
 
-**Connect:** [LinkedIn](#) | [GitHub](#)
+**Connect:** [LinkedIn](www.linkedin.com/in/chintan-shelat-pmp®-3704b92a) | [GitHub](https://github.com/chintan-dshel)
 
 ---
 
