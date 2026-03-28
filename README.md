@@ -3,7 +3,7 @@
 > A fully functional fitness tracking web app built entirely through human-AI collaboration, applying professional project management methodology from discovery to delivery.
 
 [![Status](https://img.shields.io/badge/status-active-2ed573)](#)
-[![Version](https://img.shields.io/badge/version-1.0-f5c842)](#)
+[![Version](https://img.shields.io/badge/version-1.1-f5c842)](#)
 [![Built With](https://img.shields.io/badge/built%20with-Claude%20AI-b39ddb)](#)
 [![License](https://img.shields.io/badge/license-MIT-4fc3f7)](#)
 
@@ -175,7 +175,8 @@ Zero budget + no coding background + personal use = the simplest architecture th
 | Version | Focus | Status |
 |---|---|---|
 | v1.0 | Core app — Train, Log, Analytics, RPG | ✅ Released |
-| v1.1 | GitHub Pages deployment, README, docs polish | 🔄 In Progress |
+| v1.1 | Stability & Honesty — onboarding, export, set editing, stall detection, honest copy | ✅ Released |
+| v1.2 | Radar scoring accuracy, mobile UX polish | 🔄 In Progress |
 | v2.0 | Nutrition module — TDEE, macros, meal logging | 📋 Planned |
 | v2.1 | Export & backup — download data from within app | 📋 Planned |
 | v3.0 | Claude API integration — live AI coaching | 🔭 Future |
@@ -215,7 +216,7 @@ Built by a project manager exploring the intersection of AI and product delivery
 - **Sessions:** ~8 working sessions
 - **Methodology:** PMI-aligned, Agile delivery
 
-**Connect:** [LinkedIn](www.linkedin.com/in/chintan-shelat-pmp®-3704b92a) | [GitHub](https://github.com/chintan-dshel)
+**Connect:** [LinkedIn](#) | [GitHub](#)
 
 ---
 
