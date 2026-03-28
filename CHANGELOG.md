@@ -7,13 +7,59 @@ Versioning follows [Semantic Versioning](https://semver.org/).
 
 ---
 
-## [Unreleased] — v1.1
+## [Unreleased] — v1.2
 
 ### Planned
-- GitHub Pages deployment — live URL accessible from any device
-- Docs folder with full PM artefact suite
-- Export / backup feature — download your data as JSON from within the app
-- Pull-up progression tracker on dashboard
+- Radar scoring accuracy (rolling averages, optimal range, insufficient data states)
+- Mobile UX improvements (larger inputs, loading states, cached renders)
+- Export history view in Log tab
+
+---
+
+## [1.1.0] — 2026-03-28 — Stability & Honesty Release
+
+### The Story
+v1.1 was driven entirely by a structured self-critical review of v1.0 — asking the hard question: *what's actually wrong with this?* Seven issues were identified across data architecture, AI positioning, UX, and coaching accuracy. Five are fixed in this release. The remaining two (radar scoring accuracy and mobile UX polish) carry forward to v1.2.
+
+This release also represents a deliberate PM decision: fix known problems before adding new features. Technical debt by choice is still technical debt.
+
+### Fixed — Honest AI Positioning
+- Removed "AI-powered" from app title and all in-app copy
+- Analytics subtitle updated from "Planned vs actual" to "Smart coaching engine"
+- Coaching description updated to accurately reflect rule-based engine
+- README updated to distinguish between AI-assisted *development* vs runtime behaviour
+- v3.0 Claude API integration noted as the point where "AI coaching" becomes accurate
+
+### Fixed — Onboarding & Demo Data
+- First-time users now see a full-screen choice on first load
+- "Explore demo" — loads 3-month sample dataset to explore all features
+- "Start my journey" — clears demo data, initialises a blank profile
+- Badges reset on fresh start — users earn them through their own activity
+- Returning users go straight to their dashboard, no disruption
+- Data storage warning shown on first load: data lives on this device
+
+### Fixed — Set Editing
+- Completed sets can now be unchecked by tapping the checkmark
+- Unlocking a set re-enables both weight and rep inputs and focuses weight field
+- Toast confirmation shown when a set is unlocked for editing
+- Completed set inputs visually dimmed (opacity 45%) so locked state is clear at a glance
+
+### Fixed — Export & Import (Data Backup)
+- Export button in Log tab → Data & Backup section
+- Downloads `gainr-backup-[date].json` — full data snapshot
+- Import accepts .json files, validates GAINR backup structure before restoring
+- Confirmation dialog before overwriting current data
+- Honest warning: "Your data is stored on this device. Export regularly to back up."
+
+### Fixed — Stall Detection Accuracy
+- Deload sessions now excluded from stall calculations (sessions at <75% of recent peak weight)
+- ±2.5 lb tolerance band added — one increment variance is not a stall
+- Rep ceiling context added — reps at programmed max means SDP is working, not a plateau
+- Rep max looked up from program definition per exercise for accurate context
+
+### Carried Forward to v1.2
+- Radar scoring accuracy (consistency rolling average, volume vs optimal range, recovery insufficient data state, balance by set count)
+- Mobile UX improvements (larger input targets, loading states, cached analytics renders)
 
 ---
 
