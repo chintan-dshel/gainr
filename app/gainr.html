@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="theme-color" content="#0a0a0f">
-<title>GAINR — AI Fitness Tracker</title>
+<title>GAINR — Personal Fitness Tracker</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 :root {
@@ -105,6 +105,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--fb);min-height:100
 .set-input{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:8px 6px;color:var(--text);font-family:var(--fm);font-size:14px;width:100%;text-align:center;-webkit-appearance:none;appearance:none}
 .set-input:focus{outline:none;border-color:var(--gold)}
 .set-input::placeholder{color:var(--muted);font-size:12px}
+.set-input:disabled{opacity:.45;background:var(--bg2)}
 .set-check{width:30px;height:30px;border-radius:50%;border:2px solid var(--border);background:none;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .18s;flex-shrink:0}
 .set-check.done{background:var(--green);border-color:var(--green)}
 
@@ -283,6 +284,19 @@ body{background:var(--bg);color:var(--text);font-family:var(--fb);min-height:100
     </div>
     <button class="btn-primary" onclick="logMeasurements()">LOG MEASUREMENTS</button>
   </div>
+
+  <div class="section-divider">Data & backup</div>
+  <div class="log-section" style="background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:16px">
+    <div style="font-size:12px;color:var(--muted);line-height:1.6;margin-bottom:14px">⚠️ Your data is stored on this device only. Export regularly to protect against data loss from clearing your browser or switching devices.</div>
+    <div style="display:flex;gap:10px">
+      <button onclick="exportData()" style="flex:1;padding:12px;border-radius:10px;border:1px solid var(--gold);background:rgba(245,200,66,.08);color:var(--gold);font-family:var(--fb);font-size:13px;font-weight:600;cursor:pointer">⬇ Export</button>
+      <label style="flex:1;padding:12px;border-radius:10px;border:1px solid var(--border);background:var(--bg3);color:var(--muted);font-family:var(--fb);font-size:13px;font-weight:600;cursor:pointer;text-align:center">
+        ⬆ Import
+        <input type="file" accept=".json" onchange="importData(event)" style="display:none">
+      </label>
+    </div>
+    <div style="margin-top:12px;font-size:11px;color:var(--muted);text-align:center">Import will overwrite all current data</div>
+  </div>
 </div>
 
 <!-- PROGRESS -->
@@ -320,7 +334,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--fb);min-height:100
 <!-- ANALYTICS -->
 <div id="page-analytics" class="page">
   <div class="page-header">
-    <div><div class="page-title">ANALYTICS</div><div class="page-subtitle">Planned vs actual</div></div>
+    <div><div class="page-title">ANALYTICS</div><div class="page-subtitle">Smart coaching engine</div></div>
   </div>
 
   <div style="display:flex;gap:8px;margin-bottom:16px;overflow-x:auto;padding-bottom:4px" id="lift-tabs"></div>
@@ -352,7 +366,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--fb);min-height:100
   </div>
 
   <div class="section-divider">Training composition</div>
-  <div style="font-size:12px;color:var(--muted);margin-bottom:14px;line-height:1.6">Tap any axis to see what's driving that score and get specific recommendations.</div>
+  <div style="font-size:12px;color:var(--muted);margin-bottom:14px;line-height:1.6">Tap any axis to see what's driving that score and get specific actions. Scores are calculated from your real training data.</div>
   <div class="chart-wrap" style="padding:0;overflow:hidden">
     <canvas id="chart-hex" style="width:100%;display:block"></canvas>
   </div>
@@ -383,6 +397,28 @@ body{background:var(--bg);color:var(--text);font-family:var(--fb);min-height:100
 
   <div class="section-divider">Milestones</div>
   <div id="milestone-panel"></div>
+</div>
+
+<!-- ONBOARDING -->
+<div id="page-onboarding" style="position:fixed;inset:0;z-index:999;background:var(--bg1);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:32px 24px;text-align:center">
+  <div style="font-family:var(--fd);font-size:52px;letter-spacing:3px;color:var(--gold);margin-bottom:8px">GAINR</div>
+  <div style="font-size:13px;color:var(--muted);text-transform:uppercase;letter-spacing:2px;margin-bottom:48px">Personal Fitness Tracker</div>
+
+  <div style="width:100%;max-width:340px;display:flex;flex-direction:column;gap:14px">
+    <button onclick="startDemo()" style="width:100%;padding:18px;border-radius:14px;border:1px solid var(--border);background:var(--bg2);color:var(--text);font-family:var(--fb);font-size:15px;font-weight:600;cursor:pointer;text-align:left;line-height:1.4">
+      <div style="font-size:18px;margin-bottom:4px">👀  Explore demo</div>
+      <div style="font-size:12px;color:var(--muted);font-weight:400">See 3 months of sample data to explore all features</div>
+    </button>
+    <button onclick="startFresh()" style="width:100%;padding:18px;border-radius:14px;border:1px solid var(--gold);background:rgba(245,200,66,.08);color:var(--gold);font-family:var(--fb);font-size:15px;font-weight:600;cursor:pointer;text-align:left;line-height:1.4">
+      <div style="font-size:18px;margin-bottom:4px">🚀  Start my journey</div>
+      <div style="font-size:12px;opacity:.7;font-weight:400">Begin with a clean slate — your data, your progress</div>
+    </button>
+  </div>
+
+  <div style="margin-top:40px;font-size:11px;color:var(--muted);line-height:1.7;max-width:280px">
+    All data is stored on this device.<br>
+    Export regularly from Settings to back up.
+  </div>
 </div>
 
 <!-- NAV -->
@@ -584,8 +620,28 @@ function renderWorkout(){
   });
 }
 
-function togSet(ei,si){const b=document.getElementById(`c${ei}-${si}`);b.classList.toggle('done');b.innerHTML=b.classList.contains('done')?`<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>`:'';}
-
+function togSet(ei,si){
+  const b=document.getElementById(`c${ei}-${si}`);
+  const wIn=document.getElementById(`w${ei}-${si}`);
+  const rIn=document.getElementById(`r${ei}-${si}`);
+  const completing=!b.classList.contains('done');
+  b.classList.toggle('done');
+  if(completing){
+    // Lock inputs and show checkmark
+    b.innerHTML=`<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>`;
+    b.title='Tap to edit';
+    wIn.disabled=true;
+    rIn.disabled=true;
+  } else {
+    // Unlock inputs for editing
+    b.innerHTML='';
+    b.title='';
+    wIn.disabled=false;
+    rIn.disabled=false;
+    wIn.focus();
+    toast('Set unlocked — edit and re-confirm','green');
+  }
+}
 function finishWorkout(){
   const p=PROG[curDay];if(!p.exercises.length){toast('Rest day — nothing to log!');return;}
   let done=0,xp=0,prs=0;const isD=S.wt==='deload';
@@ -659,6 +715,50 @@ function logMeasurements(){
   saveS();renderDash();ids.forEach(i=>document.getElementById('l-'+i).value='');toast('📏 Measurements logged!','green');
 }
 
+// EXPORT / IMPORT
+function exportData(){
+  const data = localStorage.getItem('gainr_v1');
+  if(!data){toast('No data to export','red');return;}
+  const date = new Date().toISOString().split('T')[0];
+  const blob = new Blob([data], {type:'application/json'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `gainr-backup-${date}.json`;
+  a.click();
+  URL.revokeObjectURL(url);
+  toast('✅ Data exported — save the file somewhere safe','green');
+}
+
+function importData(event){
+  const file = event.target.files[0];
+  if(!file){return;}
+  if(!file.name.endsWith('.json')){toast('Please select a .json backup file','red');return;}
+  const reader = new FileReader();
+  reader.onload = e => {
+    try {
+      const parsed = JSON.parse(e.target.result);
+      // Validate it's a GAINR backup
+      if(!parsed.rpg || !parsed.tr || !parsed.eh){
+        toast('Invalid backup file — not a GAINR export','red');
+        return;
+      }
+      if(!confirm('This will replace all your current data with the backup. Are you sure?')){return;}
+      localStorage.setItem('gainr_v1', JSON.stringify(parsed));
+      localStorage.setItem('gainr_onboarded','true');
+      loadS();
+      renderDash();
+      renderWorkout();
+      toast('✅ Data restored successfully','green');
+    } catch(err){
+      toast('Could not read file — make sure it\'s a valid backup','red');
+    }
+  };
+  reader.readAsText(file);
+  // Reset file input so same file can be selected again if needed
+  event.target.value = '';
+}
+
 // CHARTS
 let cW=null,cWa=null;
 function renderCharts(){
@@ -705,13 +805,27 @@ const MUSCLE_GROUPS = {
 function detectStall(exName) {
   const arr = Array.isArray(S.eh[exName]) ? S.eh[exName] : [];
   if (arr.length < 3) return null;
-  const last3 = arr.slice(-3);
 
-  // Type 3: SDP ceiling — reps at max, weight hasn't increased (not a real stall)
-  // We don't flag this, SDP handles it
+  // FIX 1: Exclude deload sessions — deload intentionally drops weight, not a stall
+  const workingSessions = arr.filter(s => {
+    // A session is a deload if its weight is significantly lower than the previous working weight
+    // We use >30% drop as the deload threshold (deloads are 60% of working weight)
+    return true; // We filter contextually below using the deload flag if stored
+  });
 
-  // Type 2: Fatigue — weight dropping
-  const isDropping = last3[2].w < last3[1].w && last3[1].w <= last3[0].w;
+  // Get last 3 non-deload sessions by checking weight isn't a deload level
+  // Find the max weight in the last 6 sessions as working weight reference
+  const recent = arr.slice(-6);
+  const maxRecent = Math.max(...recent.map(s => s.w));
+  const nonDeload = arr.filter(s => s.w >= maxRecent * 0.75); // within 25% of peak = working weight
+  if (nonDeload.length < 3) return null;
+  const last3 = nonDeload.slice(-3);
+
+  // FIX 2: Tolerance band — ±2.5 lbs is one increment, not a stall
+  const TOLERANCE = 2.5;
+
+  // Type 2: Fatigue — weight genuinely dropping (beyond tolerance)
+  const isDropping = last3[2].w < (last3[1].w - TOLERANCE) && last3[1].w <= (last3[0].w + TOLERANCE);
   if (isDropping) {
     return {
       type: 'fatigue',
@@ -720,7 +834,7 @@ function detectStall(exName) {
       label: 'Fatigue accumulation detected',
       sessions: last3,
       rec: {
-        primary: 'Your weight is dropping across sessions — this is a fatigue signal, not a technique problem. Science says this pattern indicates accumulated systemic fatigue.',
+        primary: 'Your weight is dropping across sessions — this is a fatigue signal, not a technique problem. This pattern indicates accumulated systemic fatigue.',
         actions: [
           'Take a deload this week — switch the toggle to Deload Week above',
           'Prioritise 7–9 hours of sleep for the next 5 days minimum',
@@ -732,9 +846,24 @@ function detectStall(exName) {
     };
   }
 
-  // Type 1: True plateau — weight and reps flat for 3 sessions
-  const wFlat = last3.every(s => s.w === last3[0].w);
+  // FIX 3: Rep range context — if reps are climbing, SDP is working, not a plateau
+  // Only flag plateau if weight is flat AND reps are not at the top of the range
+  const wFlat = last3.every(s => Math.abs(s.w - last3[0].w) <= TOLERANCE);
   const rFlat = last3.every(s => Math.abs(s.r - last3[0].r) <= 1);
+
+  // Find this exercise's rep max from PROG to check if reps are at ceiling
+  let repMax = 12; // default
+  Object.values(PROG).forEach(day => {
+    day.exercises.forEach(ex => {
+      if (ex.name === exName) repMax = ex.rMax;
+    });
+  });
+  const repsAtCeiling = last3.every(s => s.r >= repMax);
+
+  // If reps are at ceiling and weight is flat, SDP should trigger add weight — not a plateau
+  if (wFlat && repsAtCeiling) return null;
+
+  // True plateau: weight flat, reps flat, not at rep ceiling
   if (wFlat && rFlat) {
     return {
       type: 'plateau',
@@ -743,13 +872,13 @@ function detectStall(exName) {
       label: 'Plateau detected — 3 sessions flat',
       sessions: last3,
       rec: {
-        primary: 'No improvement in 3 consecutive sessions. This is the body\'s adaptation response — it\'s become efficient at this exact stimulus. Time to change the signal.',
+        primary: 'No improvement in 3 consecutive sessions. The body has adapted to this stimulus. Time to change the signal.',
         actions: [
           'Try a tempo change: 3 seconds down, 1 second pause, 1 second up — same weight feels very different',
-          'Add a technique refinement cue: pause reps, full range of motion emphasis',
-          'Check rest periods — are you resting 2+ minutes on compound lifts?',
+          'Add a technique cue: pause reps or full range of motion emphasis',
+          'Check rest periods — 2+ minutes on compound lifts',
           'Ensure you\'re eating enough total calories to support muscle growth',
-          'If SDP says push reps — ensure you\'re genuinely pushing to near-failure on the last set'
+          'Push genuinely to near-failure on the last set — SDP only triggers when you actually hit the top of the rep range'
         ]
       }
     };
@@ -1232,8 +1361,34 @@ function generateMilestones() {
   panel.innerHTML = html || '<div style="color:var(--muted);font-size:13px;text-align:center;padding:20px">Log workouts to unlock milestone tracking.</div>';
 }
 
+// ONBOARDING
+function checkOnboarding(){
+  const onboarded = localStorage.getItem('gainr_onboarded');
+  if(!onboarded){
+    document.getElementById('page-onboarding').style.display='flex';
+  } else {
+    document.getElementById('page-onboarding').style.display='none';
+  }
+}
+
+function startDemo(){
+  localStorage.setItem('gainr_onboarded','true');
+  document.getElementById('page-onboarding').style.display='none';
+  loadS(); renderDash(); renderWorkout();
+}
+
+function startFresh(){
+  localStorage.removeItem('gainr_v1');
+  localStorage.setItem('gainr_onboarded','true');
+  S = mkState();
+  saveS();
+  document.getElementById('page-onboarding').style.display='none';
+  renderDash(); renderWorkout();
+  toast('Welcome to GAINR — let\'s get started! 💪','green');
+}
+
 // INIT
-loadS();renderDash();renderWorkout();
+loadS(); renderDash(); renderWorkout(); checkOnboarding();
 </script>
 </body>
 </html>
