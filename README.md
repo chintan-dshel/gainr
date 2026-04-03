@@ -3,7 +3,7 @@
 > A fully functional fitness tracking web app built entirely through human-AI collaboration, applying professional project management methodology from discovery to delivery.
 
 [![Status](https://img.shields.io/badge/status-active-2ed573)](#)
-[![Version](https://img.shields.io/badge/version-1.1-f5c842)](#)
+[![Version](https://img.shields.io/badge/version-2.1-f5c842)](#)
 [![Built With](https://img.shields.io/badge/built%20with-Claude%20AI-b39ddb)](#)
 [![License](https://img.shields.io/badge/license-MIT-4fc3f7)](#)
 
@@ -32,12 +32,20 @@ This repository is also a live demonstration of what modern AI-assisted project 
 - **Planned vs actual strength charts** — science-backed logarithmic progression curves
 - **Stall detection engine** — distinguishes Type 1 Plateau from Type 2 Fatigue, with different science-backed recommendations for each
 - **Grouped exercise browser** — all 29 exercises organised by muscle group with trend indicators
+- **7-axis composition radar** — Strength, Volume, Consistency, Recovery, Balance, Recomp, Nutrition
 - **Weekly volume tracker** and **recomp dual-axis chart**
 
 ### 📝 Log
 - Body weight with automatic lbs ↔ kg conversion
 - Full body measurements (7 sites)
 - Daily check-in: sleep and steps
+- **Nutrition tracking** — TDEE calculator, daily macro targets, meal logging with protein/carb/fat
+
+### 🥗 Nutrition
+- Mifflin-St Jeor TDEE calculator with 5 activity levels
+- Recomp-optimised macro targets (0.82g protein/lb)
+- Per-meal logging with daily progress bars
+- 7th axis on training composition radar
 
 ### 🎮 RPG System
 - **Recruit → Warrior → Beast → Olympian** level progression
@@ -176,8 +184,11 @@ Zero budget + no coding background + personal use = the simplest architecture th
 |---|---|---|
 | v1.0 | Core app — Train, Log, Analytics, RPG | ✅ Released |
 | v1.1 | Stability & Honesty — onboarding, export, set editing, stall detection, honest copy | ✅ Released |
-| v1.2 | Radar scoring accuracy, mobile UX polish | 🔄 In Progress |
-| v2.0 | Nutrition module — TDEE, macros, meal logging | 📋 Planned |
+| v1.2 | Radar scoring accuracy, mobile UX polish, QA pass | ✅ Released |
+| v1.3 | Remaining radar fixes, abbreviations, skeleton states | ✅ Released |
+| v2.0 | Nutrition module — TDEE, macros, meal logging, 7th radar axis | ✅ Released |
+| v2.1 | Program customisation — custom exercises, swap, Train integration | ✅ Released |
+| v3.0 | Claude API — real conversational coaching | 🔭 Future |
 | v2.1 | Export & backup — download data from within app | 📋 Planned |
 | v3.0 | Claude API integration — live AI coaching | 🔭 Future |
 
