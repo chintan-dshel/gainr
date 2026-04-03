@@ -7,12 +7,145 @@ Versioning follows [Semantic Versioning](https://semver.org/).
 
 ---
 
-## [Unreleased] — v1.2
+## [Unreleased] — v3.0
 
 ### Planned
-- Radar scoring accuracy (rolling averages, optimal range, insufficient data states)
-- Mobile UX improvements (larger inputs, loading states, cached renders)
-- Export history view in Log tab
+- Claude API integration — real conversational coaching
+- Pre-workout briefing from actual session history
+- Post-workout analysis and adaptive recommendations
+- Research on-demand with science-backed answers
+
+---
+
+## [1.3.0] — 2026-03-28 — Polish & Accuracy
+
+### Summary
+Completed all items deferred from v1.1. All four radar scoring axes fixed, mobile UX improvements shipped, and exercise name abbreviation added. v1.3 was largely pre-built across previous sessions — this release formally documents and ships it.
+
+### Fixed — Radar Scoring (4 axes)
+- **Consistency**: Rolling 4-week session count. Appropriate rest no longer penalised
+- **Volume**: Scored against optimal hypertrophy range (10–20 sets/muscle/week), not growth rate from zero
+- **Recovery**: Shows "insufficient data" (−1) when fewer than 3 sleep entries — no more misleading 50 default
+- **Balance**: Normalised by set count per muscle group, not raw volume weight — legs no longer perpetually imbalanced
+
+### Fixed — Mobile UX
+- Set input tap targets: 44px height (accessibility minimum), 16px font (prevents iOS zoom)
+- Checkmark button: 44×44px
+- Exercise name abbreviation map (24 entries) — no more mid-word truncation in exercise browser
+- Skeleton loading opacity on analytics charts — visual feedback on slow connections
+
+---
+
+## [2.0.0] — 2026-03-28 — Nutrition Module
+
+### Summary
+The most requested feature. Full nutrition tracking integrated into the Log tab, with TDEE calculation, daily macro targets, meal logging, and a 7th axis on the training composition radar. Nutrition now connects directly to the body recomposition goal.
+
+### Added — TDEE Calculator
+- Mifflin-St Jeor BMR formula + activity multiplier
+- Activity levels: Sedentary → Very Active (5 options)
+- Calculates and saves: TDEE (maintenance calories), protein (0.82g/lb), carbs, fat
+- Targets saved to state — persist across sessions
+- Recomp-optimised: protein prioritised, calories at maintenance not deficit
+
+### Added — Meal Logging
+- Log meal name, calories, protein, carbs, fat per meal
+- Daily totals calculated automatically
+- Progress bars per macro against target (turns red if over)
+- Today's meal list with delete option
+- +2 XP per meal logged
+
+### Added — Nutrition Score (7th radar axis)
+- Scored from: target setup (prerequisite) + logging consistency (40pts) + protein target hit rate (60pts)
+- "Insufficient data" state if no targets set or no meals logged
+- Full coaching recommendations in three tiers: high / developing / needs work
+- Protein tile added to dashboard showing today's protein vs target
+
+### Architecture
+- Nutrition data stored in `S.nt`: `{meals:[], tdee:0, targets:{cal,pro,carb,fat}}`
+- Auto-migrated on loadS if not present in existing saves
+- Radar expanded from 6 to 7 axes — chart type handles variable axis count natively
+
+---
+
+## [2.1.0] — 2026-03-28 — Program Customisation
+
+### Summary
+Users can now meaningfully customise their workout program. Exercise swap (from v1.2) is complemented by custom exercise creation, giving full control over the program without touching code.
+
+### Added — Custom Exercise Creator (Program tab)
+- Add any exercise to any training day (Push/Pull/Legs/Upper/Lower)
+- Configure: sets, rep range, starting weight, increment
+- Appears in Train tab immediately alongside programmed exercises — tagged "custom" in blue
+- Exercise history tracked independently in S.eh
+- Remove custom exercises without losing history
+
+### Added — Custom Exercise in Train Tab
+- Custom exercises appear below programmed exercises per day
+- Full SDP coaching applies — same logic as built-in exercises
+- "Custom" tag (blue) visually distinct from "swapped" tag (gold)
+
+### Updated — finishWorkout
+- Now logs both swapped and custom exercises
+- Both write independently to S.eh — full history and analytics for any exercise you add
+
+### Updated — Program tab
+- Swap button (↔) on all swappable exercises
+- Custom exercise panel at bottom of Program tab
+- List of current custom exercises with remove option
+
+### Architecture
+- Swaps stored in `S.swaps`: `{"day-idx": exerciseObject}`
+- Custom exercises stored in `S.customEx`: `{"day": [exerciseArray]}`
+- Both auto-migrated on loadS
+
+---
+
+## [1.2.0] — 2026-03-28 — Polish & Accuracy Release
+
+### The Story
+v1.2 completed the work deferred from v1.1, added a full QA stress test across 4 user personas, and caught one critical bug that had been silently present since the v1.1 schema migration. The QA process is now a documented part of the release workflow.
+
+### Fixed — Radar Scoring Accuracy (4 axes)
+- **Consistency**: Now uses rolling 4-week session count (not all-time rate) — appropriate rest no longer penalised
+- **Volume**: Now scores against optimal hypertrophy range (10–20 sets/muscle/week) not growth rate from zero
+- **Recovery**: Now shows "insufficient data" state (score -1) when fewer than 3 sleep entries logged — no more misleading 50 default
+- **Balance**: Now normalises by set count per muscle group, not raw volume weight — legs no longer perpetually flagged
+
+### Fixed — Null Score Handling
+- Radar chart renders null scores as 0 with grey point colour (visually distinct from a real 0)
+- Tooltip shows "No data yet" for null axes
+- Detail panel shows contextual "how to unlock this score" message for null axes
+- Axis pill buttons show "—" prefix for null scores
+- Weakest axis auto-selection ignores null scores — picks the weakest *scored* axis
+
+### Fixed — Critical Bug: Program Tab
+- Program tab was reading `S.eh[ex.name].w` directly — broken since v1.1 schema migration to arrays
+- Now correctly reads `arr[arr.length-1]` — last session data displays correctly
+
+### Fixed — Mobile UX
+- Set input tap targets increased to 44px height (was ~32px) — meets accessibility minimum
+- Set input font size increased to 16px (was 14px) — prevents iOS zoom on focus
+- Set input border-radius increased to 10px for a more touch-friendly feel
+- Checkmark button increased to 44×44px (was 30×30px)
+
+### Added — Exercise Name Abbreviation
+- 24-entry abbreviation map for long exercise names (e.g. "Bulgarian Split Squat" → "BSS")
+- Applied in exercise browser rows — no more mid-word truncation on small screens
+- Full name still shown in chart title and stall alerts
+
+### Added — Skeleton Loading States
+- Analytics tab dims chart areas (40% opacity) while computing — visual feedback on slow connections
+- Charts restore to full opacity after all renders complete
+
+### Added — Red Toast Type
+- `toast('message', 'red')` now styled correctly — used for import errors and validation failures
+
+### QA Process
+- 4 user personas tested: non-tech beginner, power user/trainer, returning user restoring backup, user on slow WiFi
+- 15 automated checks run against app code
+- 2 issues found and fixed (Program tab bug, toast red type)
+- 13 checks passed clean
 
 ---
 
