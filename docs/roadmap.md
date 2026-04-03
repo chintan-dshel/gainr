@@ -1,6 +1,6 @@
 # GAINR — Project Roadmap
 
-**Version:** 1.2 | **Last Updated:** March 2026 | **Methodology:** Value-driven, MVP-first
+**Version:** 2.2 | **Last Updated:** March 2026 | **Methodology:** Value-driven, MVP-first
 
 ---
 
@@ -21,10 +21,11 @@ This is called **MVP thinking** — a core principle of modern product delivery.
 | Phase 0 | — | Foundation | ✅ Complete | All PM documents, discovery, architecture |
 | Phase 1–4 | v1.0 | Core App | ✅ Shipped | Working app — Train, Log, Analytics, RPG |
 | Phase 5 | v1.1 | Stability & Honesty | ✅ Released | Onboarding, export, set editing, stall fixes, honest copy |
-| Phase 5b | v1.2 | Polish & Accuracy | 🔄 Next | Radar scoring accuracy, mobile UX improvements |
-| Phase 6 | v2.0 | Nutrition Module | 📋 Planned | TDEE, macros, meal logging |
-| Phase 7 | v2.1 | Program Customisation | 📋 Planned | User-editable workout program |
-| Phase 8 | v3.0 | Real AI Integration | 🔭 Future | Claude API — genuine AI coaching |
+| Phase 5b | v1.2 | Polish & Accuracy | ✅ Released | Radar scoring, mobile UX, QA pass, critical bug fix |
+| Phase 6 | v2.0 | Nutrition Module | ✅ Released | TDEE, macros, meal logging, 7th radar axis |
+| Phase 7 | v2.1 | Program Customisation | ✅ Released | Custom exercises, swap, Train integration |
+
+| Phase 8 | v3.0 | Real AI Integration | 🔭 Next | Claude API — genuine AI coaching |
 | Phase 9 | v4.0 | Platform & Sync | 🔭 Future | Cloud storage, wearables, multi-device |
 
 ---
@@ -138,7 +139,7 @@ Building new features on top of known structural problems is technical debt by c
 
 ---
 
-### Phase 5b — Polish & Accuracy 🔄 (v1.2) — NEXT
+### Phase 5b — Polish & Accuracy ✅ (v1.2) — RELEASED
 **Goal:** Complete the remaining v1.1 items deferred due to complexity.
 
 #### Radar Scoring Accuracy
