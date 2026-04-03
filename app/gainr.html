@@ -100,13 +100,13 @@ body{background:var(--bg);color:var(--text);font-family:var(--fb);min-height:100
 .ex-target{font-size:11px;color:var(--gold);background:rgba(245,200,66,.1);padding:3px 8px;border-radius:100px}
 .set-labels{display:grid;grid-template-columns:28px 1fr 1fr 32px;gap:6px;margin-bottom:6px}
 .set-label{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;text-align:center}
-.set-row{display:grid;grid-template-columns:28px 1fr 1fr 32px;gap:6px;align-items:center;margin-bottom:7px}
+.set-row{display:grid;grid-template-columns:24px 1fr 1fr 44px;gap:6px;align-items:center;margin-bottom:8px}
 .set-num{font-size:12px;color:var(--muted);font-family:var(--fm);text-align:center}
-.set-input{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:8px 6px;color:var(--text);font-family:var(--fm);font-size:14px;width:100%;text-align:center;-webkit-appearance:none;appearance:none}
+.set-input{background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:12px 6px;color:var(--text);font-family:var(--fm);font-size:16px;width:100%;text-align:center;-webkit-appearance:none;appearance:none;min-height:44px}
 .set-input:focus{outline:none;border-color:var(--gold)}
-.set-input::placeholder{color:var(--muted);font-size:12px}
+.set-input::placeholder{color:var(--muted);font-size:13px}
 .set-input:disabled{opacity:.45;background:var(--bg2)}
-.set-check{width:30px;height:30px;border-radius:50%;border:2px solid var(--border);background:none;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .18s;flex-shrink:0}
+.set-check{width:44px;height:44px;border-radius:50%;border:2px solid var(--border);background:none;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .18s;flex-shrink:0}
 .set-check.done{background:var(--green);border-color:var(--green)}
 
 .btn-primary{width:100%;padding:16px;background:var(--gold);color:#000;border:none;border-radius:14px;font-family:var(--fd);font-size:20px;letter-spacing:2px;cursor:pointer;transition:transform .1s,background .2s;margin-top:14px}
@@ -149,8 +149,11 @@ body{background:var(--bg);color:var(--text);font-family:var(--fb);min-height:100
 /* TOAST */
 .toast{position:fixed;bottom:92px;left:50%;transform:translateX(-50%) translateY(16px);background:var(--bg3);border:1px solid var(--border);border-radius:100px;padding:10px 20px;font-size:13px;font-weight:500;opacity:0;transition:all .28s;pointer-events:none;white-space:nowrap;z-index:200}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
-.toast.gold{border-color:var(--gold);color:var(--gold)}
+.analytics-section{background:var(--bg2);border:1px solid var(--border);border-radius:14px;margin-bottom:10px;overflow:hidden}
+.analytics-section-header{display:flex;justify-content:space-between;align-items:center;padding:14px 16px;cursor:pointer}
+.analytics-section-header:active{background:rgba(255,255,255,.03)}
 .toast.green{border-color:var(--green);color:var(--green)}
+.toast.red{border-color:var(--red);color:var(--red)}
 ::-webkit-scrollbar{width:4px}
 ::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
 </style>
@@ -213,6 +216,12 @@ body{background:var(--bg);color:var(--text);font-family:var(--fb);min-height:100
       <div><span class="metric-val" id="d-steps">—</span><span class="metric-unit">k</span></div>
       <div class="metric-label">Steps</div>
       <div class="metric-change neutral">Log today</div>
+    </div>
+    <div class="metric-card" onclick="showPage('log')">
+      <div class="metric-icon">🥩</div>
+      <div><span class="metric-val" id="d-protein">—</span><span class="metric-unit">g</span></div>
+      <div class="metric-label">Protein</div>
+      <div class="metric-change neutral" id="d-protein-chg">Log meals</div>
     </div>
   </div>
   <div class="section-divider">Badges</div>
@@ -285,6 +294,46 @@ body{background:var(--bg);color:var(--text);font-family:var(--fb);min-height:100
     <button class="btn-primary" onclick="logMeasurements()">LOG MEASUREMENTS</button>
   </div>
 
+  <div class="section-divider">Nutrition</div>
+  <div class="log-section" style="background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:16px;margin-bottom:4px">
+    <div id="nutrition-targets-bar" style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:14px"></div>
+    <div class="log-title" style="margin-bottom:10px">LOG MEAL</div>
+    <div class="input-group">
+      <label class="input-label">Meal name (optional)</label>
+      <input class="input-field" type="text" id="n-meal" placeholder="e.g. Chicken & rice" style="width:100%;margin-bottom:8px">
+    </div>
+    <div class="two-col">
+      <div class="input-group"><label class="input-label">Calories</label><input class="input-field" type="number" id="n-cal" placeholder="500" step="10" min="0"></div>
+      <div class="input-group"><label class="input-label">Protein (g)</label><input class="input-field" type="number" id="n-pro" placeholder="40" step="1" min="0"></div>
+      <div class="input-group"><label class="input-label">Carbs (g)</label><input class="input-field" type="number" id="n-carb" placeholder="60" step="1" min="0"></div>
+      <div class="input-group"><label class="input-label">Fat (g)</label><input class="input-field" type="number" id="n-fat" placeholder="15" step="1" min="0"></div>
+    </div>
+    <button class="btn-primary" onclick="logMeal()">LOG MEAL</button>
+    <div id="nutrition-today" style="margin-top:14px"></div>
+  </div>
+
+  <div class="section-divider" style="margin-top:8px">Nutrition setup</div>
+  <div class="log-section" style="background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:16px">
+    <div style="font-size:12px;color:var(--muted);margin-bottom:12px;line-height:1.6">TDEE is your total daily energy expenditure — the calories you burn maintaining your current weight. Your targets are calculated automatically from your profile.</div>
+    <div class="two-col">
+      <div class="input-group"><label class="input-label">Body weight (lbs)</label><input class="input-field" type="number" id="n-bw" placeholder="155" step="1"></div>
+      <div class="input-group"><label class="input-label">Height (in)</label><input class="input-field" type="number" id="n-ht" placeholder="71" step="1"></div>
+      <div class="input-group"><label class="input-label">Age</label><input class="input-field" type="number" id="n-age" placeholder="35" step="1"></div>
+      <div class="input-group">
+        <label class="input-label">Activity</label>
+        <select id="n-act" class="input-field" style="cursor:pointer">
+          <option value="1.2">Sedentary (desk job)</option>
+          <option value="1.375">Light (1-3 days/wk)</option>
+          <option value="1.55" selected>Moderate (4-5 days/wk)</option>
+          <option value="1.725">Active (6-7 days/wk)</option>
+          <option value="1.9">Very active (2× daily)</option>
+        </select>
+      </div>
+    </div>
+    <div id="tdee-result" style="display:none;background:var(--bg3);border-radius:10px;padding:12px;margin:10px 0;text-align:center"></div>
+    <button class="btn-primary" onclick="calcTDEE()">CALCULATE MY TARGETS</button>
+  </div>
+
   <div class="section-divider">Data & backup</div>
   <div class="log-section" style="background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:16px">
     <div style="font-size:12px;color:var(--muted);line-height:1.6;margin-bottom:14px">⚠️ Your data is stored on this device only. Export regularly to protect against data loss from clearing your browser or switching devices.</div>
@@ -328,7 +377,33 @@ body{background:var(--bg);color:var(--text);font-family:var(--fb);min-height:100
   <div class="page-header">
     <div><div class="page-title">PROGRAM</div><div class="page-subtitle">Optimised PPLUL v2.0</div></div>
   </div>
+
+  <div style="font-size:12px;color:var(--muted);margin-bottom:16px;line-height:1.6">Tap ↔ on any exercise to swap it for an alternative. Tap ✏️ to adjust sets and reps. Add your own exercises with the button below.</div>
   <div id="program-list"></div>
+
+  <div class="section-divider">Custom exercises</div>
+  <div style="background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:16px;margin-bottom:10px" id="custom-ex-panel">
+    <div style="font-size:12px;color:var(--muted);margin-bottom:12px">Add an exercise that isn't in the library. It will appear in your Train tab on the next workout day you select.</div>
+    <div class="input-group"><label class="input-label">Exercise name</label><input class="input-field" type="text" id="cx-name" placeholder="e.g. Face Pull" style="width:100%;margin-bottom:8px"></div>
+    <div class="two-col">
+      <div class="input-group"><label class="input-label">Day</label>
+        <select id="cx-day" class="input-field" style="cursor:pointer">
+          <option value="sunday">Sunday — Push</option>
+          <option value="monday">Monday — Pull</option>
+          <option value="tuesday">Tuesday — Legs</option>
+          <option value="thursday">Thursday — Upper</option>
+          <option value="friday">Friday — Lower</option>
+        </select>
+      </div>
+      <div class="input-group"><label class="input-label">Sets</label><input class="input-field" type="number" id="cx-sets" placeholder="3" step="1" min="1" max="8"></div>
+      <div class="input-group"><label class="input-label">Rep min</label><input class="input-field" type="number" id="cx-rmin" placeholder="8" step="1" min="1"></div>
+      <div class="input-group"><label class="input-label">Rep max</label><input class="input-field" type="number" id="cx-rmax" placeholder="12" step="1" min="1"></div>
+      <div class="input-group"><label class="input-label">Start weight</label><input class="input-field" type="number" id="cx-base" placeholder="50" step="2.5"></div>
+      <div class="input-group"><label class="input-label">Increment (lbs)</label><input class="input-field" type="number" id="cx-inc" placeholder="5" step="2.5"></div>
+    </div>
+    <button class="btn-primary" onclick="addCustomExercise()">ADD TO PROGRAM</button>
+    <div id="custom-ex-list" style="margin-top:12px"></div>
+  </div>
 </div>
 
 <!-- ANALYTICS -->
@@ -337,70 +412,120 @@ body{background:var(--bg);color:var(--text);font-family:var(--fb);min-height:100
     <div><div class="page-title">ANALYTICS</div><div class="page-subtitle">Smart coaching engine</div></div>
   </div>
 
-  <div style="display:flex;gap:8px;margin-bottom:16px;overflow-x:auto;padding-bottom:4px" id="lift-tabs"></div>
+  <!-- SUMMARY STRIP — 3 most important numbers at a glance -->
+  <div id="analytics-summary" style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:16px"></div>
 
-  <div class="chart-wrap">
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">
-      <div class="chart-title" id="lift-chart-title">Bench Press — strength progress</div>
-    </div>
-    <div style="display:flex;gap:12px;margin-bottom:12px;flex-wrap:wrap">
-      <div style="display:flex;align-items:center;gap:5px;font-size:11px;color:var(--muted)"><div style="width:20px;height:2px;background:#f5c842"></div>Actual</div>
-      <div style="display:flex;align-items:center;gap:5px;font-size:11px;color:var(--muted)"><div style="width:20px;height:2px;border-top:2px dashed #4fc3f7"></div>Target</div>
-    </div>
-    <div class="chart-area" style="height:180px"><canvas id="chart-lift"></canvas></div>
-  </div>
-
-  <div class="chart-wrap">
-    <div class="chart-title">Weekly volume — sets × reps × weight (lbs)</div>
-    <div style="display:flex;gap:8px;margin-bottom:12px;overflow-x:auto;padding-bottom:2px" id="volume-muscle-tabs"></div>
-    <div class="chart-area" style="height:150px"><canvas id="chart-volume"></canvas></div>
-  </div>
-
-  <div class="chart-wrap">
-    <div class="chart-title">Recomp tracker — strength up, waist down</div>
-    <div style="display:flex;gap:12px;margin-bottom:10px;flex-wrap:wrap">
-      <div style="display:flex;align-items:center;gap:5px;font-size:11px;color:var(--muted)"><div style="width:20px;height:2px;background:#f5c842"></div>Squat (lbs) — left axis</div>
-      <div style="display:flex;align-items:center;gap:5px;font-size:11px;color:var(--muted)"><div style="width:20px;height:2px;background:#ff4757"></div>Waist (in) — right axis</div>
-    </div>
-    <div class="chart-area" style="height:150px"><canvas id="chart-recomp"></canvas></div>
-  </div>
-
-  <div class="section-divider">Training composition</div>
-  <div style="font-size:12px;color:var(--muted);margin-bottom:14px;line-height:1.6">Tap any axis to see what's driving that score and get specific actions. Scores are calculated from your real training data.</div>
-  <div class="chart-wrap" style="padding:0;overflow:hidden">
-    <canvas id="chart-hex" style="width:100%;display:block"></canvas>
-  </div>
-  <div id="hex-detail-panel" style="margin-bottom:4px"></div>
-
-  <div class="section-divider">Exercises by muscle group</div>
-  <div style="font-size:12px;color:var(--muted);margin-bottom:12px">🔴 fatigue &nbsp;·&nbsp; 🟡 plateau &nbsp;·&nbsp; ✅ progressing</div>
-  <div id="muscle-group-browser"></div>
-
-  <div id="ex-chart-container" style="display:none;margin-top:4px">
-    <div class="chart-wrap">
-      <div class="chart-title" id="ex-chart-title"></div>
-      <div style="display:flex;gap:12px;margin-bottom:8px;flex-wrap:wrap">
-        <div style="display:flex;align-items:center;gap:5px;font-size:11px;color:var(--muted)"><div style="width:10px;height:10px;border-radius:50%;background:#2ed573"></div>Weight up</div>
-        <div style="display:flex;align-items:center;gap:5px;font-size:11px;color:var(--muted)"><div style="width:10px;height:10px;border-radius:50%;background:#ff4757"></div>Weight down</div>
-        <div style="display:flex;align-items:center;gap:5px;font-size:11px;color:var(--muted)"><div style="width:20px;height:2px;border-top:2px dashed #4fc3f7"></div>Volume</div>
+  <!-- SECTION: TRAINING COMPOSITION -->
+  <div class="analytics-section">
+    <div class="analytics-section-header" onclick="toggleSection('hex')">
+      <div>
+        <div style="font-family:var(--fd);font-size:18px;letter-spacing:1px">Training composition</div>
+        <div style="font-size:11px;color:var(--muted);margin-top:2px">6-axis score · tap any axis for actions</div>
       </div>
-      <div id="ex-stall-box"></div>
-      <div class="chart-area" style="height:160px" id="ex-chart-area"><canvas id="chart-ex"></canvas></div>
+      <div id="hex-chevron" style="color:var(--muted);font-size:18px;transition:transform .2s">▾</div>
+    </div>
+    <div id="section-hex" style="display:block">
+      <div class="chart-wrap" style="padding:0;overflow:hidden;margin-bottom:8px">
+        <canvas id="chart-hex" style="width:100%;display:block"></canvas>
+      </div>
+      <div id="hex-detail-panel" style="margin-bottom:4px"></div>
     </div>
   </div>
 
-  <div class="section-divider">Stall & fatigue alerts</div>
-  <div id="stall-alerts" style="margin-bottom:12px"></div>
+  <!-- SECTION: STRENGTH PROGRESS -->
+  <div class="analytics-section">
+    <div class="analytics-section-header" onclick="toggleSection('strength')">
+      <div>
+        <div style="font-family:var(--fd);font-size:18px;letter-spacing:1px">Strength progress</div>
+        <div style="font-size:11px;color:var(--muted);margin-top:2px">Planned vs actual · main lifts</div>
+      </div>
+      <div id="strength-chevron" style="color:var(--muted);font-size:18px;transition:transform .2s">▾</div>
+    </div>
+    <div id="section-strength" style="display:block">
+      <div style="display:flex;gap:8px;margin-bottom:12px;overflow-x:auto;padding-bottom:4px" id="lift-tabs"></div>
+      <div style="display:flex;gap:12px;margin-bottom:10px;flex-wrap:wrap">
+        <div style="display:flex;align-items:center;gap:5px;font-size:11px;color:var(--muted)"><div style="width:20px;height:2px;background:#f5c842"></div>Actual</div>
+        <div style="display:flex;align-items:center;gap:5px;font-size:11px;color:var(--muted)"><div style="width:20px;height:2px;border-top:2px dashed #4fc3f7"></div>Target</div>
+      </div>
+      <div class="chart-wrap" style="padding:12px 16px 16px">
+        <div class="chart-title" id="lift-chart-title">Bench Press — planned vs actual</div>
+        <div class="chart-area" style="height:160px"><canvas id="chart-lift"></canvas></div>
+      </div>
+      <div id="analysis-panel"></div>
+    </div>
+  </div>
 
-  <div class="section-divider">Progress analysis</div>
-  <div id="analysis-panel"></div>
+  <!-- SECTION: VOLUME & RECOMP -->
+  <div class="analytics-section">
+    <div class="analytics-section-header" onclick="toggleSection('volume')">
+      <div>
+        <div style="font-family:var(--fd);font-size:18px;letter-spacing:1px">Volume & recomp</div>
+        <div style="font-size:11px;color:var(--muted);margin-top:2px">Weekly sets · body composition</div>
+      </div>
+      <div id="volume-chevron" style="color:var(--muted);font-size:18px;transition:transform .2s">▾</div>
+    </div>
+    <div id="section-volume" style="display:none">
+      <div class="chart-wrap" style="padding:12px 16px 16px;margin-bottom:8px">
+        <div class="chart-title">Weekly volume by muscle group</div>
+        <div style="display:flex;gap:8px;margin-bottom:10px;overflow-x:auto;padding-bottom:2px" id="volume-muscle-tabs"></div>
+        <div class="chart-area" style="height:140px"><canvas id="chart-volume"></canvas></div>
+      </div>
+      <div class="chart-wrap" style="padding:12px 16px 16px">
+        <div class="chart-title">Recomp tracker</div>
+        <div style="display:flex;gap:12px;margin-bottom:8px;flex-wrap:wrap">
+          <div style="display:flex;align-items:center;gap:5px;font-size:11px;color:var(--muted)"><div style="width:20px;height:2px;background:#f5c842"></div>Squat lbs</div>
+          <div style="display:flex;align-items:center;gap:5px;font-size:11px;color:var(--muted)"><div style="width:20px;height:2px;background:#ff4757"></div>Waist in</div>
+        </div>
+        <div class="chart-area" style="height:140px"><canvas id="chart-recomp"></canvas></div>
+      </div>
+    </div>
+  </div>
 
-  <div class="section-divider">Milestones</div>
-  <div id="milestone-panel"></div>
+  <!-- SECTION: EXERCISE BROWSER -->
+  <div class="analytics-section">
+    <div class="analytics-section-header" onclick="toggleSection('exercises')">
+      <div>
+        <div style="font-family:var(--fd);font-size:18px;letter-spacing:1px">All exercises</div>
+        <div style="font-size:11px;color:var(--muted);margin-top:2px">🔴 fatigue · 🟡 plateau · ✅ progressing</div>
+      </div>
+      <div id="exercises-chevron" style="color:var(--muted);font-size:18px;transition:transform .2s">▾</div>
+    </div>
+    <div id="section-exercises" style="display:none">
+      <div id="muscle-group-browser"></div>
+      <div id="ex-chart-container" style="display:none;margin-top:4px">
+        <div class="chart-wrap">
+          <div class="chart-title" id="ex-chart-title"></div>
+          <div style="display:flex;gap:12px;margin-bottom:8px;flex-wrap:wrap">
+            <div style="display:flex;align-items:center;gap:5px;font-size:11px;color:var(--muted)"><div style="width:10px;height:10px;border-radius:50%;background:#2ed573"></div>Up</div>
+            <div style="display:flex;align-items:center;gap:5px;font-size:11px;color:var(--muted)"><div style="width:10px;height:10px;border-radius:50%;background:#ff4757"></div>Down</div>
+            <div style="display:flex;align-items:center;gap:5px;font-size:11px;color:var(--muted)"><div style="width:20px;height:2px;border-top:2px dashed #4fc3f7"></div>Volume</div>
+          </div>
+          <div id="ex-stall-box"></div>
+          <div class="chart-area" style="height:160px" id="ex-chart-area"><canvas id="chart-ex"></canvas></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION: ALERTS & MILESTONES -->
+  <div class="analytics-section">
+    <div class="analytics-section-header" onclick="toggleSection('alerts')">
+      <div>
+        <div style="font-family:var(--fd);font-size:18px;letter-spacing:1px">Alerts & milestones</div>
+        <div style="font-size:11px;color:var(--muted);margin-top:2px" id="alerts-subtitle">Stall detection · strength targets</div>
+      </div>
+      <div id="alerts-chevron" style="color:var(--muted);font-size:18px;transition:transform .2s">▾</div>
+    </div>
+    <div id="section-alerts" style="display:none">
+      <div id="stall-alerts" style="margin-bottom:12px"></div>
+      <div id="milestone-panel"></div>
+    </div>
+  </div>
+
 </div>
 
 <!-- ONBOARDING -->
-<div id="page-onboarding" style="position:fixed;inset:0;z-index:999;background:var(--bg1);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:32px 24px;text-align:center">
+<div id="page-onboarding" style="position:fixed;inset:0;z-index:999;background:var(--bg);display:none;flex-direction:column;align-items:center;justify-content:center;padding:32px 24px;text-align:center">
   <div style="font-family:var(--fd);font-size:52px;letter-spacing:3px;color:var(--gold);margin-bottom:8px">GAINR</div>
   <div style="font-size:13px;color:var(--muted);text-transform:uppercase;letter-spacing:2px;margin-bottom:48px">Personal Fitness Tracker</div>
 
@@ -418,6 +543,18 @@ body{background:var(--bg);color:var(--text);font-family:var(--fb);min-height:100
   <div style="margin-top:40px;font-size:11px;color:var(--muted);line-height:1.7;max-width:280px">
     All data is stored on this device.<br>
     Export regularly from Settings to back up.
+  </div>
+</div>
+
+<!-- SWAP MODAL -->
+<div id="swap-modal" style="display:none;position:fixed;inset:0;z-index:998;background:rgba(0,0,0,.7);align-items:flex-end;justify-content:center" onclick="if(event.target===this)closeSwapModal()">
+  <div style="background:var(--bg2);border-radius:20px 20px 0 0;width:100%;max-width:480px;max-height:70vh;overflow:hidden;display:flex;flex-direction:column">
+    <div style="display:flex;justify-content:space-between;align-items:center;padding:16px 16px 12px;border-bottom:1px solid var(--border)">
+      <div id="swap-modal-title" style="font-family:var(--fd);font-size:20px;letter-spacing:1px"></div>
+      <button onclick="closeSwapModal()" style="background:var(--bg3);border:1px solid var(--border);border-radius:50%;width:30px;height:30px;color:var(--muted);cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center">✕</button>
+    </div>
+    <div style="font-size:12px;color:var(--muted);padding:10px 16px 4px">Your history for the original exercise is always preserved.</div>
+    <div id="swap-modal-list" style="overflow-y:auto;flex:1"></div>
   </div>
 </div>
 
@@ -506,7 +643,12 @@ const DS=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
 const BADGES=[{id:'First Blood',icon:'🩸',label:'First Blood'},{id:'Iron Will',icon:'🔩',label:'Iron Will'},{id:'Pull Up Warrior',icon:'🏋️',label:'Pull Up Warrior'},{id:'Warrior Unlocked',icon:'⚔️',label:'Warrior Unlocked'}];
 
 // STATE
-const mkState=()=>({rpg:{xp:0,stats:{str:1,end:1,con:1},sc:0,streak:0,ls:0,lsd:null,badges:[],oc:0},tr:{wl:[{date:'2026-03-24',lbs:155,kg:70.3}],ml:[{date:'2026-03-24',chest:40,waist:35.5,hips:39,arm_r:13,arm_l:13.5,thigh:24}],sl:[],stl:[],cl:[]},eh:{},wt:'active'});
+const mkState=()=>({
+  rpg:{xp:0,stats:{str:1,end:1,con:1},sc:0,streak:0,ls:0,lsd:null,badges:[],oc:0},
+  tr:{wl:[{date:'2026-03-24',lbs:155,kg:70.3}],ml:[{date:'2026-03-24',chest:40,waist:35.5,hips:39,arm_r:13,arm_l:13.5,thigh:24}],sl:[],stl:[],cl:[]},
+  nt:{meals:[],tdee:0,targets:{cal:0,pro:0,carb:0,fat:0}}, // nutrition
+  eh:{},wt:'active',swaps:{},customEx:{}  // customEx: {day:[{name,sets,rMin,rMax,baseline,inc,target}]}
+});
 let S;
 function loadS(){
   try{
@@ -518,6 +660,11 @@ function loadS(){
     if(!S.rpg.stats.end)S.rpg.stats.end=1;
     if(!S.tr.stl)S.tr.stl=[];
     if(!S.tr.sl)S.tr.sl=[];
+    if(!S.nt)S.nt={meals:[],tdee:0,targets:{cal:0,pro:0,carb:0,fat:0}};
+    if(!S.nt.meals)S.nt.meals=[];
+    if(!S.nt.targets)S.nt.targets={cal:0,pro:0,carb:0,fat:0};
+    if(!S.swaps)S.swaps={};
+    if(!S.customEx)S.customEx={};
     // SCHEMA MIGRATION: convert single-object exercise history to arrays
     Object.keys(S.eh).forEach(k=>{
       const v=S.eh[k];
@@ -551,9 +698,10 @@ function showPage(n){
   document.getElementById('page-'+n).classList.add('active');
   document.getElementById('nav-'+n).classList.add('active');
   if(n==='progress')renderCharts();
-  if(n==='program')renderProgram();
+  if(n==='program'){renderProgram();renderCustomExList();}
   if(n==='workout')renderWorkout();
   if(n==='analytics')renderAnalytics();
+  if(n==='log')renderNutritionPage();
 }
 
 // TOAST
@@ -593,10 +741,18 @@ function renderDash(){
   const ml=S.tr.ml;if(ml.length)document.getElementById('d-waist').textContent=ml[ml.length-1].waist;
   const sl=S.tr.sl;if(sl.length)document.getElementById('d-sleep').textContent=sl[sl.length-1].hours;
   const stl=S.tr.stl;if(stl&&stl.length)document.getElementById('d-steps').textContent=(stl[stl.length-1].steps/1000).toFixed(1);
-  const td=DAYS[new Date().getDay()];
+  const td2=DAYS[new Date().getDay()];
   document.getElementById('today-date').textContent=new Date().toLocaleDateString('en-CA',{weekday:'short',month:'short',day:'numeric'});
-  document.getElementById('today-label').textContent=PROG[td].name==='REST'?'Rest Day 🧘':PROG[td].name+' Day 💪';
+  document.getElementById('today-label').textContent=PROG[td2].name==='REST'?'Rest Day 🧘':PROG[td2].name+' Day 💪';
   document.getElementById('badge-row').innerHTML=BADGES.map(b=>{const e=r.badges.includes(b.id);return`<div class="badge ${e?'earned':'locked'}">${e?b.icon:'🔒'} ${b.label}</div>`;}).join('');
+  // Nutrition metric on dashboard
+  const ntEl=document.getElementById('d-protein');
+  if(ntEl&&S.nt?.targets?.pro){
+    const td3=getTodayNutrition();
+    ntEl.textContent=td3.pro+'g';
+    const pchg=document.getElementById('d-protein-chg');
+    if(pchg){pchg.textContent=`/ ${S.nt.targets.pro}g target`;pchg.className='metric-change neutral';}
+  }
 }
 
 // WORKOUT
@@ -609,13 +765,24 @@ function renderWorkout(){
   document.getElementById('wd-name').textContent=p.name;
   document.getElementById('wd-focus').textContent=p.focus;
   const list=document.getElementById('exercise-list');list.innerHTML='';
+  if(!S.swaps) S.swaps={};
+  if(!S.customEx) S.customEx={};
   if(!p.exercises.length){list.innerHTML=`<div class="card" style="text-align:center;padding:32px"><div style="font-size:36px;margin-bottom:10px">🧘</div><div style="font-family:var(--fd);font-size:28px;letter-spacing:2px;margin-bottom:8px">REST DAY</div><div style="color:var(--muted);font-size:13px">Sleep, eat well, recover. This is where you grow.</div></div>`;return;}
-  p.exercises.forEach((ex,ei)=>{
+
+  // Build full exercise list: swapped program exercises + custom exercises
+  const programExs = p.exercises.map((origEx,ei)=>({ex:getEffectiveEx(curDay,ei),origEx,ei,isCustom:false}));
+  const customExs = (S.customEx[curDay]||[]).map((ex,ci)=>({ex,origEx:ex,ei:p.exercises.length+ci,isCustom:true}));
+  const allExs = [...programExs,...customExs];
+
+  allExs.forEach(({ex,origEx,ei,isCustom})=>{
     const sdp=getSDP(ex);
     let sh=`<div class="set-labels"><div class="set-label"></div><div class="set-label">Weight (lbs)</div><div class="set-label">Reps</div><div class="set-label">✓</div></div>`;
     for(let s=0;s<ex.sets;s++){sh+=`<div class="set-row"><div class="set-num">${s+1}</div><input class="set-input" type="number" placeholder="${sdp.tw}" step="2.5" id="w${ei}-${s}"><input class="set-input" type="number" placeholder="${sdp.tr}" id="r${ei}-${s}"><button class="set-check" id="c${ei}-${s}" onclick="togSet(${ei},${s})"></button></div>`;}
     const div=document.createElement('div');div.className='exercise-item';
-    div.innerHTML=`<div class="ex-header"><div class="ex-name">${ex.name}</div><div class="ex-target">${ex.target}</div></div><div class="sdp-box ${sdp.type}"><div class="sdp-label">${sdp.label}</div><div>${sdp.msg}</div></div>${sh}`;
+    const tag=isCustom
+      ?`<span style="font-size:10px;background:rgba(79,195,247,.15);color:#4fc3f7;border-radius:100px;padding:1px 6px;margin-left:6px">custom</span>`
+      :ex.name!==origEx.name?`<span style="font-size:10px;background:rgba(245,200,66,.15);color:var(--gold);border-radius:100px;padding:1px 6px;margin-left:6px">swapped</span>`:'';
+    div.innerHTML=`<div class="ex-header"><div class="ex-name">${ex.name}${tag}</div><div class="ex-target">${ex.target}</div></div><div class="sdp-box ${sdp.type}"><div class="sdp-label">${sdp.label}</div><div>${sdp.msg}</div></div>${sh}`;
     list.appendChild(div);
   });
 }
@@ -646,7 +813,13 @@ function finishWorkout(){
   const p=PROG[curDay];if(!p.exercises.length){toast('Rest day — nothing to log!');return;}
   let done=0,xp=0,prs=0;const isD=S.wt==='deload';
   const td=new Date().toISOString().split('T')[0];
-  p.exercises.forEach((ex,ei)=>{
+  if(!S.swaps) S.swaps={};
+  if(!S.customEx) S.customEx={};
+  // Build same full list as renderWorkout — program + custom
+  const programExs=p.exercises.map((origEx,ei)=>({ex:getEffectiveEx(curDay,ei),ei}));
+  const customExs=(S.customEx[curDay]||[]).map((ex,ci)=>({ex,ei:p.exercises.length+ci}));
+  const allExs=[...programExs,...customExs];
+  allExs.forEach(({ex,ei})=>{
     let ts=0,tr=0,mw=0;
     for(let s=0;s<ex.sets;s++){
       if(document.getElementById(`c${ei}-${s}`)?.classList.contains('done')){
@@ -664,7 +837,6 @@ function finishWorkout(){
       const vol=fw*ar*ts;
       if(prev&&fw>prev.w)prs++;
       if(!isD&&ar>=ex.rMax&&ts>=ex.sets){xp+=XP_VAL.overload;S.rpg.oc=(S.rpg.oc||0)+1;S.rpg.stats.str=Math.min(99,S.rpg.stats.str+1);}
-      // Only append if this is a new date (avoid duplicate same-day entries)
       if(arr.length&&arr[arr.length-1].d===td){
         arr[arr.length-1]={w:fw,r:ar,s:ts,d:td,vol};
       } else {
@@ -777,10 +949,39 @@ function renderCharts(){
 
 // PROGRAM
 function renderProgram(){
-  const today=DAYS[new Date().getDay()];const list=document.getElementById('program-list');list.innerHTML='';
+  const today=DAYS[new Date().getDay()];
+  const list=document.getElementById('program-list');
+  list.innerHTML='';
+  if(!S.swaps) S.swaps={};
   DAYS.forEach(day=>{
-    const p=PROG[day],isT=day===today;const div=document.createElement('div');div.className='program-day'+(isT?' today':'');
-    const exH=!p.exercises.length?'<div style="color:var(--muted);font-size:13px">Active recovery — sleep, walk, eat well</div>':p.exercises.map(ex=>{const h=S.eh[ex.name];const ln=h?`<div class="last-note">Last: ${h.w}lbs × ${h.r} reps</div>`:'';return`<div class="program-ex"><div class="program-ex-name">${ex.name}${ln}</div><div class="program-ex-detail">${ex.target}<br>${ex.baseline}</div></div>`;}).join('');
+    const p=PROG[day],isT=day===today;
+    const div=document.createElement('div');
+    div.className='program-day'+(isT?' today':'');
+    const exH=!p.exercises.length
+      ?'<div style="color:var(--muted);font-size:13px">Active recovery — sleep, walk, eat well</div>'
+      :p.exercises.map((origEx,idx)=>{
+        const ex=getEffectiveEx(day,idx);
+        const isSwapped=ex.name!==origEx.name;
+        const arr=Array.isArray(S.eh[ex.name])?S.eh[ex.name]:[];
+        const h=arr.length?arr[arr.length-1]:null;
+        const alts=EX_ALTS[origEx.name];
+        const canSwap=alts&&alts.length>0;
+        const ln=h?`<div class="last-note">Last: ${h.w}lbs × ${h.r} reps</div>`:'';
+        const swappedTag=isSwapped?`<span style="font-size:10px;background:rgba(245,200,66,.15);color:var(--gold);border-radius:100px;padding:1px 6px;margin-left:6px">swapped</span>`:'';
+        const swapBtn=canSwap?`<button onclick="showSwapModal('${day}',${idx})" style="background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:4px 8px;color:var(--muted);font-size:11px;cursor:pointer;font-family:var(--fb);flex-shrink:0">↔ Swap</button>`:'';
+        return`<div class="program-ex">
+          <div class="program-ex-name" style="flex:1;min-width:0">
+            <div style="display:flex;align-items:center;flex-wrap:wrap;gap:4px">
+              <span>${ex.name}</span>${swappedTag}
+            </div>
+            ${ln}
+          </div>
+          <div style="display:flex;align-items:center;gap:8px;flex-shrink:0">
+            <div class="program-ex-detail" style="text-align:right">${ex.target}<br>${ex.baseline}</div>
+            ${swapBtn}
+          </div>
+        </div>`;
+      }).join('');
     div.innerHTML=`<div class="program-day-header"><div><div class="program-day-name">${p.name}</div><div class="program-day-type">${day.charAt(0).toUpperCase()+day.slice(1)}</div></div>${isT?'<div class="today-badge">TODAY</div>':''}</div><div class="program-exercises">${exH}</div>`;
     list.appendChild(div);
   });
@@ -1081,7 +1282,39 @@ function renderExerciseChart(exName) {
   });
 }
 
+// Exercise name abbreviation — long names truncate badly on mobile
+const EX_ABBREV = {
+  'Barbell Bench Press':'Bench Press','Incline Dumbbell Press':'Incline DB Press',
+  'Seated Cable Row (V-Grip)':'Cable Row','Rear Delt Reverse Fly':'Rear Delt Fly',
+  'Overhead Press (Barbell)':'OHP','Tricep Rope Pushdown':'Tricep Pushdown',
+  'Overhead Tricep Extension':'OH Tricep Ext','Lateral Raise (Dumbbell)':'Lateral Raise (DB)',
+  'Lateral Raise (Machine)':'Lateral Raise (M)','Triceps Extension (Machine)':'Triceps Ext',
+  'Seated Leg Curl (Machine)':'Leg Curl (S)','Standing Leg Curl':'Leg Curl (St)',
+  'Leg Extension (Machine)':'Leg Extension','Leg Press (Machine)':'Leg Press',
+  'Hip Thrust (Machine)':'Hip Thrust','Lat Pulldown (Cable)':'Lat Pulldown',
+  'Single Arm Lat Pulldown':'SA Lat Pulldown','Preacher Curl (Machine)':'Preacher Curl',
+  'Pull-Up (Assisted)':'Pull-Up (Ast)','Hammer Curl (Cable)':'Hammer Curl',
+  'Bicep Curl (Dumbbell)':'Bicep Curl (DB)','Bulgarian Split Squat':'BSS',
+  'Romanian Deadlift':'RDL','Conventional Deadlift':'Deadlift','Seated Calf Raise':'Calf Raise',
+};
+function abbrev(name){return EX_ABBREV[name]||name;}
+
+function showSkeleton(){
+  ['chart-lift','chart-volume','chart-recomp'].forEach(id=>{
+    const el=document.getElementById(id);
+    if(el)el.parentElement.style.opacity='0.4';
+  });
+}
+function hideSkeleton(){
+  ['chart-lift','chart-volume','chart-recomp'].forEach(id=>{
+    const el=document.getElementById(id);
+    if(el)el.parentElement.style.opacity='1';
+  });
+}
+
 function renderAnalytics() {
+  showSkeleton();
+  renderSummaryStrip();
   const cfg = LIFT_CONFIGS[curLift];
 
   // Lift tabs (main lifts)
@@ -1130,36 +1363,259 @@ function renderAnalytics() {
   renderStallAlerts();
   generateAnalysis();
   generateMilestones();
+  hideSkeleton();
 }
 
 // ═══════════════════════════════════════════════
-// HEXAGON RADAR ENGINE
+// EXERCISE ALTERNATIVES LIBRARY
 // ═══════════════════════════════════════════════
-const HEX_AXES=[{key:'strength',label:'Strength'},{key:'volume',label:'Volume'},{key:'consistency',label:'Consistency'},{key:'recovery',label:'Recovery'},{key:'balance',label:'Balance'},{key:'recomp',label:'Recomp'}];
+const EX_ALTS = {
+  // PUSH
+  'Barbell Bench Press':       [{name:'Dumbbell Bench Press',target:'4×8-10',baseline:'35 lbs/hand',sets:4,rMin:8,rMax:10,inc:2.5},{name:'Machine Chest Press',target:'4×10-12',baseline:'80 lbs',sets:4,rMin:10,rMax:12,inc:5},{name:'Push-Up (Weighted)',target:'4×10-15',baseline:'BW',sets:4,rMin:10,rMax:15,inc:2.5}],
+  'Incline Dumbbell Press':    [{name:'Incline Barbell Press',target:'3×8-10',baseline:'65 lbs',sets:3,rMin:8,rMax:10,inc:2.5},{name:'Incline Machine Press',target:'3×10-12',baseline:'60 lbs',sets:3,rMin:10,rMax:12,inc:5},{name:'Low-to-High Cable Fly',target:'3×12-15',baseline:'30 lbs',sets:3,rMin:12,rMax:15,inc:5}],
+  'Cable Chest Fly':           [{name:'Dumbbell Fly',target:'3×12-15',baseline:'20 lbs/hand',sets:3,rMin:12,rMax:15,inc:2.5},{name:'Pec Deck Machine',target:'3×12-15',baseline:'60 lbs',sets:3,rMin:12,rMax:15,inc:5},{name:'High-to-Low Cable Fly',target:'3×12-15',baseline:'30 lbs',sets:3,rMin:12,rMax:15,inc:5}],
+  'Lateral Raise (Dumbbell)':  [{name:'Lateral Raise (Machine)',target:'4×15-20',baseline:'40 lbs',sets:4,rMin:15,rMax:20,inc:5},{name:'Cable Lateral Raise',target:'4×15-20',baseline:'15 lbs',sets:4,rMin:15,rMax:20,inc:2.5},{name:'Upright Row (Cable)',target:'3×12-15',baseline:'50 lbs',sets:3,rMin:12,rMax:15,inc:5}],
+  'Tricep Rope Pushdown':      [{name:'Tricep Bar Pushdown',target:'3×12-15',baseline:'65 lbs',sets:3,rMin:12,rMax:15,inc:5},{name:'Triceps Extension (Machine)',target:'3×10-12',baseline:'65 lbs',sets:3,rMin:10,rMax:12,inc:5},{name:'Close Grip Bench Press',target:'3×8-10',baseline:'75 lbs',sets:3,rMin:8,rMax:10,inc:2.5}],
+  'Overhead Tricep Extension': [{name:'Skull Crusher (Barbell)',target:'3×10-12',baseline:'45 lbs',sets:3,rMin:10,rMax:12,inc:2.5},{name:'Overhead Tricep (Cable)',target:'3×12-15',baseline:'30 lbs',sets:3,rMin:12,rMax:15,inc:5},{name:'Dumbbell Kickback',target:'3×12-15',baseline:'20 lbs',sets:3,rMin:12,rMax:15,inc:2.5}],
+  'Cable Crunch':              [{name:'Decline Sit-Up',target:'3×15-20',baseline:'BW',sets:3,rMin:15,rMax:20,inc:0},{name:'Hanging Knee Raise',target:'3×12-15',baseline:'BW',sets:3,rMin:12,rMax:15,inc:0},{name:'Ab Wheel Rollout',target:'3×10-15',baseline:'BW',sets:3,rMin:10,rMax:15,inc:0}],
+  // PULL
+  'Pull-Up (Assisted)':        [{name:'Lat Pulldown (Wide Grip)',target:'4×8-10',baseline:'90 lbs',sets:4,rMin:8,rMax:10,inc:5},{name:'Machine Pull-Up',target:'4×8-10',baseline:'60 lbs',sets:4,rMin:8,rMax:10,inc:5},{name:'Band-Assisted Pull-Up',target:'4×6-8',baseline:'Light band',sets:4,rMin:6,rMax:8,inc:0}],
+  'Lat Pulldown (Cable)':      [{name:'Lat Pulldown (Neutral Grip)',target:'3×10-12',baseline:'105 lbs',sets:3,rMin:10,rMax:12,inc:5},{name:'Straight Arm Pulldown',target:'3×12-15',baseline:'50 lbs',sets:3,rMin:12,rMax:15,inc:5},{name:'Single Arm Lat Pulldown',target:'3×10-12',baseline:'55 lbs',sets:3,rMin:10,rMax:12,inc:5}],
+  'Seated Cable Row (V-Grip)': [{name:'Seated Cable Row (Wide)',target:'3×10-12',baseline:'110 lbs',sets:3,rMin:10,rMax:12,inc:5},{name:'Machine Row',target:'3×10-12',baseline:'90 lbs',sets:3,rMin:10,rMax:12,inc:5},{name:'Dumbbell Row',target:'3×10-12',baseline:'50 lbs/hand',sets:3,rMin:10,rMax:12,inc:5}],
+  'Rear Delt Reverse Fly':     [{name:'Face Pull (Cable)',target:'3×15-20',baseline:'50 lbs',sets:3,rMin:15,rMax:20,inc:5},{name:'Rear Delt Machine',target:'3×15-20',baseline:'60 lbs',sets:3,rMin:15,rMax:20,inc:5},{name:'Band Pull Apart',target:'3×20-25',baseline:'Light band',sets:3,rMin:20,rMax:25,inc:0}],
+  'Bicep Curl (Dumbbell)':     [{name:'Barbell Curl',target:'3×10-12',baseline:'45 lbs',sets:3,rMin:10,rMax:12,inc:2.5},{name:'Cable Curl',target:'3×12-15',baseline:'40 lbs',sets:3,rMin:12,rMax:15,inc:5},{name:'Concentration Curl',target:'3×10-12',baseline:'25 lbs',sets:3,rMin:10,rMax:12,inc:2.5}],
+  'Hammer Curl (Cable)':       [{name:'Hammer Curl (Dumbbell)',target:'3×12-15',baseline:'30 lbs/hand',sets:3,rMin:12,rMax:15,inc:2.5},{name:'Reverse Curl (Barbell)',target:'3×12-15',baseline:'35 lbs',sets:3,rMin:12,rMax:15,inc:2.5},{name:'Cross Body Hammer Curl',target:'3×12-15',baseline:'25 lbs',sets:3,rMin:12,rMax:15,inc:2.5}],
+  // LEGS
+  'Squat (Barbell)':           [{name:'Goblet Squat',target:'4×12-15',baseline:'50 lbs',sets:4,rMin:12,rMax:15,inc:5},{name:'Hack Squat (Machine)',target:'4×10-12',baseline:'135 lbs',sets:4,rMin:10,rMax:12,inc:10},{name:'Smith Machine Squat',target:'4×8-10',baseline:'95 lbs',sets:4,rMin:8,rMax:10,inc:5}],
+  'Romanian Deadlift':         [{name:'Stiff Leg Deadlift',target:'3×10-12',baseline:'135 lbs',sets:3,rMin:10,rMax:12,inc:5},{name:'Good Morning',target:'3×12-15',baseline:'65 lbs',sets:3,rMin:12,rMax:15,inc:5},{name:'Single Leg RDL',target:'3×10-12',baseline:'30 lbs/hand',sets:3,rMin:10,rMax:12,inc:2.5}],
+  'Leg Press (Machine)':       [{name:'Hack Squat (Machine)',target:'3×10-12',baseline:'135 lbs',sets:3,rMin:10,rMax:12,inc:10},{name:'Pendulum Squat',target:'3×10-12',baseline:'90 lbs',sets:3,rMin:10,rMax:12,inc:10},{name:'V-Squat Machine',target:'3×10-12',baseline:'120 lbs',sets:3,rMin:10,rMax:12,inc:10}],
+  'Seated Leg Curl (Machine)': [{name:'Lying Leg Curl (Machine)',target:'3×12-15',baseline:'90 lbs',sets:3,rMin:12,rMax:15,inc:5},{name:'Standing Leg Curl',target:'3×12-15',baseline:'50 lbs',sets:3,rMin:12,rMax:15,inc:5},{name:'Nordic Curl (Assisted)',target:'3×8-10',baseline:'BW',sets:3,rMin:8,rMax:10,inc:0}],
+  'Seated Calf Raise':         [{name:'Standing Calf Raise',target:'4×15-20',baseline:'BW+50',sets:4,rMin:15,rMax:20,inc:5},{name:'Leg Press Calf Raise',target:'4×15-20',baseline:'120 lbs',sets:4,rMin:15,rMax:20,inc:10},{name:'Single Leg Calf Raise',target:'3×15-20',baseline:'BW',sets:3,rMin:15,rMax:20,inc:0}],
+  // UPPER / LOWER
+  'Overhead Press (Barbell)':  [{name:'Dumbbell Shoulder Press',target:'4×8-10',baseline:'30 lbs/hand',sets:4,rMin:8,rMax:10,inc:2.5},{name:'Machine Shoulder Press',target:'4×10-12',baseline:'60 lbs',sets:4,rMin:10,rMax:12,inc:5},{name:'Arnold Press',target:'3×10-12',baseline:'25 lbs/hand',sets:3,rMin:10,rMax:12,inc:2.5}],
+  'Conventional Deadlift':     [{name:'Trap Bar Deadlift',target:'4×4-6',baseline:'135 lbs',sets:4,rMin:4,rMax:6,inc:5},{name:'Sumo Deadlift',target:'4×4-5',baseline:'95 lbs',sets:4,rMin:4,rMax:5,inc:5},{name:'Romanian Deadlift',target:'4×6-8',baseline:'115 lbs',sets:4,rMin:6,rMax:8,inc:5}],
+  'Hip Thrust (Machine)':      [{name:'Hip Thrust (Barbell)',target:'3×10-12',baseline:'135 lbs',sets:3,rMin:10,rMax:12,inc:10},{name:'Glute Bridge',target:'3×15-20',baseline:'BW+45',sets:3,rMin:15,rMax:20,inc:5},{name:'Cable Pull-Through',target:'3×12-15',baseline:'60 lbs',sets:3,rMin:12,rMax:15,inc:5}],
+  'Bulgarian Split Squat':     [{name:'Lunge (Dumbbell)',target:'3×10-12',baseline:'25 lbs/hand',sets:3,rMin:10,rMax:12,inc:2.5},{name:'Step-Up (Dumbbell)',target:'3×12-15',baseline:'30 lbs/hand',sets:3,rMin:12,rMax:15,inc:2.5},{name:'Reverse Lunge',target:'3×12-15',baseline:'20 lbs/hand',sets:3,rMin:12,rMax:15,inc:2.5}],
+  'Leg Extension (Machine)':   [{name:'Terminal Knee Extension',target:'3×15-20',baseline:'Band',sets:3,rMin:15,rMax:20,inc:0},{name:'Sissy Squat',target:'3×12-15',baseline:'BW',sets:3,rMin:12,rMax:15,inc:0},{name:'Wall Sit',target:'3×30-60s',baseline:'BW',sets:3,rMin:30,rMax:60,inc:0}],
+  'Standing Leg Curl':         [{name:'Lying Leg Curl (Machine)',target:'3×12-15',baseline:'90 lbs',sets:3,rMin:12,rMax:15,inc:5},{name:'Nordic Curl (Assisted)',target:'3×8-10',baseline:'BW',sets:3,rMin:8,rMax:10,inc:0},{name:'Swiss Ball Leg Curl',target:'3×12-15',baseline:'BW',sets:3,rMin:12,rMax:15,inc:0}],
+};
+
+// Swaps stored in state: S.swaps = { 'sunday-0': {newEx object} }
+function getEffectiveEx(day, idx) {
+  if(!S.swaps) S.swaps = {};
+  const key = `${day}-${idx}`;
+  return S.swaps[key] || PROG[day].exercises[idx];
+}
+
+function showSwapModal(day, idx) {
+  const ex = PROG[day].exercises[idx];
+  const alts = EX_ALTS[ex.name];
+  if(!alts || !alts.length) { toast('No alternatives available for this exercise', ''); return; }
+  const current = getEffectiveEx(day, idx);
+
+  const modal = document.getElementById('swap-modal');
+  document.getElementById('swap-modal-title').textContent = 'Swap: ' + ex.name;
+
+  const list = document.getElementById('swap-modal-list');
+  // Always show original + all alternatives
+  const options = [{...ex, _original: true}, ...alts];
+  list.innerHTML = options.map((alt, i) => {
+    const isCurrent = alt.name === current.name;
+    return `<div onclick="applySwap('${day}',${idx},'${i}')" style="padding:14px 16px;border-bottom:1px solid var(--border);cursor:pointer;background:${isCurrent?'rgba(245,200,66,.06)':'transparent'}" onmouseover="this.style.background='rgba(255,255,255,.04)'" onmouseout="this.style.background='${isCurrent?'rgba(245,200,66,.06)':'transparent'}'">
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <div>
+          <div style="font-size:13px;font-weight:600;color:${isCurrent?'var(--gold)':'var(--text)'}">${alt.name}${alt._original?' (original)':''}</div>
+          <div style="font-size:11px;color:var(--muted);margin-top:3px">${alt.target} · start ${alt.baseline}</div>
+        </div>
+        ${isCurrent ? '<div style="color:var(--gold);font-size:16px">✓</div>' : ''}
+      </div>
+    </div>`;
+  }).join('');
+
+  // Store context for applySwap
+  modal.dataset.day = day;
+  modal.dataset.idx = idx;
+  modal.dataset.opts = JSON.stringify(options);
+  modal.style.display = 'flex';
+}
+
+function applySwap(day, idx, optIdx) {
+  const modal = document.getElementById('swap-modal');
+  const options = JSON.parse(modal.dataset.opts);
+  const chosen = options[parseInt(optIdx)];
+  if(!S.swaps) S.swaps = {};
+  const key = `${day}-${idx}`;
+  if(chosen._original) {
+    delete S.swaps[key]; // restore original
+  } else {
+    const {_original, ...exData} = chosen;
+    S.swaps[key] = exData;
+  }
+  saveS();
+  closeSwapModal();
+  renderProgram();
+  renderWorkout();
+  toast('✅ Exercise updated', 'green');
+}
+
+function closeSwapModal() {
+  document.getElementById('swap-modal').style.display = 'none';
+}
+
+// ═══════════════════════════════════════════════
+// ANALYTICS SECTION TOGGLE
+// ═══════════════════════════════════════════════
+const sectionState = { hex: true, strength: true, volume: false, exercises: false, alerts: false };
+
+function toggleSection(id) {
+  sectionState[id] = !sectionState[id];
+  const el = document.getElementById('section-' + id);
+  const chevron = document.getElementById(id + '-chevron');
+  if(el) el.style.display = sectionState[id] ? 'block' : 'none';
+  if(chevron) chevron.style.transform = sectionState[id] ? 'rotate(0deg)' : 'rotate(-90deg)';
+}
+
+// ═══════════════════════════════════════════════
+// ANALYTICS SUMMARY STRIP
+// ═══════════════════════════════════════════════
+function renderSummaryStrip() {
+  const el = document.getElementById('analytics-summary');
+  if(!el) return;
+  const scores = computeHexScores();
+
+  // 3 most useful at-a-glance numbers
+  const wl = S.tr.wl;
+  const weightChange = wl.length >= 2 ? (wl[wl.length-1].lbs - wl[0].lbs).toFixed(1) : null;
+  const wDir = weightChange !== null ? (parseFloat(weightChange) < 0 ? '#2ed573' : parseFloat(weightChange) > 0 ? '#ff4757' : 'var(--muted)') : 'var(--muted)';
+
+  const stalls = getAllStalls();
+  const stallCount = stalls.length;
+  const stallColor = stallCount === 0 ? '#2ed573' : stallCount <= 2 ? '#f5c842' : '#ff4757';
+
+  const consistScore = scores.consistency;
+  const consistColor = consistScore >= 70 ? '#2ed573' : consistScore >= 40 ? '#f5c842' : '#ff4757';
+
+  el.innerHTML = `
+    <div style="background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:12px;text-align:center">
+      <div style="font-family:var(--fd);font-size:24px;color:${wDir}">${weightChange !== null ? (parseFloat(weightChange) > 0 ? '+' : '') + weightChange + ' lbs' : '—'}</div>
+      <div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-top:2px">Weight Δ</div>
+    </div>
+    <div style="background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:12px;text-align:center">
+      <div style="font-family:var(--fd);font-size:24px;color:${stallColor}">${stallCount === 0 ? '✅' : stallCount}</div>
+      <div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-top:2px">${stallCount === 0 ? 'All clear' : 'Stall' + (stallCount > 1 ? 's' : '')}</div>
+    </div>
+    <div style="background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:12px;text-align:center">
+      <div style="font-family:var(--fd);font-size:24px;color:${consistColor}">${consistScore}<span style="font-size:14px">/100</span></div>
+      <div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-top:2px">Consistency</div>
+    </div>`;
+}
+const HEX_AXES=[{key:'strength',label:'Strength'},{key:'volume',label:'Volume'},{key:'consistency',label:'Consistency'},{key:'recovery',label:'Recovery'},{key:'balance',label:'Balance'},{key:'recomp',label:'Recomp'},{key:'nutrition',label:'Nutrition'}];
 
 function computeHexScores(){
   const scores={};
+  const NULL_SCORE=-1;
+
+  // STRENGTH: % of progression target achieved
   let st=0,sc=0;
-  Object.entries(LIFT_CONFIGS).forEach(([name,cfg])=>{const hist=getLiftHistory(name);if(!hist.length)return;const l=hist[hist.length-1];const wk=weeksSince(l.d||l.date);const proj=getProjectedWeight(cfg,wk);st+=Math.min(120,((l.w||l.weight)/proj)*100);sc++;});
+  Object.entries(LIFT_CONFIGS).forEach(([name,cfg])=>{
+    const hist=getLiftHistory(name);if(!hist.length)return;
+    const l=hist[hist.length-1];const wk=weeksSince(l.d||l.date);
+    const proj=getProjectedWeight(cfg,wk);
+    st+=Math.min(120,((l.w||l.weight)/proj)*100);sc++;
+  });
   scores.strength=sc?Math.round(st/sc):0;
-  let vt=0,vc=0;
-  Object.entries(MUSCLE_GROUPS).forEach(([mg])=>{const wv=getVolumeByWeek(mg);const wks=Object.keys(wv);if(!wks.length)return;const rec=wks.sort((a,b)=>+b-+a).slice(0,4);const avg=rec.reduce((s,w)=>s+wv[w],0)/rec.length;const first=wv[wks.sort((a,b)=>+a-+b)[0]]||1;vt+=Math.min(150,(avg/first)*100);vc++;});
-  scores.volume=vc?Math.round(Math.min(100,vt/vc)):0;
-  const tw=Math.max(1,weeksSince(new Date().toISOString().split('T')[0]));
-  scores.consistency=Math.round(Math.min(100,((S.rpg.sc||0)/tw/5)*100));
-  const sl=S.tr.sl||[];let ss=50;
-  if(sl.length>=3){const avg=sl.slice(-7).reduce((s,e)=>s+e.hours,0)/Math.min(7,sl.length);ss=Math.round(Math.min(100,Math.max(0,(avg-4)/4*100)));}
-  scores.recovery=Math.min(100,ss+Math.min(20,S.rpg.sc>0?10:0));
-  const gv={};Object.entries(MUSCLE_GROUPS).forEach(([mg])=>{const wv=getVolumeByWeek(mg);gv[mg]=Object.values(wv).reduce((s,v)=>s+v,0);});
-  const tot=Object.values(gv).reduce((s,v)=>s+v,0)||1;const ideal=1/Object.keys(gv).length;
-  const dev=Object.values(gv).map(v=>v/tot).reduce((s,r)=>s+Math.abs(r-ideal),0);
-  scores.balance=Math.round(Math.max(0,100-(dev*200)));
-  const wl=S.tr.wl,ml=S.tr.ml;let rs=50;
-  if(wl.length>=2&&ml.length>=2){const wD=wl[0].lbs-wl[wl.length-1].lbs;const waD=ml[0].waist-ml[ml.length-1].waist;const chD=(ml[ml.length-1].chest||0)-(ml[0].chest||0);rs=Math.round(Math.min(100,Math.max(0,50+Math.min(25,wD*5)+Math.min(25,waD*10)+Math.min(15,chD*10))));}
-  scores.recomp=rs;
+
+  // VOLUME: score against optimal range 10-20 sets/muscle/week
+  const now=new Date();
+  const fourWeeksAgo=new Date(now.getTime()-28*24*60*60*1000);
+  let volTotal=0,volCount=0;
+  Object.entries(MUSCLE_GROUPS).forEach(([mg,exNames])=>{
+    const weekSets={};
+    exNames.forEach(exName=>{
+      const arr=Array.isArray(S.eh[exName])?S.eh[exName]:[];
+      arr.forEach(entry=>{
+        if(!entry.d)return;
+        const wk=weeksSince(entry.d);
+        weekSets[wk]=(weekSets[wk]||0)+(entry.s||0);
+      });
+    });
+    const wks=Object.keys(weekSets);if(!wks.length)return;
+    const recent=wks.sort((a,b)=>+b-+a).slice(0,4);
+    const avgSets=recent.reduce((s,w)=>s+weekSets[w],0)/recent.length;
+    const rangeScore=avgSets<10?Math.round((avgSets/10)*50):Math.round(50+Math.min(50,((avgSets-10)/10)*50));
+    volTotal+=rangeScore;volCount++;
+  });
+  scores.volume=volCount?Math.round(volTotal/volCount):0;
+
+  // CONSISTENCY: rolling 4-week session count (not all-time rate)
+  const sessionDates=new Set();
+  Object.values(S.eh).forEach(arr=>{
+    if(!Array.isArray(arr))return;
+    arr.forEach(e=>{if(e.d&&new Date(e.d)>=fourWeeksAgo)sessionDates.add(e.d);});
+  });
+  scores.consistency=Math.round(Math.min(100,(sessionDates.size/20)*100));
+
+  // RECOVERY: insufficient data if <3 sleep logs
+  const sl=S.tr.sl||[];
+  if(sl.length<3){
+    scores.recovery=NULL_SCORE;
+  } else {
+    const avg=sl.slice(-7).reduce((s,e)=>s+e.hours,0)/Math.min(7,sl.length);
+    scores.recovery=Math.round(Math.min(100,Math.max(0,(avg-4)/4.5*100)));
+  }
+
+  // BALANCE: by set count per muscle group (not raw volume weight)
+  const groupSets={};
+  Object.entries(MUSCLE_GROUPS).forEach(([mg,exNames])=>{
+    let ts=0;
+    exNames.forEach(exName=>{
+      const arr=Array.isArray(S.eh[exName])?S.eh[exName]:[];
+      arr.forEach(entry=>{if(entry.d&&new Date(entry.d)>=fourWeeksAgo)ts+=(entry.s||0);});
+    });
+    groupSets[mg]=ts;
+  });
+  const totalSets=Object.values(groupSets).reduce((s,v)=>s+v,0)||1;
+  const ideal=1/Object.keys(groupSets).length;
+  const dev=Object.values(groupSets).map(v=>v/totalSets).reduce((s,r)=>s+Math.abs(r-ideal),0);
+  scores.balance=Object.values(groupSets).every(v=>v===0)?0:Math.round(Math.max(0,100-(dev*150)));
+
+  // RECOMP: body composition change — null if insufficient data
+  const wl=S.tr.wl,ml=S.tr.ml;
+  if(wl.length<2||ml.length<2){
+    scores.recomp=NULL_SCORE;
+  } else {
+    const wD=wl[0].lbs-wl[wl.length-1].lbs;
+    const waD=ml[0].waist-ml[ml.length-1].waist;
+    const chD=(ml[ml.length-1].chest||0)-(ml[0].chest||0);
+    scores.recomp=Math.round(Math.min(100,Math.max(0,50+Math.min(25,wD*5)+Math.min(25,waD*10)+Math.min(15,chD*10))));
+  }
+
+  // NUTRITION: logged separately so computeNutritionScore can be called independently
+  scores.nutrition=computeNutritionScore();
+
   return scores;
 }
 
+function computeNutritionScore(){
+  // Score based on: targets set, protein hitting goal, logging consistency (last 7 days)
+  if(!S.nt||!S.nt.targets||!S.nt.targets.pro) return -1; // no targets set
+  const last7=[];
+  const now=new Date();
+  for(let i=0;i<7;i++){
+    const d=new Date(now);d.setDate(d.getDate()-i);
+    const ds=d.toISOString().split('T')[0];
+    const meals=(S.nt.meals||[]).filter(m=>m.date===ds);
+    if(meals.length) last7.push({date:ds,pro:meals.reduce((s,m)=>s+(m.pro||0),0),cal:meals.reduce((s,m)=>s+(m.cal||0),0)});
+  }
+  if(!last7.length) return -1; // no meals logged yet
+  const daysLogged=last7.length;
+  const proTarget=S.nt.targets.pro||127;
+  const proHitDays=last7.filter(d=>d.pro>=proTarget*0.9).length; // 90% counts
+  // Score: 40pts for logging ≥4 days, 60pts for hitting protein target
+  const logScore=Math.round(Math.min(40,(daysLogged/7)*40));
+  const proScore=Math.round((proHitDays/Math.max(daysLogged,1))*60);
+  return Math.min(100,logScore+proScore);
+}
 const HEX_RECS={
   strength:{high:{s:'On or ahead of strength targets',p:'Your strength progression is healthy. Focus on sustaining progressive overload and protecting recovery.',a:['Keep applying SDP — add weight after hitting top rep range','Ensure 2+ min rest on all compound lifts','Log every set to keep SDP accurate']},mid:{s:'Strength progressing but room to grow',p:"You're making progress but not maximising your beginner window. Small adjustments can accelerate gains.",a:['Push genuinely to top of rep range each session','Increase protein to 0.82g/lb minimum','Lead with compound lifts when freshest']},low:{s:'Strength gains below target',p:'Strength is lagging — usually a recovery issue, not training. Beginners almost always have enough stimulus.',a:["Take a deload week if you haven't in 4 weeks",'Audit sleep — aim for 7.5–8hrs minimum','Eating near TDEE, not below — recomp requires fuel','Review form — poor form limits safe loading']}},
   volume:{high:{s:'Volume growing well',p:'Volume trending upward — a strong hypertrophy signal. Maintain while watching recovery.',a:['Add sets gradually — max 2 extra per muscle per week','Monitor soreness — excessive means volume outpacing recovery','Keep deload weeks every 4 weeks']},mid:{s:'Volume adequate but not optimal',p:'Enough to progress but leaving gains on the table. Adding volume to lagging groups will accelerate recomp.',a:['Add 1 extra set to weakest muscle group this week','Complete all programmed sets — no early exits','Consider a 6th exercise on Pull day for more back volume']},low:{s:'Volume below hypertrophy threshold',p:'10–20 working sets per muscle per week is the minimum for hypertrophy. You may be below this.',a:['Log every session fully — incomplete logging masks true volume','Complete all sets as programmed before adding new exercises','Check for skipped sessions — consistency drives volume']}},
@@ -1167,6 +1623,7 @@ const HEX_RECS={
   recovery:{high:{s:'Recovery is excellent',p:"You're sleeping well and managing fatigue effectively. This directly enables strength and recomp.",a:['Maintain current sleep schedule','Continue deload weeks every 4th week','Watch for overreaching: soreness, mood changes, declining performance']},mid:{s:'Recovery adequate but improvable',p:'Suboptimal recovery is the most common reason beginners plateau. 30 extra minutes of sleep compounds over weeks.',a:['Target 7.5–8hrs per night','Avoid training within 3 hours of sleep','10g glycine before bed — research shows improved recovery']},low:{s:'Recovery is a critical issue',p:'Accumulated fatigue causes stalls, mood decline, injury risk. Highest priority fix right now.',a:['Take a full deload week — switch to Deload Week in Train tab','Target 8hrs sleep for 2 consecutive weeks minimum','Cut caffeine after 2pm — halves deep sleep even unfelt','400mg magnesium glycinate before bed — well-researched for sleep quality']}},
   balance:{high:{s:'Push/Pull/Legs well balanced',p:'Even volume distribution prevents imbalances, posture issues, and injury over time.',a:['Maintain current PPLUL structure — it is working','Monitor the balance chart to catch drift early','Track bilateral symmetry — left vs right measurements']},mid:{s:'Minor muscle group imbalance',p:'Slight imbalance detected. A small correction now prevents a bigger one later.',a:['Check which group has lowest volume in the volume chart','Add 1–2 sets to underperforming group for 3 weeks','Face pulls and rear delt work correct the most common imbalance: overdeveloped push']},low:{s:'Significant muscle group imbalance',p:'Push/pull/leg volumes are substantially unequal. Creates compensation patterns and eventually injury.',a:['Audit session logs — are you skipping certain days?','Pull is most commonly underdeveloped — complete Pull and Upper days fully','Reduce push by 1 set per exercise and redirect to lagging groups']}},
   recomp:{high:{s:'Recomp is working',p:"You're achieving simultaneous fat loss and muscle gain. Correct approach — maintain it.",a:['Stay at maintenance calories — deficit slows muscle gain','Keep protein at 0.82g/lb minimum','Check measurements monthly — waist down + arms up is the signal']},mid:{s:'Recomp progress is developing',p:'Body composition moving the right direction but slowly. Recomp is the slowest approach. Patience and consistency win.',a:['Log measurements monthly — weekly weigh-ins show noise, monthly shows signal','Protein target consistently — this is the #1 recomp lever','Progressive overload matters as much as diet — muscle gain requires training stimulus']},low:{s:'Recomp needs dietary attention',p:'Minimal body composition change usually means nutrition is not calibrated. Training alone cannot drive change without dietary support.',a:['Track calories for 1 week to find actual baseline','Hit 127g protein minimum every day','Ensure enough total food — undereating kills muscle gain']}},
+  nutrition:{high:{s:'Nutrition is on track',p:'You are consistently logging meals and hitting your protein target. This is the dietary foundation recomp requires.',a:['Keep hitting protein target daily — this is non-negotiable for recomp','Stay close to TDEE calories — neither surplus nor deficit','Continue logging meals — consistency in tracking = consistency in results']},mid:{s:'Nutrition is inconsistent',p:'You are logging some days but missing protein targets or logging gaps. Inconsistent nutrition undermines consistent training.',a:['Log every meal even if estimates — rough data beats no data','Prioritise protein in the first two meals of the day — easier to hit the target','Prep a high-protein meal option for days you are short — Greek yogurt, eggs, chicken']},low:{s:'Nutrition needs attention',p:'Nutrition logging is sparse or protein targets are being missed. Your training is doing its job — the diet side needs to catch up.',a:['Set up your TDEE and macro targets in the Log tab → Nutrition Setup','Start with just protein — track that one macro for one week','High-protein staples: chicken breast, eggs, Greek yogurt, cottage cheese, tuna']}},
 };
 
 function getHexRec(key,score){const t=score>=70?'high':score>=40?'mid':'low';const r=HEX_RECS[key][t];return{strategic:r.p,specific:r.a,summary:r.s,tier:t};}
@@ -1175,41 +1632,75 @@ let chartHex=null;
 
 function renderHexChart(){
   const scores=computeHexScores();
-  const data=HEX_AXES.map(a=>scores[a.key]);
+  // For radar chart, replace null scores (-1) with 0 so chart renders cleanly
+  const data=HEX_AXES.map(a=>scores[a.key]===-1?0:scores[a.key]);
   const canvas=document.getElementById('chart-hex');if(!canvas)return;
   if(chartHex)chartHex.destroy();
   chartHex=new Chart(canvas,{
     type:'radar',
-    data:{labels:HEX_AXES.map(a=>a.label),datasets:[{data,backgroundColor:'rgba(245,200,66,0.12)',borderColor:'#f5c842',borderWidth:2,pointBackgroundColor:data.map(v=>v>=70?'#2ed573':v>=40?'#f5c842':'#ff4757'),pointBorderColor:'transparent',pointRadius:6,pointHoverRadius:9}]},
+    data:{labels:HEX_AXES.map(a=>a.label),datasets:[{data,backgroundColor:'rgba(245,200,66,0.12)',borderColor:'#f5c842',borderWidth:2,
+      pointBackgroundColor:HEX_AXES.map(a=>scores[a.key]===-1?'#444':scores[a.key]>=70?'#2ed573':scores[a.key]>=40?'#f5c842':'#ff4757'),
+      pointBorderColor:'transparent',pointRadius:6,pointHoverRadius:9}]},
     options:{responsive:true,maintainAspectRatio:true,aspectRatio:1.4,
-      onClick:(evt,els)=>{if(!els.length)return;const idx=els[0].index;renderHexDetail(HEX_AXES[idx].key,data[idx]);},
-      plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>` ${ctx.label}: ${ctx.parsed.r}/100`}}},
-      scales:{r:{min:0,max:100,ticks:{stepSize:25,display:false},grid:{color:'rgba(255,255,255,0.08)'},angleLines:{color:'rgba(255,255,255,0.08)'},pointLabels:{color:data.map(v=>v>=70?'#2ed573':v>=40?'#f5c842':'#ff4757'),font:{family:'DM Sans',size:12,weight:'600'}}}}}
+      onClick:(evt,els)=>{if(!els.length)return;const idx=els[0].index;renderHexDetail(HEX_AXES[idx].key,scores[HEX_AXES[idx].key]);},
+      plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>{const raw=scores[HEX_AXES[ctx.dataIndex].key];return raw===-1?` ${ctx.label}: No data yet`:` ${ctx.label}: ${raw}/100`;}}}},
+      scales:{r:{min:0,max:100,ticks:{stepSize:25,display:false},grid:{color:'rgba(255,255,255,0.08)'},angleLines:{color:'rgba(255,255,255,0.08)'},
+        pointLabels:{color:HEX_AXES.map(a=>scores[a.key]===-1?'#555':scores[a.key]>=70?'#2ed573':scores[a.key]>=40?'#f5c842':'#ff4757'),font:{family:'DM Sans',size:12,weight:'600'}}}}}
   });
-  // Auto-show weakest axis
-  const lowestIdx=data.indexOf(Math.min(...data));
-  renderHexDetail(HEX_AXES[lowestIdx].key,data[lowestIdx]);
+  // Auto-show weakest scored axis (ignore null scores for selection)
+  const validScores=HEX_AXES.map(a=>({key:a.key,score:scores[a.key]})).filter(a=>a.score!==-1);
+  const weakest=validScores.length?validScores.reduce((a,b)=>a.score<b.score?a:b):HEX_AXES[0];
+  renderHexDetail(weakest.key,scores[weakest.key]);
 }
 
 function renderHexDetail(axisKey,score){
   const panel=document.getElementById('hex-detail-panel');if(!panel)return;
-  const rec=getHexRec(axisKey,score);
   const axis=HEX_AXES.find(a=>a.key===axisKey);
-  const sc=score>=70?'#2ed573':score>=40?'#f5c842':'#ff4757';
-  const tier=score>=70?'✅ Strong':score>=40?'⚡ Developing':'⚠️ Needs work';
   const allScores=computeHexScores();
-  panel.innerHTML='<div style="background:var(--bg2);border:1px solid '+sc+'44;border-radius:14px;padding:16px;margin-bottom:12px">'
-    +'<div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px">'
-    +'<div><div style="font-family:var(--fd);font-size:26px;letter-spacing:1px;color:'+sc+'">'+axis.label+'</div>'
-    +'<div style="font-size:12px;color:var(--muted);margin-top:2px">'+tier+' — '+rec.summary+'</div></div>'
-    +'<div style="text-align:right"><div style="font-family:var(--fd);font-size:42px;line-height:1;color:'+sc+'">'+score+'</div>'
-    +'<div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:1px">/ 100</div></div></div>'
-    +'<div style="height:5px;background:rgba(255,255,255,.08);border-radius:3px;overflow:hidden;margin-bottom:14px">'
-    +'<div style="height:100%;width:'+score+'%;background:'+sc+';border-radius:3px;transition:width .6s ease"></div></div>'
-    +'<div style="font-size:13px;line-height:1.65;color:var(--text);margin-bottom:14px">'+rec.strategic+'</div>'
-    +'<div style="font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin-bottom:8px;font-weight:600">Specific actions</div>'
-    +'<div style="display:flex;flex-direction:column;gap:7px">'+rec.specific.map(a=>'<div style="display:flex;gap:8px;font-size:12px;color:var(--text);line-height:1.5"><span style="color:'+sc+';flex-shrink:0;font-weight:700">→</span><span>'+a+'</span></div>').join('')+'</div></div>'
-    +'<div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:4px">'+HEX_AXES.map(a=>{const s=allScores[a.key];const c=s>=70?'#2ed573':s>=40?'#f5c842':'#ff4757';const sel=a.key===axisKey;return'<button onclick="renderHexDetail(\''+a.key+'\','+s+')" style="padding:5px 12px;border-radius:100px;border:1px solid '+(sel?c:'var(--border)')+';background:'+(sel?c+'22':'var(--bg2)')+';color:'+(sel?c:'var(--muted)')+';font-size:11px;font-weight:600;cursor:pointer;font-family:var(--fb)">'+a.label+' '+s+'</button>';}).join('')+'</div>';
+
+  const pillsHTML=()=>'<div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:4px">'+HEX_AXES.map(a=>{
+    const s=allScores[a.key];const isNull=s===-1;
+    const c=isNull?'var(--muted)':s>=70?'#2ed573':s>=40?'#f5c842':'#ff4757';
+    const sel=a.key===axisKey;
+    return'<button data-hkey="'+a.key+'" data-hscore="'+s+'" style="padding:5px 12px;border-radius:100px;border:1px solid '+(sel?c:'var(--border)')+';background:'+(sel?c+'22':'var(--bg2)')+';color:'+c+';font-size:11px;font-weight:600;cursor:pointer;font-family:var(--fb)">'+(isNull?'—':s)+' '+a.label+'</button>';
+  }).join('')+'</div>';
+
+  if(score===-1){
+    panel.innerHTML=
+      '<div style="background:var(--bg2);border:1px solid rgba(255,255,255,.1);border-radius:14px;padding:16px;margin-bottom:12px">'+
+      '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">'+
+      '<div style="font-family:var(--fd);font-size:26px;letter-spacing:1px;color:var(--muted)">'+axis.label+'</div>'+
+      '<div style="font-size:12px;color:var(--muted);background:var(--bg3);padding:4px 10px;border-radius:100px">No data yet</div></div>'+
+      '<div style="font-size:13px;color:var(--muted);line-height:1.65;margin-bottom:14px">Not enough data to score this dimension yet. '
+      +(axisKey==='recovery'?'Log your sleep for at least 3 days to unlock your recovery score.'
+        :axisKey==='recomp'?'Log body weight and measurements on two different dates to unlock your recomp score.'
+        :'Keep training and logging to unlock this score.')
+      +'</div>'+pillsHTML()+'</div>';
+  } else {
+    const rec=getHexRec(axisKey,score);
+    const sc=score>=70?'#2ed573':score>=40?'#f5c842':'#ff4757';
+    const tier=score>=70?'✅ Strong':score>=40?'⚡ Developing':'⚠️ Needs work';
+    panel.innerHTML=
+      '<div style="background:var(--bg2);border:1px solid '+sc+'44;border-radius:14px;padding:16px;margin-bottom:12px">'+
+      '<div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px">'+
+      '<div><div style="font-family:var(--fd);font-size:26px;letter-spacing:1px;color:'+sc+'">'+axis.label+'</div>'+
+      '<div style="font-size:12px;color:var(--muted);margin-top:2px">'+tier+' — '+rec.summary+'</div></div>'+
+      '<div style="text-align:right"><div style="font-family:var(--fd);font-size:42px;line-height:1;color:'+sc+'">'+score+'</div>'+
+      '<div style="font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:1px">/ 100</div></div></div>'+
+      '<div style="height:5px;background:rgba(255,255,255,.08);border-radius:3px;overflow:hidden;margin-bottom:14px">'+
+      '<div style="height:100%;width:'+score+'%;background:'+sc+';border-radius:3px;transition:width .6s ease"></div></div>'+
+      '<div style="font-size:13px;line-height:1.65;color:var(--text);margin-bottom:14px">'+rec.strategic+'</div>'+
+      '<div style="font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin-bottom:8px;font-weight:600">Specific actions</div>'+
+      '<div style="display:flex;flex-direction:column;gap:7px">'+rec.specific.map(a=>'<div style="display:flex;gap:8px;font-size:12px;color:var(--text);line-height:1.5"><span style="color:'+sc+';flex-shrink:0;font-weight:700">→</span><span>'+a+'</span></div>').join('')+'</div></div>'+
+      pillsHTML();
+  }
+
+  // Attach pill click handlers via event delegation (safe — no inline onclick)
+  panel.querySelectorAll('[data-hkey]').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      renderHexDetail(btn.dataset.hkey, parseInt(btn.dataset.hscore));
+    });
+  });
 }
 
 // ═══════════════════════════════════════════════
@@ -1237,7 +1728,7 @@ function renderGroupedExerciseBrowser(){
       const safeN=n.replace(/'/g,"\\'");
       return'<div onclick="selectExercise(\''+safeN+'\')" style="display:flex;justify-content:space-between;align-items:center;padding:11px 16px;border-bottom:1px solid var(--border);cursor:pointer" onmouseover="this.style.background=\'rgba(255,255,255,.04)\'" onmouseout="this.style.background=\'transparent\'">'
         +'<div style="display:flex;align-items:center;gap:8px;flex:1;min-width:0"><span style="font-size:13px">'+dot+'</span>'
-        +'<div style="min-width:0"><div style="font-size:13px;font-weight:500;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">'+n+'</div>'
+        +'<div style="min-width:0"><div style="font-size:13px;font-weight:500;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">'+abbrev(n)+'</div>'
         +(latest?'<div style="font-size:11px;color:var(--muted);margin-top:1px">'+latest.w+' lbs × '+latest.r+' reps</div>':'<div style="font-size:11px;color:var(--muted)">Not yet logged</div>')
         +'</div></div>'
         +'<div style="text-align:right;flex-shrink:0;margin-left:12px"><div style="font-size:12px;font-weight:600;color:'+tc+'">'+trend+'</div>'
@@ -1361,13 +1852,213 @@ function generateMilestones() {
   panel.innerHTML = html || '<div style="color:var(--muted);font-size:13px;text-align:center;padding:20px">Log workouts to unlock milestone tracking.</div>';
 }
 
+// ═══════════════════════════════════════════════
+// NUTRITION ENGINE (v2.0)
+// ═══════════════════════════════════════════════
+
+// Mifflin-St Jeor BMR + activity multiplier = TDEE
+// Recomp targets: TDEE calories, high protein (0.82g/lb), moderate carb, moderate fat
+function calcTDEE(){
+  const bw=parseFloat(document.getElementById('n-bw').value);
+  const ht=parseFloat(document.getElementById('n-ht').value);
+  const age=parseFloat(document.getElementById('n-age').value);
+  const act=parseFloat(document.getElementById('n-act').value);
+  if(isNaN(bw)||isNaN(ht)||isNaN(age)){toast('Enter weight, height and age first','red');return;}
+
+  // Convert to metric for Mifflin-St Jeor
+  const wKg=bw/2.205;
+  const hCm=ht*2.54;
+  // BMR = 10×weight(kg) + 6.25×height(cm) − 5×age + 5 (male)
+  const bmr=Math.round(10*wKg + 6.25*hCm - 5*age + 5);
+  const tdee=Math.round(bmr*act);
+
+  // Recomp macro targets
+  const pro=Math.round(bw*0.82);       // 0.82g/lb — high protein for recomp
+  const fat=Math.round(tdee*0.25/9);   // 25% cals from fat
+  const carb=Math.round((tdee - pro*4 - fat*9)/4); // remaining cals from carbs
+
+  S.nt.tdee=tdee;
+  S.nt.targets={cal:tdee,pro,carb,fat};
+  saveS();
+
+  const res=document.getElementById('tdee-result');
+  res.style.display='block';
+  res.innerHTML=`<div style="font-family:var(--fd);font-size:28px;color:var(--gold);margin-bottom:6px">${tdee} kcal / day</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:8px">
+      <div><div style="font-family:var(--fd);font-size:20px;color:#4fc3f7">${pro}g</div><div style="font-size:10px;color:var(--muted);text-transform:uppercase">Protein</div></div>
+      <div><div style="font-family:var(--fd);font-size:20px;color:#2ed573">${carb}g</div><div style="font-size:10px;color:var(--muted);text-transform:uppercase">Carbs</div></div>
+      <div><div style="font-family:var(--fd);font-size:20px;color:#f5c842">${fat}g</div><div style="font-size:10px;color:var(--muted);text-transform:uppercase">Fat</div></div>
+    </div>
+    <div style="font-size:11px;color:var(--muted);margin-top:10px;line-height:1.5">Targets saved. Log meals below to track daily progress.</div>`;
+
+  renderNutritionBar();
+  toast('✅ Targets saved','green');
+}
+
+function logMeal(){
+  const name=document.getElementById('n-meal').value||'Meal';
+  const cal=parseFloat(document.getElementById('n-cal').value)||0;
+  const pro=parseFloat(document.getElementById('n-pro').value)||0;
+  const carb=parseFloat(document.getElementById('n-carb').value)||0;
+  const fat=parseFloat(document.getElementById('n-fat').value)||0;
+  if(!cal&&!pro&&!carb&&!fat){toast('Enter at least one value','red');return;}
+  const today=new Date().toISOString().split('T')[0];
+  if(!S.nt)S.nt={meals:[],tdee:0,targets:{cal:0,pro:0,carb:0,fat:0}};
+  S.nt.meals.push({date:today,name,cal,pro,carb,fat});
+  S.rpg.xp+=2; // small XP for logging
+  saveS();
+  ['n-meal','n-cal','n-pro','n-carb','n-fat'].forEach(id=>document.getElementById(id).value='');
+  renderNutritionBar();
+  renderNutritionToday();
+  toast('🥗 Meal logged','green');
+}
+
+function getTodayNutrition(){
+  const today=new Date().toISOString().split('T')[0];
+  const meals=(S.nt?.meals||[]).filter(m=>m.date===today);
+  return meals.reduce((acc,m)=>({
+    cal:acc.cal+(m.cal||0), pro:acc.pro+(m.pro||0),
+    carb:acc.carb+(m.carb||0), fat:acc.fat+(m.fat||0), meals
+  }),{cal:0,pro:0,carb:0,fat:0,meals:[]});
+}
+
+function renderNutritionBar(){
+  const el=document.getElementById('nutrition-targets-bar');if(!el)return;
+  const t=S.nt?.targets||{cal:0,pro:0,carb:0,fat:0};
+  const td=getTodayNutrition();
+  if(!t.cal&&!t.pro){
+    el.innerHTML=`<div style="grid-column:1/-1;font-size:12px;color:var(--muted);text-align:center;padding:8px">Set up your nutrition targets below to track progress</div>`;
+    return;
+  }
+  const bar=(val,max,color)=>{
+    const pct=max?Math.min(100,Math.round(val/max*100)):0;
+    const over=max&&val>max;
+    return`<div style="height:4px;background:rgba(255,255,255,.08);border-radius:2px;overflow:hidden;margin-top:4px">
+      <div style="height:100%;width:${pct}%;background:${over?'#ff4757':color};border-radius:2px;transition:width .4s ease"></div></div>`;
+  };
+  el.innerHTML=`
+    <div style="background:var(--bg3);border-radius:10px;padding:10px;text-align:center">
+      <div style="font-family:var(--fd);font-size:20px;color:var(--gold)">${td.cal}</div>
+      <div style="font-size:10px;color:var(--muted)">/ ${t.cal} kcal</div>
+      ${bar(td.cal,t.cal,'var(--gold)')}
+    </div>
+    <div style="background:var(--bg3);border-radius:10px;padding:10px;text-align:center">
+      <div style="font-family:var(--fd);font-size:20px;color:#4fc3f7">${td.pro}g</div>
+      <div style="font-size:10px;color:var(--muted)">/ ${t.pro}g protein</div>
+      ${bar(td.pro,t.pro,'#4fc3f7')}
+    </div>
+    <div style="background:var(--bg3);border-radius:10px;padding:10px;text-align:center">
+      <div style="font-family:var(--fd);font-size:20px;color:#2ed573">${td.carb}g</div>
+      <div style="font-size:10px;color:var(--muted)">/ ${t.carb}g carbs</div>
+      ${bar(td.carb,t.carb,'#2ed573')}
+    </div>`;
+}
+
+function renderNutritionToday(){
+  const el=document.getElementById('nutrition-today');if(!el)return;
+  const td=getTodayNutrition();
+  if(!td.meals.length){el.innerHTML='<div style="font-size:12px;color:var(--muted);text-align:center;padding:8px">No meals logged today</div>';return;}
+  el.innerHTML='<div style="font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin-bottom:8px;font-weight:600">Today\'s meals</div>'
+    +td.meals.map((m,i)=>`<div style="display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px solid var(--border)">
+      <div>
+        <div style="font-size:13px;color:var(--text)">${m.name}</div>
+        <div style="font-size:11px;color:var(--muted);margin-top:2px">${m.pro}g protein · ${m.carb}g carbs · ${m.fat}g fat</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px">
+        <div style="font-family:var(--fm);font-size:13px;color:var(--gold)">${m.cal} kcal</div>
+        <button onclick="deleteMeal(${i})" style="background:none;border:none;color:var(--muted);cursor:pointer;font-size:14px;padding:4px">✕</button>
+      </div>
+    </div>`).join('');
+}
+
+function deleteMeal(idx){
+  const today=new Date().toISOString().split('T')[0];
+  const todayMeals=S.nt.meals.filter(m=>m.date===today);
+  const mealToDelete=todayMeals[idx];
+  S.nt.meals=S.nt.meals.filter(m=>m!==mealToDelete);
+  saveS();renderNutritionBar();renderNutritionToday();
+  toast('Meal removed','');
+}
+
+function renderNutritionPage(){
+  renderNutritionBar();
+  renderNutritionToday();
+  // Pre-fill setup fields if TDEE already calculated
+  if(S.nt?.tdee){
+    const res=document.getElementById('tdee-result');
+    const t=S.nt.targets;
+    res.style.display='block';
+    res.innerHTML=`<div style="font-family:var(--fd);font-size:28px;color:var(--gold);margin-bottom:6px">${S.nt.tdee} kcal / day</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:8px">
+        <div><div style="font-family:var(--fd);font-size:20px;color:#4fc3f7">${t.pro}g</div><div style="font-size:10px;color:var(--muted);text-transform:uppercase">Protein</div></div>
+        <div><div style="font-family:var(--fd);font-size:20px;color:#2ed573">${t.carb}g</div><div style="font-size:10px;color:var(--muted);text-transform:uppercase">Carbs</div></div>
+        <div><div style="font-family:var(--fd);font-size:20px;color:#f5c842">${t.fat}g</div><div style="font-size:10px;color:var(--muted);text-transform:uppercase">Fat</div></div>
+      </div>`;
+  }
+}
+
+// ═══════════════════════════════════════════════
+// PROGRAM CUSTOMISATION (v2.1)
+// ═══════════════════════════════════════════════
+
+function addCustomExercise(){
+  const name=document.getElementById('cx-name').value.trim();
+  const day=document.getElementById('cx-day').value;
+  const sets=parseInt(document.getElementById('cx-sets').value)||3;
+  const rMin=parseInt(document.getElementById('cx-rmin').value)||8;
+  const rMax=parseInt(document.getElementById('cx-rmax').value)||12;
+  const base=parseFloat(document.getElementById('cx-base').value)||45;
+  const inc=parseFloat(document.getElementById('cx-inc').value)||5;
+  if(!name){toast('Enter an exercise name','red');return;}
+  if(rMin>rMax){toast('Rep min must be less than rep max','red');return;}
+  if(!S.customEx)S.customEx={};
+  if(!S.customEx[day])S.customEx[day]=[];
+  // Prevent duplicates
+  if(S.customEx[day].some(e=>e.name===name)){toast('Exercise already added','red');return;}
+  S.customEx[day].push({name,sets,rMin,rMax,inc,baseline:`${base} lbs`,target:`${sets}×${rMin}-${rMax}`});
+  saveS();
+  renderProgram();
+  renderWorkout();
+  renderCustomExList();
+  ['cx-name','cx-sets','cx-rmin','cx-rmax','cx-base','cx-inc'].forEach(id=>document.getElementById(id).value='');
+  toast(`✅ ${name} added to ${day.charAt(0).toUpperCase()+day.slice(1)}`,'green');
+}
+
+function removeCustomExercise(day, name){
+  if(!S.customEx||!S.customEx[day])return;
+  S.customEx[day]=S.customEx[day].filter(e=>e.name!==name);
+  saveS();renderProgram();renderWorkout();renderCustomExList();
+  toast('Exercise removed','');
+}
+
+function renderCustomExList(){
+  const el=document.getElementById('custom-ex-list');if(!el)return;
+  if(!S.customEx)S.customEx={};
+  const all=Object.entries(S.customEx).flatMap(([day,exs])=>exs.map(e=>({...e,day})));
+  if(!all.length){el.innerHTML='<div style="font-size:12px;color:var(--muted);text-align:center;padding:8px 0">No custom exercises yet</div>';return;}
+  el.innerHTML='<div style="font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin-bottom:8px;font-weight:600">Your custom exercises</div>'
+    +all.map(e=>`<div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--border)">
+      <div><div style="font-size:13px;color:var(--text)">${e.name}</div>
+      <div style="font-size:11px;color:var(--muted)">${e.day.charAt(0).toUpperCase()+e.day.slice(1)} · ${e.target}</div></div>
+      <button onclick="removeCustomExercise('${e.day}','${e.name.replace(/'/g,"\\'")}')" style="background:none;border:1px solid var(--border);border-radius:8px;color:var(--muted);cursor:pointer;font-size:12px;padding:4px 8px">Remove</button>
+    </div>`).join('');
+}
+
+// Override getEffectiveEx to also inject custom exercises
+function getEffectiveDayExercises(day){
+  const base=PROG[day].exercises.map((origEx,idx)=>getEffectiveEx(day,idx));
+  const custom=(S.customEx&&S.customEx[day])||[];
+  return [...base,...custom];
+}
+
 // ONBOARDING
 function checkOnboarding(){
   const onboarded = localStorage.getItem('gainr_onboarded');
+  const el = document.getElementById('page-onboarding');
   if(!onboarded){
-    document.getElementById('page-onboarding').style.display='flex';
+    el.style.display='flex';
   } else {
-    document.getElementById('page-onboarding').style.display='none';
+    el.style.display='none';
   }
 }
 
