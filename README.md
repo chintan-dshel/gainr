@@ -3,7 +3,7 @@
 > A fully functional fitness tracking web app built entirely through human-AI collaboration, applying professional project management methodology from discovery to delivery.
 
 [![Status](https://img.shields.io/badge/status-active-2ed573)](#)
-[![Version](https://img.shields.io/badge/version-2.1-f5c842)](#)
+[![Version](https://img.shields.io/badge/version-3.0-f5c842)](#)
 [![Built With](https://img.shields.io/badge/built%20with-Claude%20AI-b39ddb)](#)
 [![License](https://img.shields.io/badge/license-MIT-4fc3f7)](#)
 
@@ -46,6 +46,19 @@ This repository is also a live demonstration of what modern AI-assisted project 
 - Recomp-optimised macro targets (0.82g protein/lb)
 - Per-meal logging with daily progress bars
 - 7th axis on training composition radar
+
+### 🎯 Physique Goals
+- Three goal modes: Bulk (+250 kcal), Recomp (maintenance), Cut (−400 kcal)
+- Guided 4-step onboarding wizard — profile, goal, timeline, targets
+- Daily caloric balance: meals consumed vs estimated session calories burned
+- Weekly goal progress tracking with on-track/off-track indicator
+
+### 🤖 AI Coaching (v3.0)
+- Bring your own API key — OpenAI (GPT-4o) or Google Gemini (2.0-flash-lite), both free-tier friendly
+- Set up once via ⚙️ on dashboard — Test connection button validates key before saving
+- Tap any radar axis for coaching personalised to your actual data
+- Post-workout analysis: session recap, next week targets with exact weights, single focus point
+- Rule-based coaching always visible as fallback
 
 ### 🎮 RPG System
 - **Recruit → Warrior → Beast → Olympian** level progression
@@ -188,7 +201,8 @@ Zero budget + no coding background + personal use = the simplest architecture th
 | v1.3 | Remaining radar fixes, abbreviations, skeleton states | ✅ Released |
 | v2.0 | Nutrition module — TDEE, macros, meal logging, 7th radar axis | ✅ Released |
 | v2.1 | Program customisation — custom exercises, swap, Train integration | ✅ Released |
-| v3.0 | Claude API — real conversational coaching | 🔭 Future |
+| v3.0 | AI coaching, onboarding wizard, physique goals, caloric balance, post-workout analysis | ✅ Released |
+| v4.0 | Multi-profile support, cloud sync, Apple Health / Google Fit | 🔭 Next |
 | v2.1 | Export & backup — download data from within app | 📋 Planned |
 | v3.0 | Claude API integration — live AI coaching | 🔭 Future |
 
