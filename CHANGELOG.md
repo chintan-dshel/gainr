@@ -7,13 +7,77 @@ Versioning follows [Semantic Versioning](https://semver.org/).
 
 ---
 
-## [Unreleased] — v3.0
+## [Unreleased] — v4.0
 
 ### Planned
-- Claude API integration — real conversational coaching
-- Pre-workout briefing from actual session history
-- Post-workout analysis and adaptive recommendations
-- Research on-demand with science-backed answers
+- Multi-profile support — multiple users on one device, switchable without data loss
+- Coach / athlete mode — one account manages multiple athletes with shared visibility
+- Cloud sync — cross-device data via Supabase (required for multi-profile)
+- Pre-workout AI briefing — session plan generated from history before you train
+- Apple Health / Google Fit integration
+
+---
+
+## [3.0.0] — 2026-04-04 — Real AI Coaching + New User Journey
+
+### Summary
+v3.0 is the release that makes the "AI-powered" label accurate. It ships three major systems: a guided new-user onboarding wizard, a physique goal engine with caloric balance tracking, and a provider-agnostic AI coaching layer connected to real APIs. Every feature traces directly to user feedback from the v1–v2 cycle.
+
+### New User Journey — 4-Step Onboarding Wizard
+- Step 1: Welcome — choose Start my journey or Explore demo
+- Step 2: Profile — name, age, sex, weight, height, activity level (5 options)
+- Step 3: Goal — Bulk / Recomp / Cut with timeline in weeks; plain-English explanation of each
+- Step 4: Ready — personalised TDEE, macro targets, and a 4-point next-steps checklist
+- Back navigation on every step; all fields validated before proceeding
+- Profile and goal committed to S.profile and S.goal on completion
+- Baseline weight seeded automatically; dashboard greeting personalised with name
+
+### Physique Goal System
+- Bulk: TDEE +250 kcal — maximise muscle, minimal fat overshoot
+- Recomp: TDEE +0 kcal — simultaneous fat loss and muscle gain (default)
+- Cut: TDEE −400 kcal — fat loss priority, high protein to protect muscle
+- Goal progress panel on Dashboard: weeks in / weeks left / weight change since start / on-track indicator
+- Expected progress rates: Bulk +0.5 lbs/wk, Recomp ≤±2 lbs, Cut −0.75 lbs/wk
+
+### Caloric Balance
+- Daily balance card: consumed (meal logs) vs estimated burned (MET × weight × session type)
+- MET values by day type: Legs/Lower 6.0, Push/Pull/Upper/Lower 5.0
+- Net calories colour-coded vs daily target
+- Remaining calories shown below the card
+
+### AI Coaching Engine (Provider-Agnostic)
+- Supports OpenAI (GPT-4o) and Google Gemini (2.0-flash-lite) — both work from browser
+- Claude/Anthropic listed but correctly blocked: their API rejects browser requests via CORS policy; this is documented clearly in the UI
+- callAI() abstraction routes all calls through one function — provider-swappable
+- Key and provider stored in localStorage — user-supplied, never hardcoded
+- ⚙️ gear icon on dashboard opens AI settings modal
+- Test connection button validates key before saving — shows specific error (invalid key / rate limit / network)
+- Error messages translated from HTTP codes to plain English
+
+### Post-Workout Session Analysis
+- Completing a session shows a summary modal: XP, PRs, exercise count
+- Per-exercise table: weight × reps × sets, colour-coded diff vs last session
+- AI analysis button: session assessment + 3 next-week targets with exact weights + focus point
+- No key set → informational card explaining what AI provides, with "Set up AI" button
+
+### Radar Coaching (Analytics Tab)
+- Tap any axis → rule-based coaching shown immediately
+- "Get AI coaching" button fires the AI call for that specific axis
+- Context sent: goal, weeks in, weight change, sleep, stalls, all 7 radar scores
+
+### UI & Stability
+- AI coaching button and settings icon separated into two distinct controls
+- Post-workout modal has clean separate paths for "has key" and "no key" states
+- Testing panel in ⚙️ settings: reset to new user, load demo, preview post-workout summary
+- All reset actions show confirm dialog with export reminder
+- Node.js --check added to QA pipeline — syntax errors now caught before shipping
+
+### Fixes Included from v3.0 Iteration
+- Orphaned `});` after mkState — killed entire JS block silently (caught by Node --check)
+- Duplicate `let aiCoachLoading` declaration — same cause
+- Gemini model updated from deprecated `gemini-1.5-flash` to `gemini-2.0-flash-lite`
+- showPage() switched from querySelectorAll('.page') to explicit ID list — was matching 24 elements including page-header, page-title, page-subtitle
+- Onboarding step 1 starts display:none — was leaking layout even with parent hidden
 
 ---
 
