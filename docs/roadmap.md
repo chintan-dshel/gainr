@@ -1,6 +1,6 @@
 # GAINR — Project Roadmap
 
-**Version:** 2.2 | **Last Updated:** March 2026 | **Methodology:** Value-driven, MVP-first
+**Version:** 3.0 Released | **Last Updated:** April 2026 | **Methodology:** Value-driven, MVP-first
 
 ---
 
@@ -25,7 +25,10 @@ This is called **MVP thinking** — a core principle of modern product delivery.
 | Phase 6 | v2.0 | Nutrition Module | ✅ Released | TDEE, macros, meal logging, 7th radar axis |
 | Phase 7 | v2.1 | Program Customisation | ✅ Released | Custom exercises, swap, Train integration |
 
-| Phase 8 | v3.0 | Real AI Integration | 🔭 Next | Claude API — genuine AI coaching |
+| Phase 8 | v3.0 | Real AI Integration | ✅ Released | Claude API coaching, onboarding wizard, physique goals, caloric balance |
+| Phase 8b | v3.0 (final) | AI Engine + UX Polish | ✅ Released | CORS fix, test connection, UI simplification, Gemini 2.0 |
+| Phase 9 | v4.0 | Multi-Profile + Cloud | 🔭 Next | Multiple user profiles, coach mode, cloud sync |
+| Phase 10 | v4.1 | Wearables + Health APIs | 🔭 Future | Apple Health, Google Fit, real calorie burn data |
 | Phase 9 | v4.0 | Platform & Sync | 🔭 Future | Cloud storage, wearables, multi-device |
 
 ---
@@ -247,3 +250,87 @@ Documented limitations of the current version and when each will be addressed:
 ---
 
 *This roadmap is a living document. It is reviewed and updated after every version release and every structured feedback session.*
+
+---
+
+## Next Phases — v4.0 and Beyond
+
+### Phase 9 — v4.0: Multi-Profile + Cloud Sync
+
+#### The Problem
+GAINR is currently a single-user app. If you share a device with a partner, family member, or if you're a coach managing athletes, there's no way to separate data. Everything lives in one localStorage key. This is the most significant architectural limitation remaining.
+
+#### Design Approach
+
+**Option A — Local Multi-Profile (no server required)**
+- Multiple profiles stored in localStorage: `gainr_profiles: { id1: {...}, id2: {...} }`
+- Profile switcher on the landing screen — tap your name to load your data
+- Each profile has its own full state: exercise history, nutrition, goal, settings
+- PIN-lock optional per profile for privacy on shared devices
+- Export/import works per-profile
+
+**Option B — Coach / Athlete Mode (requires cloud)**
+- Coach account has visibility across all athlete profiles
+- Athletes log their own sessions; coach sees aggregated analytics
+- Requires Supabase or similar for real-time sync
+- More complex but the right long-term architecture
+
+**Recommended sequencing:** Ship Option A first (local multi-profile, no new infrastructure). This solves the shared-device problem immediately. Then layer cloud sync on top for cross-device + coach mode in v4.1.
+
+#### Key Design Decisions Deferred
+- How many profiles per device? (Suggested cap: 6)
+- Does switching profiles require a re-onboarding or just name selection?
+- Should AI settings (API key) be per-profile or shared across profiles?
+- How does demo mode work with multiple profiles?
+
+#### Technical Notes
+- Schema change: `gainr_profiles` replaces `gainr_v1` as the root key
+- Migration: existing `gainr_v1` becomes Profile 1 automatically
+- Active profile ID stored separately: `gainr_active_profile`
+- All existing functions read from `S` — minimal changes needed if profile switching just swaps the `S` object
+
+---
+
+### Phase 10 — v4.1: Wearables + Health APIs
+
+#### The Problem
+MET-based calorie burn estimates (current approach) are approximations. A 60-minute Push day estimated at 5.0 MET × weight = ~330 kcal. A fitness tracker reading heart rate and movement gives a far more accurate number. The caloric balance feature is only as good as the burn estimate.
+
+#### Design Approach
+- Apple Health (iOS): read active calories via HealthKit Web API
+- Google Fit (Android): read active calories via Fitness REST API
+- Fallback: keep MET estimates if no wearable connected
+- Show data source on caloric balance card (Estimated vs From Apple Health)
+
+#### Pre-requisites
+- Cloud sync (v4.0) makes the wearable data persistent across sessions
+- User must grant health permissions explicitly — needs clear consent UI
+
+---
+
+### Phase 11 — v5.0: Social + Community
+
+#### The Problem
+GAINR is entirely private. There's no accountability mechanism, no way to share achievements, and no way to see how your progress compares to anything external. For many users, social accountability is the strongest driver of consistency.
+
+#### Possible Features
+- Share a workout summary as an image (generated client-side)
+- Public profile with cumulative stats (opt-in)
+- Challenges: set a goal, invite someone to match it
+- Leaderboard for custom groups (gym friends, office challenge)
+
+#### Constraint
+This requires cloud infrastructure. Not appropriate before v4.0 cloud sync is stable.
+
+---
+
+### Decision Log (open)
+
+| Decision | Options | Status |
+|---|---|---|
+| Multi-profile local vs cloud-first | Local first → cloud later | ✅ Decided |
+| Coach mode architecture | Supabase + role-based access | 📋 Deferred to v4.1 |
+| AI API key per-profile vs shared | Likely shared (convenience) | ❓ Open |
+| Profile cap per device | 6 suggested | ❓ Open |
+| Wearable priority: Apple or Google | Both, Apple first (iOS traffic) | ❓ Open |
+
