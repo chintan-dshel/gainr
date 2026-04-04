@@ -164,9 +164,12 @@ body{background:var(--bg);color:var(--text);font-family:var(--fb);min-height:100
 <div id="page-dashboard" class="page active">
   <div class="page-header">
     <div><div class="page-title">GAINR</div><div class="page-subtitle">Your fitness journey</div></div>
-    <div style="text-align:right">
-      <div style="font-size:11px;color:var(--muted)" id="today-date"></div>
-      <div style="font-size:11px;color:var(--gold);margin-top:2px" id="today-label"></div>
+    <div style="display:flex;align-items:flex-start;gap:12px">
+      <div style="text-align:right">
+        <div style="font-size:11px;color:var(--muted)" id="today-date"></div>
+        <div style="font-size:11px;color:var(--gold);margin-top:2px" id="today-label"></div>
+      </div>
+      <button onclick="openAPISettings()" title="AI settings" style="background:var(--bg3);border:1px solid var(--border);border-radius:10px;width:36px;height:36px;color:var(--muted);cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;flex-shrink:0" id="ai-settings-btn">⚙️</button>
     </div>
   </div>
   <div class="char-card">
@@ -224,6 +227,8 @@ body{background:var(--bg);color:var(--text);font-family:var(--fb);min-height:100
       <div class="metric-change neutral" id="d-protein-chg">Log meals</div>
     </div>
   </div>
+  <div class="section-divider">Goal progress</div>
+  <div id="goal-progress-panel"></div>
   <div class="section-divider">Badges</div>
   <div class="card"><div class="badge-row" id="badge-row"></div></div>
 </div>
@@ -525,27 +530,120 @@ body{background:var(--bg);color:var(--text);font-family:var(--fb);min-height:100
 </div>
 
 <!-- ONBOARDING -->
-<div id="page-onboarding" style="position:fixed;inset:0;z-index:999;background:var(--bg);display:none;flex-direction:column;align-items:center;justify-content:center;padding:32px 24px;text-align:center">
-  <div style="font-family:var(--fd);font-size:52px;letter-spacing:3px;color:var(--gold);margin-bottom:8px">GAINR</div>
-  <div style="font-size:13px;color:var(--muted);text-transform:uppercase;letter-spacing:2px;margin-bottom:48px">Personal Fitness Tracker</div>
+<div id="page-onboarding" style="position:fixed;inset:0;z-index:999;background:var(--bg);display:none;flex-direction:column;overflow-y:auto">
 
-  <div style="width:100%;max-width:340px;display:flex;flex-direction:column;gap:14px">
-    <button onclick="startDemo()" style="width:100%;padding:18px;border-radius:14px;border:1px solid var(--border);background:var(--bg2);color:var(--text);font-family:var(--fb);font-size:15px;font-weight:600;cursor:pointer;text-align:left;line-height:1.4">
-      <div style="font-size:18px;margin-bottom:4px">👀  Explore demo</div>
-      <div style="font-size:12px;color:var(--muted);font-weight:400">See 3 months of sample data to explore all features</div>
-    </button>
-    <button onclick="startFresh()" style="width:100%;padding:18px;border-radius:14px;border:1px solid var(--gold);background:rgba(245,200,66,.08);color:var(--gold);font-family:var(--fb);font-size:15px;font-weight:600;cursor:pointer;text-align:left;line-height:1.4">
-      <div style="font-size:18px;margin-bottom:4px">🚀  Start my journey</div>
-      <div style="font-size:12px;opacity:.7;font-weight:400">Begin with a clean slate — your data, your progress</div>
-    </button>
+  <!-- STEP 1: WELCOME -->
+  <div id="ob-step-1" style="flex:1;display:none;flex-direction:column;align-items:center;justify-content:center;padding:40px 28px;text-align:center;min-height:100vh">
+    <div style="font-family:var(--fd);font-size:64px;letter-spacing:4px;color:var(--gold);margin-bottom:8px">GAINR</div>
+    <div style="font-size:13px;color:var(--muted);text-transform:uppercase;letter-spacing:2px;margin-bottom:40px">Personal Fitness Tracker</div>
+    <div style="width:100%;max-width:340px;display:flex;flex-direction:column;gap:12px">
+      <button onclick="showOBStep(2)" style="width:100%;padding:18px;border-radius:14px;border:1px solid var(--gold);background:rgba(245,200,66,.08);color:var(--gold);font-family:var(--fb);font-size:15px;font-weight:600;cursor:pointer;text-align:left">
+        <div style="font-size:18px;margin-bottom:4px">🚀  Start my journey</div>
+        <div style="font-size:12px;opacity:.7;font-weight:400">Set up your profile and goals — takes 60 seconds</div>
+      </button>
+      <button onclick="startDemo()" style="width:100%;padding:18px;border-radius:14px;border:1px solid var(--border);background:var(--bg2);color:var(--text);font-family:var(--fb);font-size:15px;font-weight:600;cursor:pointer;text-align:left">
+        <div style="font-size:18px;margin-bottom:4px">👀  Explore demo</div>
+        <div style="font-size:12px;color:var(--muted);font-weight:400">See 3 months of sample data — no setup needed</div>
+      </button>
+    </div>
+    <div style="margin-top:40px;font-size:11px;color:var(--muted);line-height:1.7">All data stored on this device only.<br>Export anytime from the Log tab.</div>
   </div>
 
-  <div style="margin-top:40px;font-size:11px;color:var(--muted);line-height:1.7;max-width:280px">
-    All data is stored on this device.<br>
-    Export regularly from Settings to back up.
+  <!-- STEP 2: PROFILE -->
+  <div id="ob-step-2" style="display:none;flex-direction:column;padding:40px 24px;min-height:100vh">
+    <div style="margin-bottom:32px">
+      <div style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:2px;margin-bottom:8px">Step 1 of 3</div>
+      <div style="font-family:var(--fd);font-size:32px;letter-spacing:2px;color:var(--gold)">Your Profile</div>
+      <div style="font-size:13px;color:var(--muted);margin-top:6px">This powers your TDEE and coaching targets</div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:14px;flex:1">
+      <div class="input-group"><label class="input-label">Your name</label><input class="input-field" type="text" id="ob-name" placeholder="e.g. Chintan" autocomplete="given-name" style="width:100%"></div>
+      <div class="two-col">
+        <div class="input-group"><label class="input-label">Age</label><input class="input-field" type="number" id="ob-age" placeholder="35" min="16" max="80"></div>
+        <div class="input-group"><label class="input-label">Sex</label>
+          <select id="ob-sex" class="input-field" style="cursor:pointer">
+            <option value="m">Male</option>
+            <option value="f">Female</option>
+          </select>
+        </div>
+        <div class="input-group"><label class="input-label">Weight (lbs)</label><input class="input-field" type="number" id="ob-wt" placeholder="155" step="0.5"></div>
+        <div class="input-group"><label class="input-label">Height (in)</label><input class="input-field" type="number" id="ob-ht" placeholder="71" step="1"></div>
+      </div>
+      <div class="input-group"><label class="input-label">Activity level</label>
+        <select id="ob-act" class="input-field" style="cursor:pointer">
+          <option value="1.2">Sedentary — desk job, little exercise</option>
+          <option value="1.375">Light — 1–3 workouts per week</option>
+          <option value="1.55" selected>Moderate — 4–5 workouts per week (recommended)</option>
+          <option value="1.725">Active — daily training or physical job</option>
+          <option value="1.9">Very active — twice daily training</option>
+        </select>
+      </div>
+    </div>
+    <button onclick="obProfileNext()" class="btn-primary" style="margin-top:24px">Continue →</button>
+    <button onclick="showOBStep(1)" style="margin-top:10px;background:none;border:none;color:var(--muted);font-size:13px;cursor:pointer;padding:8px">← Back</button>
   </div>
+
+  <!-- STEP 3: GOAL -->
+  <div id="ob-step-3" style="display:none;flex-direction:column;padding:40px 24px;min-height:100vh">
+    <div style="margin-bottom:32px">
+      <div style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:2px;margin-bottom:8px">Step 2 of 3</div>
+      <div style="font-family:var(--fd);font-size:32px;letter-spacing:2px;color:var(--gold)">Your Goal</div>
+      <div style="font-size:13px;color:var(--muted);margin-top:6px">Shapes your caloric targets and coaching advice</div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:12px;flex:1">
+      <div id="ob-goal-bulk" onclick="selectGoal('bulk')" style="padding:16px;border-radius:14px;border:2px solid var(--border);cursor:pointer;transition:all .2s">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+          <div style="font-family:var(--fd);font-size:22px;letter-spacing:1px">💪 Bulk</div>
+          <div style="font-size:11px;color:var(--muted);background:var(--bg3);padding:3px 8px;border-radius:100px">+200–300 kcal</div>
+        </div>
+        <div style="font-size:12px;color:var(--muted);line-height:1.6">Caloric surplus. Maximise muscle gain. Best for beginners and those under their genetic potential.</div>
+      </div>
+      <div id="ob-goal-recomp" onclick="selectGoal('recomp')" style="padding:16px;border-radius:14px;border:2px solid var(--border);cursor:pointer;transition:all .2s">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+          <div style="font-family:var(--fd);font-size:22px;letter-spacing:1px">⚖️ Recomp</div>
+          <div style="font-size:11px;color:var(--muted);background:var(--bg3);padding:3px 8px;border-radius:100px">Maintenance</div>
+        </div>
+        <div style="font-size:12px;color:var(--muted);line-height:1.6">Calories at TDEE. Simultaneous fat loss + muscle gain. Slower but most sustainable long-term.</div>
+      </div>
+      <div id="ob-goal-cut" onclick="selectGoal('cut')" style="padding:16px;border-radius:14px;border:2px solid var(--border);cursor:pointer;transition:all .2s">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+          <div style="font-family:var(--fd);font-size:22px;letter-spacing:1px">🔥 Cut</div>
+          <div style="font-size:11px;color:var(--muted);background:var(--bg3);padding:3px 8px;border-radius:100px">−300–500 kcal</div>
+        </div>
+        <div style="font-size:12px;color:var(--muted);line-height:1.6">Caloric deficit. Fat loss priority with muscle preservation. High protein is essential.</div>
+      </div>
+      <div class="input-group" style="margin-top:8px">
+        <label class="input-label">Target timeline (weeks)</label>
+        <div class="input-row">
+          <input class="input-field" type="number" id="ob-weeks" placeholder="12" min="4" max="52" step="1">
+          <div class="input-unit">wks</div>
+        </div>
+        <div style="font-size:11px;color:var(--muted);margin-top:4px">12 weeks recommended for first goal cycle</div>
+      </div>
+    </div>
+    <button onclick="obGoalNext()" class="btn-primary" style="margin-top:24px">Continue →</button>
+    <button onclick="showOBStep(2)" style="margin-top:10px;background:none;border:none;color:var(--muted);font-size:13px;cursor:pointer;padding:8px">← Back</button>
+  </div>
+
+  <!-- STEP 4: READY -->
+  <div id="ob-step-4" style="display:none;flex-direction:column;align-items:center;justify-content:center;padding:40px 24px;text-align:center;min-height:100vh">
+    <div style="font-size:48px;margin-bottom:16px">🎯</div>
+    <div id="ob-ready-name" style="font-family:var(--fd);font-size:36px;letter-spacing:2px;color:var(--gold);margin-bottom:8px"></div>
+    <div id="ob-ready-tagline" style="font-size:14px;color:var(--muted);margin-bottom:32px"></div>
+    <div id="ob-ready-targets" style="width:100%;max-width:340px;background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:20px;margin-bottom:28px"></div>
+    <div style="width:100%;max-width:340px;background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:16px;margin-bottom:28px;text-align:left">
+      <div style="font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin-bottom:10px;font-weight:600">Your next steps</div>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <div style="font-size:13px;color:var(--text)">1️⃣  Go to <strong>Train</strong> — log your first session</div>
+        <div style="font-size:13px;color:var(--text)">2️⃣  Go to <strong>Log</strong> — log your first meal</div>
+        <div style="font-size:13px;color:var(--text)">3️⃣  Come back weekly to log your weight</div>
+        <div style="font-size:13px;color:var(--text)">4️⃣  Check <strong>Analytics</strong> to see your progress</div>
+      </div>
+    </div>
+    <button onclick="finishOnboarding()" class="btn-primary" style="width:100%;max-width:340px">Let's go 💪</button>
+  </div>
+
 </div>
-
 <!-- SWAP MODAL -->
 <div id="swap-modal" style="display:none;position:fixed;inset:0;z-index:998;background:rgba(0,0,0,.7);align-items:flex-end;justify-content:center" onclick="if(event.target===this)closeSwapModal()">
   <div style="background:var(--bg2);border-radius:20px 20px 0 0;width:100%;max-width:480px;max-height:70vh;overflow:hidden;display:flex;flex-direction:column">
@@ -646,8 +744,10 @@ const BADGES=[{id:'First Blood',icon:'🩸',label:'First Blood'},{id:'Iron Will'
 const mkState=()=>({
   rpg:{xp:0,stats:{str:1,end:1,con:1},sc:0,streak:0,ls:0,lsd:null,badges:[],oc:0},
   tr:{wl:[{date:'2026-03-24',lbs:155,kg:70.3}],ml:[{date:'2026-03-24',chest:40,waist:35.5,hips:39,arm_r:13,arm_l:13.5,thigh:24}],sl:[],stl:[],cl:[]},
-  nt:{meals:[],tdee:0,targets:{cal:0,pro:0,carb:0,fat:0}}, // nutrition
-  eh:{},wt:'active',swaps:{},customEx:{}  // customEx: {day:[{name,sets,rMin,rMax,baseline,inc,target}]}
+  nt:{meals:[],tdee:0,targets:{cal:0,pro:0,carb:0,fat:0}},
+  profile:{name:'',age:0,sex:'m',wt:0,ht:0,act:1.55},
+  goal:{type:'recomp',weeks:12,startDate:'',startWt:0,targetCal:0},
+  eh:{},wt:'active',swaps:{},customEx:{}
 });
 let S;
 function loadS(){
@@ -665,6 +765,8 @@ function loadS(){
     if(!S.nt.targets)S.nt.targets={cal:0,pro:0,carb:0,fat:0};
     if(!S.swaps)S.swaps={};
     if(!S.customEx)S.customEx={};
+    if(!S.profile)S.profile={name:'',age:0,sex:'m',wt:0,ht:0,act:1.55};
+    if(!S.goal)S.goal={type:'recomp',weeks:12,startDate:'',startWt:0,targetCal:0};
     // SCHEMA MIGRATION: convert single-object exercise history to arrays
     Object.keys(S.eh).forEach(k=>{
       const v=S.eh[k];
@@ -693,10 +795,16 @@ function getSDP(ex){
 
 // NAV
 function showPage(n){
-  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  // Use precise IDs not class selector which matches page-header, page-title etc
+  ['dashboard','workout','log','progress','program','analytics'].forEach(p=>{
+    const el=document.getElementById('page-'+p);
+    if(el) el.classList.remove('active');
+  });
   document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
-  document.getElementById('page-'+n).classList.add('active');
-  document.getElementById('nav-'+n).classList.add('active');
+  const target=document.getElementById('page-'+n);
+  if(target) target.classList.add('active');
+  const nav=document.getElementById('nav-'+n);
+  if(nav) nav.classList.add('active');
   if(n==='progress')renderCharts();
   if(n==='program'){renderProgram();renderCustomExList();}
   if(n==='workout')renderWorkout();
@@ -726,7 +834,9 @@ function renderDash(){
   const r=S.rpg,lv=getLv(r.xp);
   document.getElementById('char-lvnum').textContent=lv.i+1;
   document.getElementById('char-lvlabel').textContent=lv.name;
-  document.getElementById('char-name').textContent=lv.name;
+  // Show user's name if set, otherwise show level name
+  const displayName=S.profile&&S.profile.name?S.profile.name.toUpperCase():lv.name;
+  document.getElementById('char-name').textContent=displayName;
   document.getElementById('xp-cur').textContent=r.xp+' XP';
   document.getElementById('xp-nxt').textContent=lv.i<3?(LEVELS[lv.i+1].min-r.xp)+' XP to '+LEVELS[lv.i+1].name:'🏆 MAX LEVEL';
   const pct=lv.i<3?((r.xp-lv.min)/(LEVELS[lv.i+1].min-lv.min))*100:100;
@@ -745,6 +855,7 @@ function renderDash(){
   document.getElementById('today-date').textContent=new Date().toLocaleDateString('en-CA',{weekday:'short',month:'short',day:'numeric'});
   document.getElementById('today-label').textContent=PROG[td2].name==='REST'?'Rest Day 🧘':PROG[td2].name+' Day 💪';
   document.getElementById('badge-row').innerHTML=BADGES.map(b=>{const e=r.badges.includes(b.id);return`<div class="badge ${e?'earned':'locked'}">${e?b.icon:'🔒'} ${b.label}</div>`;}).join('');
+  renderGoalProgress();
   // Nutrition metric on dashboard
   const ntEl=document.getElementById('d-protein');
   if(ntEl&&S.nt?.targets?.pro){
@@ -819,6 +930,7 @@ function finishWorkout(){
   const programExs=p.exercises.map((origEx,ei)=>({ex:getEffectiveEx(curDay,ei),ei}));
   const customExs=(S.customEx[curDay]||[]).map((ex,ci)=>({ex,ei:p.exercises.length+ci}));
   const allExs=[...programExs,...customExs];
+  const sessionLog=[];
   allExs.forEach(({ex,ei})=>{
     let ts=0,tr=0,mw=0;
     for(let s=0;s<ex.sets;s++){
@@ -842,6 +954,8 @@ function finishWorkout(){
       } else {
         arr.push({w:fw,r:ar,s:ts,d:td,vol});
       }
+      // Record for post-workout summary
+      sessionLog.push({name:ex.name,w:fw,r:ar,s:ts,prev:prev?{w:prev.w,r:prev.r}:null});
     }
   });
   if(!done){toast('Log at least one set first!');return;}
@@ -851,10 +965,11 @@ function finishWorkout(){
   if(ld){const df=Math.floor((new Date(td)-new Date(ld))/86400000);S.rpg.streak=df<=2?S.rpg.streak+1:1;}else S.rpg.streak=1;
   S.rpg.lsd=td;S.rpg.ls=Math.max(S.rpg.streak,S.rpg.ls||0);
   if(getLv(S.rpg.xp).i>getLv(prevXP).i){if(!S.rpg.badges.includes('Warrior Unlocked'))S.rpg.badges.push('Warrior Unlocked');toast('🏆 LEVEL UP — '+getLv(S.rpg.xp).name+'!','gold');}
-  else toast(`✅ Done! +${xp} XP${prs>0?' 🏅 PR!':''}`, 'green');
   if(S.rpg.sc===1&&!S.rpg.badges.includes('First Blood')){S.rpg.badges.push('First Blood');setTimeout(()=>toast('🏅 Badge: First Blood!','gold'),1200);}
   if((S.rpg.oc||0)>=10&&!S.rpg.badges.includes('Iron Will')){S.rpg.badges.push('Iron Will');setTimeout(()=>toast('🏅 Badge: Iron Will!','gold'),1600);}
-  saveS();renderDash();setTimeout(()=>showPage('dashboard'),1200);
+  saveS();renderDash();
+  // Show post-workout summary modal instead of navigating away
+  showWorkoutSummary(sessionLog, xp, prs);
 }
 
 // LOG
@@ -1692,6 +1807,11 @@ function renderHexDetail(axisKey,score){
       '<div style="font-size:13px;line-height:1.65;color:var(--text);margin-bottom:14px">'+rec.strategic+'</div>'+
       '<div style="font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin-bottom:8px;font-weight:600">Specific actions</div>'+
       '<div style="display:flex;flex-direction:column;gap:7px">'+rec.specific.map(a=>'<div style="display:flex;gap:8px;font-size:12px;color:var(--text);line-height:1.5"><span style="color:'+sc+';flex-shrink:0;font-weight:700">→</span><span>'+a+'</span></div>').join('')+'</div></div>'+
+      // AI Coaching button — separate from settings
+      '<div style="display:flex;gap:8px;margin-bottom:8px">'+
+      '<button id="ai-coach-btn" style="flex:1;padding:11px;border-radius:10px;border:1px solid rgba(179,157,219,.4);background:rgba(179,157,219,.08);color:#b39ddb;font-family:var(--fb);font-size:12px;font-weight:600;cursor:pointer">🤖 Get AI coaching</button>'+
+      '<button onclick="openAPISettings()" style="padding:11px 14px;border-radius:10px;border:1px solid var(--border);background:var(--bg3);color:var(--muted);font-family:var(--fb);font-size:12px;cursor:pointer" title="AI provider settings">⚙️</button>'+
+      '</div>'+
       pillsHTML();
   }
 
@@ -1701,6 +1821,10 @@ function renderHexDetail(axisKey,score){
       renderHexDetail(btn.dataset.hkey, parseInt(btn.dataset.hscore));
     });
   });
+
+  // Wire AI coaching button
+  const aiBtn=document.getElementById('ai-coach-btn');
+  if(aiBtn) aiBtn.addEventListener('click',()=>getAICoaching(axisKey,score));
 }
 
 // ═══════════════════════════════════════════════
@@ -2052,14 +2176,124 @@ function getEffectiveDayExercises(day){
 }
 
 // ONBOARDING
+// ═══════════════════════════════════════════════
+// ONBOARDING WIZARD
+// ═══════════════════════════════════════════════
+let obSelectedGoal = 'recomp';
+
 function checkOnboarding(){
   const onboarded = localStorage.getItem('gainr_onboarded');
   const el = document.getElementById('page-onboarding');
   if(!onboarded){
     el.style.display='flex';
+    showOBStep(1);
   } else {
     el.style.display='none';
   }
+}
+
+function showOBStep(n){
+  [1,2,3,4].forEach(i=>{
+    const el=document.getElementById('ob-step-'+i);
+    if(el) el.style.display = i===n ? 'flex' : 'none';
+  });
+}
+
+function selectGoal(type){
+  obSelectedGoal=type;
+  ['bulk','recomp','cut'].forEach(g=>{
+    const el=document.getElementById('ob-goal-'+g);
+    if(!el)return;
+    el.style.borderColor = g===type ? 'var(--gold)' : 'var(--border)';
+    el.style.background = g===type ? 'rgba(245,200,66,.06)' : 'transparent';
+  });
+}
+
+function obProfileNext(){
+  const name=document.getElementById('ob-name').value.trim();
+  const age=parseInt(document.getElementById('ob-age').value);
+  const sex=document.getElementById('ob-sex').value;
+  const wt=parseFloat(document.getElementById('ob-wt').value);
+  const ht=parseFloat(document.getElementById('ob-ht').value);
+  const act=parseFloat(document.getElementById('ob-act').value);
+  if(!name){ toast('Please enter your name','red'); return; }
+  if(!age||age<16||age>80){ toast('Please enter a valid age','red'); return; }
+  if(!wt||wt<80||wt>400){ toast('Please enter your weight in lbs','red'); return; }
+  if(!ht||ht<48||ht>96){ toast('Please enter your height in inches','red'); return; }
+  // Save to temp object — won't commit until step 4
+  window._obProfile={name,age,sex,wt,ht,act};
+  selectGoal('recomp'); // default selection
+  showOBStep(3);
+}
+
+function obGoalNext(){
+  const weeks=parseInt(document.getElementById('ob-weeks').value)||12;
+  if(weeks<4||weeks>52){ toast('Timeline should be 4–52 weeks','red'); return; }
+  window._obGoal={type:obSelectedGoal,weeks};
+  // Calculate targets and show summary
+  const p=window._obProfile;
+  const wKg=p.wt/2.205;
+  const hCm=p.ht*2.54;
+  const bmrBase = p.sex==='m'
+    ? 10*wKg + 6.25*hCm - 5*p.age + 5
+    : 10*wKg + 6.25*hCm - 5*p.age - 161;
+  const tdee=Math.round(bmrBase*p.act);
+  const goalOffsets={bulk:250,recomp:0,cut:-400};
+  const targetCal=tdee+(goalOffsets[obSelectedGoal]||0);
+  const pro=Math.round(p.wt*0.82);
+  const fat=Math.round(targetCal*0.25/9);
+  const carb=Math.round((targetCal-pro*4-fat*9)/4);
+  window._obCalc={tdee,targetCal,pro,carb,fat};
+
+  const goalLabels={bulk:'Bulk — Build muscle',recomp:'Recomp — Build & burn',cut:'Cut — Lose fat'};
+  const goalColors={bulk:'#2ed573',recomp:'#f5c842',cut:'#ff4757'};
+  const c=goalColors[obSelectedGoal];
+
+  document.getElementById('ob-ready-name').textContent='Ready, '+p.name+'!';
+  document.getElementById('ob-ready-tagline').textContent=goalLabels[obSelectedGoal]+' · '+weeks+' week goal';
+  document.getElementById('ob-ready-targets').innerHTML=`
+    <div style="text-align:center;margin-bottom:16px">
+      <div style="font-family:var(--fd);font-size:36px;color:${c}">${targetCal} kcal</div>
+      <div style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:1px">Daily calorie target</div>
+      ${targetCal!==tdee?`<div style="font-size:11px;color:var(--muted);margin-top:2px">TDEE ${tdee} kcal ${targetCal>tdee?'+'+Math.abs(targetCal-tdee):'-'+Math.abs(targetCal-tdee)} kcal</div>`:'<div style="font-size:11px;color:var(--muted);margin-top:2px">At maintenance calories</div>'}
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px">
+      <div style="text-align:center;background:var(--bg3);border-radius:10px;padding:10px">
+        <div style="font-family:var(--fd);font-size:22px;color:#4fc3f7">${pro}g</div>
+        <div style="font-size:10px;color:var(--muted);text-transform:uppercase">Protein</div>
+      </div>
+      <div style="text-align:center;background:var(--bg3);border-radius:10px;padding:10px">
+        <div style="font-family:var(--fd);font-size:22px;color:#2ed573">${carb}g</div>
+        <div style="font-size:10px;color:var(--muted);text-transform:uppercase">Carbs</div>
+      </div>
+      <div style="text-align:center;background:var(--bg3);border-radius:10px;padding:10px">
+        <div style="font-family:var(--fd);font-size:22px;color:#f5c842">${fat}g</div>
+        <div style="font-size:10px;color:var(--muted);text-transform:uppercase">Fat</div>
+      </div>
+    </div>`;
+  showOBStep(4);
+}
+
+function finishOnboarding(){
+  const p=window._obProfile;
+  const g=window._obGoal;
+  const c=window._obCalc;
+  const today=new Date().toISOString().split('T')[0];
+  // Clear any existing data and start fresh
+  localStorage.removeItem('gainr_v1');
+  S=mkState();
+  S.profile={name:p.name,age:p.age,sex:p.sex,wt:p.wt,ht:p.ht,act:p.act};
+  S.goal={type:g.type,weeks:g.weeks,startDate:today,startWt:p.wt,targetCal:c.targetCal};
+  S.nt.tdee=c.tdee;
+  S.nt.targets={cal:c.targetCal,pro:c.pro,carb:c.carb,fat:c.fat};
+  // Seed baseline weight and measurements
+  S.tr.wl=[{date:today,lbs:p.wt,kg:+(p.wt/2.205).toFixed(1)}];
+  saveS();
+  localStorage.setItem('gainr_onboarded','true');
+  document.getElementById('page-onboarding').style.display='none';
+  renderDash();
+  renderWorkout();
+  toast('Welcome to GAINR, '+p.name+'! 🎯','green');
 }
 
 function startDemo(){
@@ -2068,18 +2302,515 @@ function startDemo(){
   loadS(); renderDash(); renderWorkout();
 }
 
-function startFresh(){
+// ═══════════════════════════════════════════════
+// PHYSIQUE GOAL TRACKING
+// ═══════════════════════════════════════════════
+
+// MET values for calorie burn estimation per exercise category
+const MET_VALUES={
+  Push:5.0, Pull:5.0, Legs:6.0, Upper:5.0, Lower:6.0, REST:1.2
+};
+
+function estimateSessionCaloriesBurned(day){
+  if(!S.profile||!S.profile.wt)return 0;
+  const p=PROG[day];
+  if(!p||!p.exercises.length)return 0;
+  const dayType=p.name; // PUSH, PULL, LEGS, UPPER, LOWER, REST
+  const met=MET_VALUES[dayType]||5.0;
+  const wKg=S.profile.wt/2.205;
+  const durationHrs=1.0; // assume ~60min session
+  return Math.round(met*wKg*durationHrs);
+}
+
+function getTodayCaloricBalance(){
+  const today=new Date().toISOString().split('T')[0];
+  const meals=(S.nt?.meals||[]).filter(m=>m.date===today);
+  const consumed=meals.reduce((s,m)=>s+(m.cal||0),0);
+  const td=DAYS[new Date().getDay()];
+  const burned=estimateSessionCaloriesBurned(td);
+  const target=S.nt?.targets?.cal||0;
+  return{consumed,burned,target,net:consumed-burned};
+}
+
+function renderGoalProgress(){
+  const el=document.getElementById('goal-progress-panel');
+  if(!el)return;
+  if(!S.goal||!S.goal.startDate||!S.goal.type){
+    el.innerHTML='<div style="font-size:12px;color:var(--muted);text-align:center;padding:12px">Complete onboarding to track your goal</div>';
+    return;
+  }
+  const g=S.goal;
+  const wl=S.tr.wl;
+  const startDate=new Date(g.startDate);
+  const today=new Date();
+  const weeksIn=Math.max(0,Math.round((today-startDate)/(7*86400000)));
+  const weeksLeft=Math.max(0,g.weeks-weeksIn);
+  const currentWt=wl.length?wl[wl.length-1].lbs:g.startWt;
+  const wtChange=(currentWt-g.startWt).toFixed(1);
+  const goalLabels={bulk:'Bulk',recomp:'Recomp',cut:'Cut'};
+  const goalColors={bulk:'#2ed573',recomp:'#f5c842',cut:'#ff4757'};
+  const c=goalColors[g.type]||'#f5c842';
+  const pct=Math.min(100,Math.round((weeksIn/g.weeks)*100));
+  // Expected progress by goal
+  const expectedChange={bulk:weeksIn*0.5,recomp:0,cut:weeksIn*-0.75}[g.type]||0;
+  const onTrack=g.type==='recomp'?Math.abs(parseFloat(wtChange))<2
+    :g.type==='bulk'?parseFloat(wtChange)>=expectedChange*0.7
+    :parseFloat(wtChange)<=expectedChange*0.7;
+
+  const bal=getTodayCaloricBalance();
+
+  el.innerHTML=`
+    <div style="background:var(--bg2);border:1px solid ${c}44;border-radius:14px;padding:16px;margin-bottom:10px">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px">
+        <div>
+          <div style="font-family:var(--fd);font-size:22px;letter-spacing:1px;color:${c}">${goalLabels[g.type]}</div>
+          <div style="font-size:11px;color:var(--muted);margin-top:2px">Week ${weeksIn} of ${g.weeks} · ${weeksLeft} weeks left</div>
+        </div>
+        <div style="text-align:right">
+          <div style="font-size:13px;font-weight:600;color:${onTrack?'#2ed573':'#ff4757'}">${onTrack?'✅ On track':'⚠️ Off track'}</div>
+          <div style="font-size:11px;color:var(--muted);margin-top:2px">${parseFloat(wtChange)>0?'+':''}${wtChange} lbs since start</div>
+        </div>
+      </div>
+      <div style="height:5px;background:rgba(255,255,255,.08);border-radius:3px;overflow:hidden;margin-bottom:14px">
+        <div style="height:100%;width:${pct}%;background:${c};border-radius:3px;transition:width .6s ease"></div>
+      </div>
+      <div style="font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin-bottom:8px;font-weight:600">Today's caloric balance</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px">
+        <div style="text-align:center;background:var(--bg3);border-radius:10px;padding:10px">
+          <div style="font-family:var(--fd);font-size:18px;color:#2ed573">${bal.consumed}</div>
+          <div style="font-size:10px;color:var(--muted);text-transform:uppercase">Consumed</div>
+        </div>
+        <div style="text-align:center;background:var(--bg3);border-radius:10px;padding:10px">
+          <div style="font-family:var(--fd);font-size:18px;color:#4fc3f7">~${bal.burned}</div>
+          <div style="font-size:10px;color:var(--muted);text-transform:uppercase">Est. burned</div>
+        </div>
+        <div style="text-align:center;background:var(--bg3);border-radius:10px;padding:10px">
+          <div style="font-family:var(--fd);font-size:18px;color:${bal.net<=(g.targetCal||2000)?'#2ed573':'#ff4757'}">${bal.net}</div>
+          <div style="font-size:10px;color:var(--muted);text-transform:uppercase">Net</div>
+        </div>
+      </div>
+      ${bal.target?`<div style="font-size:11px;color:var(--muted);text-align:center;margin-top:8px">Daily target: ${bal.target} kcal · Remaining: ${Math.max(0,bal.target-bal.net)} kcal</div>`:''}
+    </div>`;
+}
+
+// ═══════════════════════════════════════════════
+// AI ENGINE — PROVIDER-AGNOSTIC (v3.0)
+// ═══════════════════════════════════════════════
+
+const AI_PROVIDERS = {
+  openai: {
+    label: 'GPT-4o (OpenAI)',
+    hint: 'Get your key at platform.openai.com → API Keys → Create new secret key. Starts with "sk-". Free tier available.',
+    browserCompatible: true,
+    call: async (key, prompt, sys) => {
+      const res = await fetch('https://api.openai.com/v1/chat/completions', {
+        method:'POST',
+        headers:{'Content-Type':'application/json','Authorization':'Bearer '+key},
+        body:JSON.stringify({model:'gpt-4o',max_tokens:600,messages:[{role:'system',content:sys},{role:'user',content:prompt}]})
+      });
+      const d = await res.json();
+      if(!res.ok) throw new Error(d.error?.message||'API error '+res.status);
+      return d.choices?.[0]?.message?.content||'';
+    }
+  },
+  gemini: {
+    label: 'Gemini 2.0 Flash (Google)',
+    hint: 'Get your key at aistudio.google.com → Get API Key → Create API key. Free tier is generous. Starts with "AIza".',
+    browserCompatible: true,
+    call: async (key, prompt, sys) => {
+      const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-lite:generateContent?key=${key}`,{
+        method:'POST',headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({contents:[{parts:[{text:sys+'\n\n'+prompt}]}]})
+      });
+      const d = await res.json();
+      if(!res.ok) throw new Error(d.error?.message||'API error '+res.status);
+      return d.candidates?.[0]?.content?.parts?.[0]?.text||'';
+    }
+  },
+  anthropic: {
+    label: 'Claude (Anthropic) — ⚠️ See note',
+    hint: '⚠️ Anthropic blocks direct browser requests (CORS policy). Claude API requires a server — it cannot be called from a web app like GAINR running on GitHub Pages. Use OpenAI or Gemini instead.',
+    browserCompatible: false,
+    call: async (key, prompt, sys) => {
+      // Anthropic intentionally blocks browser-to-API calls via CORS.
+      // The anthropic-version header triggers a preflight that Anthropic rejects.
+      // This is by design — their API is for server-to-server use only.
+      throw new Error('CORS_BLOCKED');
+    }
+  }
+};
+
+function getStoredAPI(){
+  return{provider:localStorage.getItem('gainr_api_provider')||'openai',key:localStorage.getItem('gainr_api_key')||''};
+}
+
+function openAPISettings(){
+  const{provider,key}=getStoredAPI();
+  const sel=document.getElementById('api-provider-select');if(sel)sel.value=provider;
+  const inp=document.getElementById('api-key-input');if(inp)inp.value=key;
+  updateAPIProviderHint();
+  const status=document.getElementById('api-current-status');
+  if(status)status.innerHTML=key?'✅ Key saved — tap <strong>Test connection</strong> to verify':'No key saved yet';
+  document.getElementById('api-settings-modal').style.display='flex';
+}
+
+function closeAPISettings(){document.getElementById('api-settings-modal').style.display='none';}
+
+function updateAPIProviderHint(){
+  const p=document.getElementById('api-provider-select')?.value||'openai';
+  const provider=AI_PROVIDERS[p];
+  const hintEl=document.getElementById('api-provider-hint');
+  const warningEl=document.getElementById('api-cors-warning');
+  if(hintEl)hintEl.textContent=provider?.hint||'';
+  if(warningEl){
+    if(provider&&!provider.browserCompatible){
+      warningEl.style.display='block';
+    }else{
+      warningEl.style.display='none';
+    }
+  }
+}
+
+async function testAPIConnection(){
+  const provider=document.getElementById('api-provider-select')?.value||'openai';
+  const key=document.getElementById('api-key-input')?.value?.trim();
+  const statusEl=document.getElementById('api-current-status');
+  const testBtn=document.getElementById('api-test-btn');
+  if(!key){toast('Enter an API key first','red');return;}
+  const p=AI_PROVIDERS[provider];
+  if(!p||!p.browserCompatible){
+    if(statusEl)statusEl.innerHTML='<span style="color:#ff4757">⚠️ This provider cannot be used from a browser. Choose OpenAI or Gemini.</span>';
+    return;
+  }
+  if(testBtn){testBtn.disabled=true;testBtn.textContent='Testing...';}
+  if(statusEl)statusEl.innerHTML='<span style="color:var(--muted)">Connecting to '+p.label+'...</span>';
+  try{
+    await p.call(key,'Reply with exactly one word: OK','Reply with one word only.');
+    if(statusEl)statusEl.innerHTML='<span style="color:#2ed573">✅ Connected! '+p.label+' is ready to use.</span>';
+  }catch(err){
+    const msg=err.message.includes('401')||err.message.toLowerCase().includes('invalid')||err.message.toLowerCase().includes('incorrect')
+      ?'Invalid API key — double-check and re-enter'
+      :err.message.includes('429')
+      ?'Rate limited — key is valid but over quota. Try again in a moment.'
+      :err.message.includes('Failed to fetch')||err.message.includes('CORS')
+      ?'Network error — check your internet connection'
+      :'Error: '+err.message;
+    if(statusEl)statusEl.innerHTML=`<span style="color:#ff4757">❌ ${msg}</span>`;
+  }finally{
+    if(testBtn){testBtn.disabled=false;testBtn.textContent='Test connection';}
+  }
+}
+
+function saveAPISettings(){
+  const provider=document.getElementById('api-provider-select')?.value;
+  const key=document.getElementById('api-key-input')?.value?.trim();
+  const p=AI_PROVIDERS[provider];
+  if(p&&!p.browserCompatible){
+    toast('Anthropic cannot be used from a browser app — choose OpenAI or Gemini','red');
+    return;
+  }
+  if(!key){toast('Enter an API key','red');return;}
+  localStorage.setItem('gainr_api_provider',provider);
+  localStorage.setItem('gainr_api_key',key);
+  closeAPISettings();
+  toast('✅ AI settings saved — tap Test connection next time to verify','green');
+  const btn=document.getElementById('ai-settings-btn');
+  if(btn){btn.style.borderColor='rgba(179,157,219,.5)';btn.title='AI active — tap to change settings';}
+}
+
+async function callAI(prompt,sys='You are a science-backed fitness coach. Be specific, direct, practical. No fluff.'){
+  const{provider,key}=getStoredAPI();
+  if(!key){openAPISettings();throw new Error('NO_KEY');}
+  const p=AI_PROVIDERS[provider];
+  if(!p)throw new Error('Unknown provider — open ⚙️ settings and reselect');
+  if(!p.browserCompatible)throw new Error('CORS_BLOCKED');
+  try{
+    return await p.call(key,prompt,sys);
+  }catch(err){
+    if(err.message==='Failed to fetch'||err.message.includes('NetworkError')){
+      throw new Error('Network error — check your internet connection and try again');
+    }
+    if(err.message.includes('401')||err.message.toLowerCase().includes('incorrect api key')){
+      throw new Error('Invalid API key — open ⚙️ settings and re-enter your key');
+    }
+    if(err.message.includes('429')){
+      throw new Error('Rate limit reached — wait a moment and try again');
+    }
+    throw err;
+  }
+}
+
+function parseAIResponse(text){
+  const sm=text.match(/STRATEGIC:\s*(.+?)(?=\n1\.)/s);
+  const am=[...text.matchAll(/\d\.\s*(.+)/g)].map(m=>m[1].trim());
+  return{strategic:sm?sm[1].trim():text.split('\n').slice(0,3).join(' '),actions:am.length?am:[text]};
+}
+
+// ── RADAR AXIS COACHING ──────────────────────────
+let aiCoachLoading=false;
+
+async function getAICoaching(axisKey,score){
+  if(aiCoachLoading)return;
+  const panel=document.getElementById('hex-detail-panel');if(!panel)return;
+  const scores=computeHexScores();
+  const stalls=getAllStalls();
+  const wl=S.tr.wl;
+  const wtChange=wl.length>1?(wl[wl.length-1].lbs-wl[0].lbs).toFixed(1):null;
+  const avgSleep=S.tr.sl.length?(S.tr.sl.slice(-7).reduce((s,e)=>s+e.hours,0)/Math.min(7,S.tr.sl.length)).toFixed(1):null;
+  const axis=HEX_AXES.find(a=>a.key===axisKey);
+  const sc=score===-1?'No data':score+'/100';
+  const tier=score>=70?'strong':score>=40?'developing':'needs work';
+  const prompt=`User: ${S.profile?.name||'user'}, goal: ${S.goal?.type||'recomp'} (week ${S.goal?.startDate?Math.round((new Date()-new Date(S.goal.startDate))/(7*86400000)):0})
+Weight change: ${wtChange!==null?wtChange+' lbs':'no data'}, sleep avg: ${avgSleep||'not logged'} hrs
+Stalls: ${stalls.map(s=>s.exName+'('+s.type+')').join(', ')||'none'}
+Radar scores: ${HEX_AXES.map(a=>{const s=scores[a.key];return a.label+':'+(s===-1?'no data':s);}).join(', ')}
+Tapped: "${axis?.label}" — Score: ${sc} (${tier})
+
+Respond EXACTLY:
+STRATEGIC: [2-3 sentence assessment]
+1. [Action]
+2. [Action]
+3. [Action]`;
+
+  aiCoachLoading=true;
+  const {provider}=getStoredAPI();
+  const providerLabel=AI_PROVIDERS[provider]?.label||'AI';
+  const loadingEl=document.createElement('div');
+  loadingEl.style.cssText='background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:16px;margin-bottom:12px;text-align:center;color:var(--muted);font-size:13px';
+  loadingEl.innerHTML='<div style="margin-bottom:6px">🤖 Analysing your data...</div><div style="font-size:11px">Powered by '+providerLabel+'</div>';
+  panel.insertBefore(loadingEl,panel.firstChild);
+
+  try{
+    const text=await callAI(prompt);
+    if(!text){loadingEl.remove();return;}
+    const{strategic,actions}=parseAIResponse(text);
+    const c=score===-1?'var(--muted)':score>=70?'#2ed573':score>=40?'#f5c842':'#ff4757';
+    loadingEl.style.cssText='background:var(--bg2);border:1px solid '+c+'44;border-radius:14px;padding:16px;margin-bottom:12px';
+    loadingEl.innerHTML=`<div style="display:flex;align-items:center;gap:8px;margin-bottom:10px"><div style="font-size:12px;background:rgba(179,157,219,.2);color:#b39ddb;border-radius:100px;padding:3px 10px;font-weight:600">🤖 ${providerLabel}</div></div><div style="font-size:13px;line-height:1.65;color:var(--text);margin-bottom:12px">${strategic}</div><div style="font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin-bottom:8px;font-weight:600">Actions</div><div style="display:flex;flex-direction:column;gap:7px">${actions.map(a=>`<div style="display:flex;gap:8px;font-size:12px;color:var(--text);line-height:1.5"><span style="color:${c};flex-shrink:0;font-weight:700">→</span><span>${a}</span></div>`).join('')}</div>`;
+  }catch(err){
+    if(err.message==='NO_KEY'){loadingEl.remove();}
+    else{loadingEl.style.cssText='background:rgba(255,71,87,.06);border:1px solid rgba(255,71,87,.2);border-radius:14px;padding:12px;margin-bottom:12px;font-size:12px;color:var(--muted);text-align:center';loadingEl.textContent='AI error: '+err.message+'. Check settings ⚙️';setTimeout(()=>loadingEl.remove(),5000);}
+  }finally{aiCoachLoading=false;}
+}
+
+// ── POST-WORKOUT SESSION ANALYSIS ──────────────────
+let lastSessionLog=[];
+
+function closeWorkoutSummary(){document.getElementById('workout-summary-modal').style.display='none';}
+
+function showWorkoutSummary(sessionLog,xpEarned,prs){
+  lastSessionLog=sessionLog;
+  const content=document.getElementById('workout-summary-content');
+  const rows=sessionLog.map(item=>{
+    const prev=item.prev;
+    const diff=prev?item.w-prev.w:0;
+    const diffStr=diff>0?`<span style="color:#2ed573">+${diff} lbs</span>`:diff<0?`<span style="color:#ff4757">${diff} lbs</span>`:prev?'<span style="color:var(--muted)">same</span>':'<span style="color:#4fc3f7">first!</span>';
+    return`<div style="display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px solid var(--border)"><div style="font-size:13px;font-weight:500;color:var(--text);min-width:0;margin-right:8px">${item.name}</div><div style="text-align:right;flex-shrink:0"><div style="font-size:13px;font-family:var(--fm)">${item.w} lbs × ${item.r} × ${item.s}s</div><div style="font-size:11px;margin-top:1px">${diffStr}${prev?' vs '+prev.w+'lbs':''}</div></div></div>`;
+  }).join('');
+
+  const{provider,key}=getStoredAPI();
+  const providerLabel=AI_PROVIDERS[provider]?.label||'AI';
+
+  const aiSection=key
+    ?`<div style="margin-bottom:12px">
+        <div style="font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin-bottom:8px;font-weight:600">AI coaching</div>
+        <div style="font-size:12px;color:var(--muted);margin-bottom:10px;line-height:1.5">Get a breakdown of this session and specific targets for next week, powered by ${providerLabel}.</div>
+        <button onclick="getPostWorkoutAnalysis()" id="post-workout-ai-btn" style="width:100%;padding:13px;border-radius:12px;border:1px solid rgba(179,157,219,.4);background:rgba(179,157,219,.08);color:#b39ddb;font-family:var(--fb);font-size:13px;font-weight:600;cursor:pointer">
+          🤖 Analyse this session
+        </button>
+      </div>`
+    :`<div style="margin-bottom:12px;background:var(--bg3);border-radius:12px;padding:14px">
+        <div style="font-size:13px;font-weight:600;color:var(--text);margin-bottom:6px">🤖 AI coaching available</div>
+        <div style="font-size:12px;color:var(--muted);margin-bottom:12px;line-height:1.5">Connect an AI provider to get session analysis and next week targets. Supports Claude, GPT-4o, and Gemini.</div>
+        <button onclick="openAPISettings()" style="width:100%;padding:11px;border-radius:10px;border:1px solid rgba(179,157,219,.4);background:rgba(179,157,219,.08);color:#b39ddb;font-family:var(--fb);font-size:13px;font-weight:600;cursor:pointer">
+          ⚙️ Set up AI provider
+        </button>
+      </div>`;
+
+  content.innerHTML=
+    `<div style="display:flex;gap:10px;margin-bottom:16px">
+      <div style="flex:1;background:var(--bg3);border-radius:10px;padding:10px;text-align:center">
+        <div style="font-family:var(--fd);font-size:22px;color:var(--gold)">+${xpEarned}</div>
+        <div style="font-size:10px;color:var(--muted);text-transform:uppercase">XP</div>
+      </div>
+      <div style="flex:1;background:var(--bg3);border-radius:10px;padding:10px;text-align:center">
+        <div style="font-family:var(--fd);font-size:22px;color:#2ed573">${prs}</div>
+        <div style="font-size:10px;color:var(--muted);text-transform:uppercase">PRs</div>
+      </div>
+      <div style="flex:1;background:var(--bg3);border-radius:10px;padding:10px;text-align:center">
+        <div style="font-family:var(--fd);font-size:22px;color:#4fc3f7">${sessionLog.length}</div>
+        <div style="font-size:10px;color:var(--muted);text-transform:uppercase">Exercises</div>
+      </div>
+    </div>
+    <div style="font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin-bottom:8px;font-weight:600">What you logged</div>
+    <div style="margin-bottom:16px">${rows||'<div style="color:var(--muted);font-size:13px;padding:8px 0">No sets completed</div>'}</div>
+    <div id="post-workout-ai-panel" style="margin-bottom:4px"></div>`
+    +aiSection
+    +`<button onclick="closeWorkoutSummary();showPage('dashboard')" style="width:100%;padding:12px;border-radius:12px;border:1px solid var(--border);background:var(--bg3);color:var(--text);font-family:var(--fb);font-size:13px;font-weight:600;cursor:pointer;margin-top:4px">
+        Back to dashboard
+      </button>`;
+
+  document.getElementById('workout-summary-modal').style.display='flex';
+}
+let postWorkoutAILoading=false;
+
+async function getPostWorkoutAnalysis(){
+  if(postWorkoutAILoading)return;
+  const panel=document.getElementById('post-workout-ai-panel');
+  const btn=document.getElementById('post-workout-ai-btn');
+  if(!panel)return;
+  const sessionLines=lastSessionLog.map(item=>`${item.name}: ${item.w}lbs × ${item.r} reps × ${item.s} sets${item.prev?' (was '+item.prev.w+'lbs × '+item.prev.r+' reps)':' (first session)'}`).join('\n');
+  const stalls=getAllStalls();
+  const wl=S.tr.wl;
+  const prompt=`Analyse this completed workout and give specific targets for next week.
+
+User: ${S.profile?.name||'user'}, goal: ${S.goal?.type||'recomp'} (week ${S.goal?.startDate?Math.round((new Date()-new Date(S.goal.startDate))/(7*86400000)):0} of ${S.goal?.weeks||12})
+Current weight: ${wl.length?wl[wl.length-1].lbs+' lbs':'not logged'}
+Stalls: ${stalls.map(s=>s.exName+'('+s.type+')').join(', ')||'none'}
+
+SESSION:
+${sessionLines}
+
+Respond EXACTLY:
+ASSESSMENT: [2-3 sentences on how session went]
+NEXT_WEEK:
+1. [Exercise]: target [X] lbs × [Y] reps — [reason]
+2. [Exercise]: target [X] lbs × [Y] reps — [reason]
+3. [Exercise]: target [X] lbs × [Y] reps — [reason]
+FOCUS: [one sentence on the most important thing next session]`;
+
+  postWorkoutAILoading=true;
+  if(btn){btn.disabled=true;btn.textContent='🤖 Analysing...';}
+  panel.innerHTML='<div style="background:var(--bg3);border-radius:10px;padding:14px;text-align:center;color:var(--muted);font-size:13px;margin-bottom:4px">🤖 Analysing session and building next week plan...</div>';
+
+  try{
+    const text=await callAI(prompt);
+    if(!text){panel.innerHTML='';return;}
+    const assessMatch=text.match(/ASSESSMENT:\s*(.+?)(?=NEXT_WEEK:)/s);
+    const nextMatch=text.match(/NEXT_WEEK:\s*(.+?)(?=FOCUS:)/s);
+    const focusMatch=text.match(/FOCUS:\s*(.+)/s);
+    const assessment=assessMatch?assessMatch[1].trim():'';
+    const nextLines=nextMatch?nextMatch[1].trim().split('\n').filter(l=>l.match(/^\d\./)):[];
+    const focus=focusMatch?focusMatch[1].trim():'';
+    const{provider}=getStoredAPI();
+    const providerLabel=AI_PROVIDERS[provider]?.label||'AI';
+    panel.innerHTML=`<div style="background:var(--bg2);border:1px solid rgba(179,157,219,.3);border-radius:14px;padding:16px;margin-bottom:8px"><div style="display:flex;align-items:center;gap:8px;margin-bottom:12px"><div style="font-size:12px;background:rgba(179,157,219,.2);color:#b39ddb;border-radius:100px;padding:3px 10px;font-weight:600">🤖 ${providerLabel}</div></div>${assessment?`<div style="font-size:13px;line-height:1.65;color:var(--text);margin-bottom:14px">${assessment}</div>`:''} ${nextLines.length?`<div style="font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin-bottom:8px;font-weight:600">Next week targets</div><div style="display:flex;flex-direction:column;gap:7px;margin-bottom:14px">${nextLines.map(l=>`<div style="display:flex;gap:8px;font-size:12px;color:var(--text);line-height:1.5;background:var(--bg3);border-radius:8px;padding:8px"><span style="color:#b39ddb;flex-shrink:0;font-weight:700">→</span><span>${l.replace(/^\d\.\s*/,'')}</span></div>`).join('')}</div>`:''} ${focus?`<div style="background:rgba(245,200,66,.08);border:1px solid rgba(245,200,66,.2);border-radius:10px;padding:10px;font-size:12px;color:var(--gold);line-height:1.5"><strong>Focus:</strong> ${focus}</div>`:''}</div>`;
+    if(btn)btn.style.display='none';
+  }catch(err){
+    if(err.message==='NO_KEY'){panel.innerHTML='';}
+    else{panel.innerHTML=`<div style="background:rgba(255,71,87,.06);border:1px solid rgba(255,71,87,.2);border-radius:10px;padding:12px;font-size:12px;color:var(--muted);text-align:center">Error: ${err.message}. Check ⚙️ settings.</div>`;}
+    if(btn){btn.disabled=false;btn.textContent='🤖 Retry';}
+  }finally{postWorkoutAILoading=false;}
+}
+
+
+// ── TESTING FUNCTIONS ─────────────────────────────
+function testAsNewUser(){
+  if(!confirm('This will clear your current data and show the onboarding wizard. Export a backup first if needed.\n\nContinue?')) return;
   localStorage.removeItem('gainr_v1');
-  localStorage.setItem('gainr_onboarded','true');
-  S = mkState();
-  saveS();
-  document.getElementById('page-onboarding').style.display='none';
+  localStorage.removeItem('gainr_onboarded');
+  closeAPISettings();
+  S = mkState(); saveS();
   renderDash(); renderWorkout();
-  toast('Welcome to GAINR — let\'s get started! 💪','green');
+  checkOnboarding();
+  toast('Showing as new user — complete wizard to test flow','gold');
+}
+
+function testWithDemo(){
+  if(!confirm('This will replace your current data with 3 months of demo data. Export a backup first if needed.\n\nContinue?')) return;
+  localStorage.removeItem('gainr_v1');
+  localStorage.removeItem('gainr_onboarded');
+  closeAPISettings();
+  // Re-run the seed script by reloading — seed fires on empty gainr_v1
+  location.reload();
+}
+
+function testWorkoutSummary(){
+  closeAPISettings();
+  // Synthetic session log for UI testing
+  const mockLog = [
+    {name:'Barbell Bench Press', w:135, r:9, s:4, prev:{w:132.5, r:8}},
+    {name:'Incline Dumbbell Press', w:75, r:10, s:3, prev:{w:75, r:10}},
+    {name:'Cable Chest Fly', w:70, r:13, s:3, prev:{w:65, r:12}},
+    {name:'Lateral Raise (Dumbbell)', w:32.5, r:15, s:4, prev:null},
+    {name:'Tricep Rope Pushdown', w:95, r:13, s:3, prev:{w:90, r:12}},
+  ];
+  showWorkoutSummary(mockLog, 45, 2);
 }
 
 // INIT
 loadS(); renderDash(); renderWorkout(); checkOnboarding();
 </script>
+
+<!-- API SETTINGS MODAL -->
+<div id="api-settings-modal" style="display:none;position:fixed;inset:0;z-index:1001;background:rgba(0,0,0,.8);align-items:center;justify-content:center;padding:20px" onclick="if(event.target===this)closeAPISettings()">
+  <div style="background:var(--bg2);border:1px solid var(--border);border-radius:20px;width:100%;max-width:380px;padding:24px;max-height:90vh;overflow-y:auto">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">
+      <div style="font-family:var(--fd);font-size:22px;letter-spacing:1px">AI & Settings</div>
+      <button onclick="closeAPISettings()" style="background:var(--bg3);border:1px solid var(--border);border-radius:50%;width:32px;height:32px;color:var(--muted);cursor:pointer;font-size:16px">✕</button>
+    </div>
+
+    <!-- AI PROVIDER SECTION -->
+    <div style="font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin-bottom:10px;font-weight:600">AI Provider</div>
+    <div class="input-group" style="margin-bottom:10px">
+      <label class="input-label">Provider</label>
+      <select id="api-provider-select" class="input-field" style="cursor:pointer" onchange="updateAPIProviderHint()">
+        <option value="openai">GPT-4o (OpenAI) — recommended</option>
+        <option value="gemini">Gemini 2.0 Flash (Google) — free tier</option>
+        <option value="anthropic">Claude (Anthropic) — ⚠️ see note</option>
+      </select>
+    </div>
+    <div id="api-cors-warning" style="display:none;background:rgba(255,71,87,.08);border:1px solid rgba(255,71,87,.3);border-radius:10px;padding:10px;margin-bottom:10px;font-size:12px;color:var(--text);line-height:1.6">
+      ⚠️ <strong>Anthropic blocks browser requests.</strong> Their API is designed for server apps and cannot be called directly from a web app like GAINR. This is their intentional CORS policy. Use OpenAI or Gemini instead — both work natively from the browser.
+    </div>
+    <div class="input-group" style="margin-bottom:6px">
+      <label class="input-label">API Key</label>
+      <input class="input-field" type="password" id="api-key-input" placeholder="Paste your API key here" style="width:100%;font-family:monospace;font-size:13px">
+    </div>
+    <div id="api-provider-hint" style="font-size:11px;color:var(--muted);margin-bottom:10px;line-height:1.6"></div>
+    <div style="background:rgba(245,200,66,.06);border:1px solid rgba(245,200,66,.2);border-radius:10px;padding:10px;margin-bottom:12px;font-size:11px;color:var(--muted);line-height:1.6">
+      🔒 Stored on this device only. Never sent anywhere except your chosen AI provider.
+    </div>
+    <div style="display:flex;gap:8px;margin-bottom:6px">
+      <button onclick="testAPIConnection()" id="api-test-btn" style="flex:1;padding:11px;border-radius:10px;border:1px solid var(--border);background:var(--bg3);color:var(--text);font-family:var(--fb);font-size:13px;font-weight:600;cursor:pointer">Test connection</button>
+      <button onclick="saveAPISettings()" style="flex:1;padding:11px;border-radius:10px;border:none;background:var(--gold);color:#000;font-family:var(--fb);font-size:13px;font-weight:700;cursor:pointer">Save</button>
+    </div>
+    <div id="api-current-status" style="font-size:12px;color:var(--muted);text-align:center;margin-bottom:20px;min-height:20px"></div>
+
+    <!-- DIVIDER -->
+    <div style="height:1px;background:var(--border);margin-bottom:20px"></div>
+
+    <!-- TESTING SECTION -->
+    <div style="font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin-bottom:6px;font-weight:600">Testing & Reset</div>
+    <div style="font-size:12px;color:var(--muted);margin-bottom:12px;line-height:1.6">Use these to test different user states without clearing your browser manually. Your real data is restored when you import a backup.</div>
+
+    <div style="display:flex;flex-direction:column;gap:8px">
+      <button onclick="testAsNewUser()" style="width:100%;padding:11px;border-radius:10px;border:1px solid var(--border);background:var(--bg3);color:var(--text);font-family:var(--fb);font-size:13px;font-weight:600;cursor:pointer;text-align:left">
+        🆕 Test as new user — see onboarding wizard
+      </button>
+      <button onclick="testWithDemo()" style="width:100%;padding:11px;border-radius:10px;border:1px solid var(--border);background:var(--bg3);color:var(--text);font-family:var(--fb);font-size:13px;font-weight:600;cursor:pointer;text-align:left">
+        👀 Test with demo data — see all features
+      </button>
+      <button onclick="testWorkoutSummary()" style="width:100%;padding:11px;border-radius:10px;border:1px solid var(--border);background:var(--bg3);color:var(--text);font-family:var(--fb);font-size:13px;font-weight:600;cursor:pointer;text-align:left">
+        💪 Test post-workout summary screen
+      </button>
+    </div>
+    <div style="font-size:11px;color:var(--muted);text-align:center;margin-top:10px;line-height:1.5">
+      ⚠️ Reset options clear your current data.<br>Export a backup first if you want to restore it.
+    </div>
+  </div>
+</div>
+
+<!-- POST-WORKOUT SUMMARY MODAL -->
+<div id="workout-summary-modal" style="display:none;position:fixed;inset:0;z-index:1000;background:rgba(0,0,0,.85);align-items:flex-end;justify-content:center" onclick="if(event.target===this)closeWorkoutSummary()">
+  <div style="background:var(--bg2);border-radius:20px 20px 0 0;width:100%;max-width:480px;max-height:88vh;overflow-y:auto;display:flex;flex-direction:column">
+    <div style="padding:20px 20px 0;display:flex;justify-content:space-between;align-items:center">
+      <div style="font-family:var(--fd);font-size:24px;letter-spacing:1px;color:var(--green)">Session Complete 💪</div>
+      <button onclick="closeWorkoutSummary()" style="background:var(--bg3);border:1px solid var(--border);border-radius:50%;width:32px;height:32px;color:var(--muted);cursor:pointer;font-size:16px">✕</button>
+    </div>
+    <div id="workout-summary-content" style="padding:16px 20px 24px;flex:1"></div>
+  </div>
+</div>
+
 </body>
 </html>
