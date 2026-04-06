@@ -1,16 +1,14 @@
 # GAINR — Project Roadmap
 
-**Version:** 3.0 Released | **Last Updated:** April 2026 | **Methodology:** Value-driven, MVP-first
+**Version:** 3.1 — Final Release | **Last Updated:** April 2026 | **Status:** ✅ Project Complete | **Methodology:** Value-driven, MVP-first
 
 ---
 
 ## Roadmap Philosophy
 
-This roadmap is sequenced by value, not by complexity. Each phase delivers a fully working product. If the project stopped at any phase, users would have something genuinely useful.
+This roadmap is sequenced by value, not by complexity. Each phase delivers a fully working product. If the project stopped at any phase, users would have something genuinely useful. This is called **MVP thinking** — a core principle of modern product delivery.
 
-This is called **MVP thinking** — a core principle of modern product delivery.
-
-> **v1.1 update note:** Following a structured critical review of v1.0, this roadmap has been resequenced. Several issues identified in review — data fragility, misleading AI positioning, missing onboarding, and UX gaps — are now addressed in v1.1 before the nutrition module. A honest product roadmap reflects reality, not just the original plan.
+> **Project note:** GAINR was built as a portfolio project to demonstrate AI-enabled PM methodology. The project was wound down intentionally at v3.1 after 9 calendar days and approximately 20 hours of active work. Phases 9 and beyond were designed but descoped by deliberate choice, not resource constraint.
 
 ---
 
@@ -19,202 +17,126 @@ This is called **MVP thinking** — a core principle of modern product delivery.
 | Phase | Version | Name | Status | Key Deliverable |
 |---|---|---|---|---|
 | Phase 0 | — | Foundation | ✅ Complete | All PM documents, discovery, architecture |
-| Phase 1–4 | v1.0 | Core App | ✅ Shipped | Working app — Train, Log, Analytics, RPG |
+| Phase 1–4 | v1.0 | Core App | ✅ Shipped | Working app — Train, Log, Analytics, RPG, SDP engine |
 | Phase 5 | v1.1 | Stability & Honesty | ✅ Released | Onboarding, export, set editing, stall fixes, honest copy |
-| Phase 5b | v1.2 | Polish & Accuracy | ✅ Released | Radar scoring, mobile UX, QA pass, critical bug fix |
+| Phase 5b | v1.2–1.3 | Polish & Accuracy | ✅ Released | Radar rebuilt, 44px inputs, mobile UX, exercise abbreviations |
 | Phase 6 | v2.0 | Nutrition Module | ✅ Released | TDEE, macros, meal logging, 7th radar axis |
-| Phase 7 | v2.1 | Program Customisation | ✅ Released | Custom exercises, swap, Train integration |
-
-| Phase 8 | v3.0 | Real AI Integration | ✅ Released | Claude API coaching, onboarding wizard, physique goals, caloric balance |
-| Phase 8b | v3.0 (final) | AI Engine + UX Polish | ✅ Released | CORS fix, test connection, UI simplification, Gemini 2.0 |
-| Phase 9 | v4.0 | Multi-Profile + Cloud | 🔭 Next | Multiple user profiles, coach mode, cloud sync |
-| Phase 10 | v4.1 | Wearables + Health APIs | 🔭 Future | Apple Health, Google Fit, real calorie burn data |
-| Phase 9 | v4.0 | Platform & Sync | 🔭 Future | Cloud storage, wearables, multi-device |
+| Phase 7 | v2.1 | Program Customisation | ✅ Released | Exercise swap (24 exercises), custom exercise creator |
+| Phase 8 | v3.0 | Real AI Coaching | ✅ Released | Onboarding wizard, physique goals, caloric balance, AI coaching (OpenAI/Gemini) |
+| Phase 8b | v3.0.x | AI Engine + UX Polish | ✅ Released | CORS fix, provider-agnostic AI, test connection, post-workout analysis |
+| Phase 8c | v3.1 | Profile Page | ✅ Released | Identity card, inline editing, goal management — **final release** |
+| Phase 9 | v4.0 | Multi-Profile + Cloud | 🚫 Descoped | Designed but not built — intentional wind-down decision |
+| Phase 10 | v4.1 | Wearables + Health APIs | 🚫 Descoped | Designed but not built |
+| Phase 11 | v5.0 | Social + Community | 🚫 Descoped | Requires cloud infrastructure — not appropriate scope |
 
 ---
 
-## Phase Detail
+## Phase Detail — Completed
 
 ### Phase 0 — Foundation ✅
-**Goal:** Establish everything needed before building.
-
 **Delivered:**
-- Project Charter (DOC-001)
-- Stakeholder Register (DOC-002)
-- Discovery Log (DOC-003) — 3 sessions of structured requirements gathering
-- Risk Register (DOC-004)
-- Business Requirements Document (DOC-005) — 41 requirements
-- Technical Architecture (DOC-006)
-- Cost Management Plan (DOC-009) + Cost Log (DOC-010)
+- Project Charter, Stakeholder Register, Discovery Log, Risk Register
+- Business Requirements Document (41 requirements)
+- Technical Architecture document
+- Cost Management Plan + Cost Log
 
 ---
 
-### Phase 1–4 — Core App ✅ (v1.0)
-**Goal:** A functional fitness tracking proof of concept.
+### Phase 1–4 — Core App ✅ (v1.0) — Released March 26, 2026
+**Delivered:** PPLUL workout program, SDP progressive overload engine (4 states), RPG system (XP/levels/badges/streaks), stall detection, analytics with radar chart, GitHub Pages deployment.
 
-**Delivered:** See [CHANGELOG.md](../CHANGELOG.md) for full feature list.
-
-**Honest assessment of v1.0:**
-v1.0 is a well-executed proof of concept demonstrating PM-led AI-assisted delivery. It has strong bones — science-backed programming, SDP coaching, stall detection, RPG gamification, and analytics. However a structured critical review identified issues that must be addressed before new features are added. See Phase 5.
+**Post-launch review findings:** Data loss risk (localStorage only), misleading "AI-powered" copy, no onboarding, radar scoring inaccuracies. All addressed in v1.1 before new features were added — a deliberate PM decision to protect product integrity over velocity.
 
 ---
 
-### Phase 5 — Stability & Honesty ✅ (v1.1) — RELEASED
-**Goal:** Address every critical issue identified in post-launch review before adding new features.
+### Phase 5 — Stability & Honesty ✅ (v1.1) — Released March 28, 2026
+**Why before nutrition:** Building new features on known structural problems is technical debt by choice.
 
-**Released:** March 28, 2026
-
-**Why before nutrition?**
-Building new features on top of known structural problems is technical debt by choice. This resequencing is itself a demonstration of good PM discipline.
-
-#### 5.1 — ✅ Onboarding & Demo Data (Critical)
-**Problem:** Every new user opens the app and sees 3 months of someone else's workout history. Badges are pre-earned. There is no "start fresh" path.
-
-**Fix:**
-- Detect first-time users vs returning users on load
-- Show an onboarding screen: "Explore demo" vs "Start your own journey"
-- "Start fresh" clears demo data and initialises a blank profile
-- Badges reset — users earn them through their own activity, not from fake data
-
-#### 5.2 — ✅ Data Export & Backup (Critical)
-**Problem:** All data lives in localStorage. Clearing browser cache, switching browsers, or getting a new phone causes permanent, unrecoverable data loss. For a fitness tracker where historical data is the entire value proposition, this is a trust-destroying flaw.
-
-**Fix:**
-- "Export data" button — downloads `gainr-backup-[date].json`
-- "Import data" — restore from a previously exported file
-- Visible warning in the UI: "Your data is stored on this device. Export regularly to back up."
-- No false promises of cloud sync until v4.0
-
-#### 5.3 — ✅ Honest AI Positioning (Critical)
-**Problem:** The app is described as "AI-powered coaching" but the coaching engine is entirely rule-based `if/else` logic with hardcoded recommendation strings. This is accurate for how the app was *built* but not for what it *does* at runtime. A technical audience who reads the source code loses confidence immediately.
-
-**Fix:**
-- Update all in-app copy: "smart coaching engine" not "AI coaching"
-- Update README to accurately describe the architecture
-- Add a note explaining v3.0 will replace the rule-based engine with real Claude API integration
-- The AI story is about the development methodology — that remains a genuine and compelling differentiator
-
-#### 5.4 — ✅ Set Editing (High)
-**Problem:** Once a set is marked complete it cannot be edited. A user who logs the wrong weight has no correction path — a common occurrence when training with heavy weights and limited attention.
-
-**Fix:**
-- Tap a completed checkmark to uncheck and re-edit
-- Edited sets update the exercise history correctly on session completion
-
-#### 5.5 — ✅ Stall Detection Accuracy (High)
-**Problem:** The 3-session stall rule has three known false positive sources:
-1. Deload weeks intentionally produce flat/dropping weights but are flagged as fatigue
-2. Weight rounding (2.5 lb increments) makes intentional same-weight sessions look like stalls
-3. No differentiation between a rep range ceiling and a genuine plateau
-
-**Fix:**
-- Exclude deload week sessions from stall calculations entirely
-- Add ±2.5 lb tolerance — one increment variance is not a stall
-- Incorporate rep range context — hitting the top of the rep range is SDP working, not a plateau
-
-#### 5.6 — Radar Scoring Accuracy → Carried to v1.2
-**Problem:** Several radar axes produce misleading scores:
-- **Consistency** penalises appropriate rest (illness, injury, planned recovery)
-- **Volume** rewards starting from zero — a beginner always scores higher than an experienced user
-- **Recovery** defaults to 50 permanently if sleep isn't logged — meaningless noise
-- **Balance** perpetually flags an imbalance because leg exercises generate more volume by weight regardless of programming balance
-
-**Fix:**
-- Consistency: rolling 4-week average rather than all-time rate
-- Volume: score against optimal range (10–20 sets/muscle/week) not growth rate
-- Recovery: show "insufficient data" state — no score is better than a wrong score
-- Balance: normalise by set count, not raw volume weight
-
-#### 5.7 — Mobile UX Fixes → Carried to v1.2
-**Problem:** Real-device testing surfaces several friction points:
-- Set input fields too small for accurate tapping while sweaty
-- Long exercise names truncate mid-word, losing differentiating information
-- No loading state when CDN is slow on gym WiFi
-- Analytics re-renders all charts on every visit — will slow significantly with 12+ months of data
-
-**Fix:**
-- Increase set input minimum tap target to 44px height
-- Consistent abbreviation system for long exercise names
-- Skeleton loading states for all charts
-- Cache computed scores — only recalculate when underlying data changes
+- ✅ Onboarding: Explore demo vs Start fresh — user choice on first load
+- ✅ Data export/import: JSON backup, restores from file
+- ✅ Honest AI copy: "smart coaching engine" not "AI coaching" until v3.0 makes it true
+- ✅ Set editing: tap completed checkmark to unlock and re-enter
+- ✅ Stall detection: deload exclusion, ±2.5 lb tolerance, rep ceiling context
 
 ---
 
----
-
-### Phase 5b — Polish & Accuracy ✅ (v1.2) — RELEASED
-**Goal:** Complete the remaining v1.1 items deferred due to complexity.
-
-#### Radar Scoring Accuracy
-- Consistency: rolling 4-week average instead of all-time rate
-- Volume: score against optimal range (10–20 sets/muscle/week) not growth rate
-- Recovery: show "insufficient data" state when sleep not logged
-- Balance: normalise by set count, not raw volume weight
-
-#### Mobile UX Improvements
-- Increase set input minimum tap target to 44px height
-- Skeleton loading states for all charts
-- Cache computed analytics scores — only recalculate when data changes
-- Abbreviation system for long exercise names in exercise browser
+### Phase 5b — Polish & Accuracy ✅ (v1.2–1.3) — Released March 28, 2026
+- ✅ Radar rebuilt: rolling 4-week consistency, optimal volume range (10–20 sets/week), null scores for insufficient data, balance by set count
+- ✅ 44px tap targets, 16px font (prevents iOS zoom)
+- ✅ Exercise name abbreviation map (24 entries)
+- ✅ Skeleton loading states for analytics
 
 ---
 
-### Phase 6 — Nutrition Module 📋 (v2.0)
-**Goal:** Complete the body recomposition picture with dietary tracking.
-
-**Moved from original v2.0 slot** — now follows Phase 5 stability work.
-
-**Planned features:**
-- TDEE calculation (Mifflin St-Jeor + activity multiplier)
-- Daily calorie and macro targets
-- Meal logging against targets
-- High-protein meal suggestions aligned to goal
-- Nutrition score integrated into RPG system and radar chart
+### Phase 6 — Nutrition Module ✅ (v2.0) — Released March 28, 2026
+- ✅ TDEE calculator: Mifflin-St Jeor formula + 5 activity levels
+- ✅ Recomp macro targets: 0.82g protein/lb, 25% fat, remainder carbs
+- ✅ Meal logging: name, calories, protein, carbs, fat; daily progress bars; delete option
+- ✅ 7th radar axis: Nutrition (scored from target setup + logging consistency + protein hit rate)
+- ✅ Protein tile on dashboard
 
 ---
 
-### Phase 7 — Program Customisation 📋 (v2.1)
-**Goal:** Let users modify their workout program without editing source code.
-
-**Problem being solved:** The entire workout program is hardcoded in a JavaScript constant. Users cannot swap exercises, adjust sets/reps, or follow any training style other than PPLUL. This limits the app to a single user archetype.
-
-**Planned features:**
-- Exercise swap — replace any movement with an alternative
-- Set/rep target editing per exercise
-- Rest day reassignment
-- Custom exercise creation
-- Program templates — Powerlifting, Bodyweight, 3-day, 4-day variants
+### Phase 7 — Program Customisation ✅ (v2.1) — Released March 28, 2026
+- ✅ Exercise swap: 3 curated alternatives per exercise (24 exercises covered), stored in S.swaps
+- ✅ Custom exercise creator: add any exercise to any day, full SDP coaching, stored in S.customEx
+- ✅ Both swapped and custom exercises tracked independently in S.eh
+- ✅ "swapped" (gold) and "custom" (blue) tags in Train and Program tabs
 
 ---
 
-### Phase 8 — Real AI Integration 🔭 (v3.0)
-**Goal:** Replace the rule-based coaching engine with genuine Claude API integration. This is what makes the "AI coaching" claim legitimate.
-
-**Planned features:**
-- Pre-workout briefing generated from your actual session history
-- Post-workout analysis — what went well, what to adjust next session
-- Conversational coaching — ask any question about training or nutrition
-- Adaptive program modifications based on detected patterns
-- Research on-demand — science-backed answers with cited sources
-
-**Architecture note:** The v1.0 engine functions (`getSDP()`, `detectStall()`, `computeHexScores()`) are designed as drop-in replacements for API calls. The UI and data layer remain unchanged in v3.0 — only the intelligence layer is upgraded. This was a deliberate forward-compatibility decision made at v1.0 architecture stage.
-
-**Cost consideration:** API integration introduces per-request costs. A cost management strategy must be designed before v3.0 development begins.
+### Phase 8 — Real AI Coaching ✅ (v3.0) — Released April 4, 2026
+- ✅ 4-step onboarding wizard: Welcome → Profile → Goal → Ready
+- ✅ Physique goal system: Bulk +250 kcal / Recomp +0 / Cut −400 from TDEE
+- ✅ Goal progress panel on dashboard: weeks in/left, weight change, on-track indicator
+- ✅ Caloric balance: consumed vs MET-estimated burned vs daily target
+- ✅ AI coaching: provider-agnostic (OpenAI GPT-4o, Gemini 2.0 Flash Lite)
+- ✅ Post-workout summary: session recap, next-week targets, AI analysis
+- ✅ API settings modal: provider selector, key input, test connection button
+- ✅ CORS correctly handled: Anthropic blocked by design, OpenAI/Gemini work natively from browser
+- ✅ Testing panel: reset to new user, load demo, preview post-workout summary
 
 ---
 
-### Phase 9 — Platform & Sync 🔭 (v4.0)
-**Goal:** Solve the data architecture's fundamental limitations identified in v1.0 review.
+### Phase 8c — Profile Page ✅ (v3.1) — Released April 6, 2026 — Final Release
+- ✅ Profile tab replaces Program in nav (Program accessible from Profile → Workout program)
+- ✅ Identity card: gold avatar, name, level, session count, XP, streak
+- ✅ Goal banner: active goal in goal colour, caloric target, weeks in / remaining
+- ✅ Inline editing for all fields: name, age, sex, weight, height, activity, goal type, timeline
+- ✅ Field-specific validation before save
+- ✅ Recalculate targets button: reruns TDEE from current profile, applies goal offset
+- ✅ Quick links: Workout program, Progress charts, AI settings
 
-**Problems being solved:** localStorage data loss, no cross-device sync, no automatic backup.
+---
 
-**Planned features:**
-- Cloud storage backend (Supabase free tier)
-- Account creation and authentication
-- Cross-device sync — same data on phone and laptop
-- Automatic cloud backup
-- Apple Health / Google Fit passive data integration
-- Wearable device support
+## Phase Detail — Descoped
+
+The following phases were designed during the project and are documented here for portfolio completeness. They were not built due to a deliberate wind-down decision, not resource or time constraints.
+
+### Phase 9 — v4.0: Multi-Profile + Cloud Sync 🚫 Descoped
+
+**Problem it would have solved:** GAINR is single-user. All data in one localStorage key. No cross-device sync, no shared-device support, no coach/athlete mode.
+
+**Design (not built):**
+- Option A — Local multi-profile: `gainr_profiles: {id1:{...}, id2:{...}}`, profile switcher on landing screen, PIN-lock per profile, export/import per profile. No server required.
+- Option B — Cloud: Supabase backend, account auth, real-time sync across devices, coach visibility across athlete profiles.
+- Recommended sequence: A first, then B on top.
+
+**Why descoped:** Cloud infrastructure is a different complexity tier and appropriate scope for a separate project. Portfolio objectives were met at v3.1.
+
+---
+
+### Phase 10 — v4.1: Wearables + Health APIs 🚫 Descoped
+
+**Problem it would have solved:** MET-based burn estimates (~330 kcal for a Push session) are approximations. Apple Health / Google Fit data would make the caloric balance card genuinely accurate.
+
+**Design (not built):** HealthKit Web API (iOS) + Google Fitness REST API (Android). Show data source on balance card. Fall back to MET if no wearable connected. Requires cloud sync as prerequisite.
+
+---
+
+### Phase 11 — v5.0: Social + Community 🚫 Descoped
+
+**Design (not built):** Shareable workout summary images, opt-in public profile, group challenges, leaderboard. Requires cloud infrastructure — not appropriate without v4.0.
 
 ---
 
@@ -222,115 +144,48 @@ Building new features on top of known structural problems is technical debt by c
 
 | Decision | Version | Rationale |
 |---|---|---|
-| Nutrition module last in original plan | v1.0 | User needs training history before nutrition is personalised |
+| Nutrition module deferred from v1.0 | v1.0 | User needs training history before nutrition is personalised |
 | SDP before gamification | v1.0 | Gamification needs real data to be meaningful |
 | API integration deferred to v3.0 | v1.0 | Zero budget; API requires cost strategy first |
-| **Stability phase inserted before nutrition** | **v1.1** | **Critical review identified data loss risk and misleading positioning — these must be fixed before new features are added** |
-| Program customisation added as v2.1 | v1.1 | Hardcoded program identified as blocker for real users beyond original single-user scope |
+| Stability phase inserted before nutrition | v1.1 | Critical review found data loss risk and misleading AI copy — integrity before features |
+| Program customisation added as v2.1 | v1.1 | Hardcoded program is a blocker for real users beyond original single-user scope |
 | Radar scoring moved from feature to fix | v1.1 | Misleading scores damage trust more than missing scores |
-| Radar + UX fixes deferred to v1.2 | v1.1 | Complexity warranted a separate focused release rather than delaying v1.1 ship date |
+| Radar + UX fixes deferred to v1.2 | v1.1 | Complexity warranted a separate release |
+| Anthropic API not used for browser calls | v3.0 | CORS policy blocks browser-to-API calls by design; OpenAI + Gemini support it natively |
+| Provider-agnostic AI (not Claude-only) | v3.0 | No reason to lock users to one provider; abstraction costs nothing |
+| Profile page replaces Program in nav | v3.1 | Program is reference material visited occasionally; Profile is account information visited regularly |
+| Cloud sync and wearables descoped | v3.1 | Portfolio objectives met; infrastructure work is a separate project |
+| Wind down at v3.1 | v3.1 | Clean exit on a high note with complete narrative — intentional, not forced |
 
 ---
 
-## Known Limitations (Honest)
+## Known Limitations (Honest, Final)
 
-Documented limitations of the current version and when each will be addressed:
-
-| Limitation | Severity | Addressed In |
+| Limitation | Severity | Status |
 |---|---|---|
-| Data stored in localStorage — lost on cache clear | High | ✅ v1.1 (export/import) / v4.0 (cloud sync) |
-| No cross-device data sync | High | v4.0 |
-| Coaching engine is rule-based, not genuine AI | Medium | v3.0 |
-| Workout program hardcoded — not user-editable | Medium | v2.1 |
-| Demo data shown to all new users on first load | Medium | ✅ v1.1 |
-| No set editing after completion | Medium | ✅ v1.1 |
-| Stall detection has known false positives | Medium | ✅ v1.1 |
-| Radar scores have measurement accuracy issues | Medium | v1.2 |
+| Data stored on device only — lost on cache clear | High | Mitigated: export/import in v1.1. Full cloud sync descoped. |
+| No cross-device sync | High | Descoped — v4.0 designed but not built |
+| No automated tests or CI/CD | High | Not built — manual QA with Node.js syntax validation |
+| Codebase requires AI to maintain or extend | High | Intentional constraint of the development approach |
+| Technical debt invisible without code literacy | Medium | Documented risk, accepted for portfolio scope |
+| Caloric burn is MET estimate, not measured | Medium | Wearable integration descoped |
+| Single user only — no profile switching | Medium | Multi-profile descoped |
 
 ---
 
-*This roadmap is a living document. It is reviewed and updated after every version release and every structured feedback session.*
+## Project Outcomes
+
+| Metric | Result |
+|---|---|
+| Calendar days (v1.0 → v3.1) | 9 days |
+| Active work hours | ~20 hours |
+| Versions shipped | 9 |
+| Features in final build | 22 confirmed |
+| Total infrastructure cost | CAD $28 (one month Claude Pro) |
+| Traditional dev estimate (same scope) | CAD $18,000–$24,000 |
+| Scope delivered | 95%+ of original vision |
+| Final QA result | 0 issues |
 
 ---
 
-## Next Phases — v4.0 and Beyond
-
-### Phase 9 — v4.0: Multi-Profile + Cloud Sync
-
-#### The Problem
-GAINR is currently a single-user app. If you share a device with a partner, family member, or if you're a coach managing athletes, there's no way to separate data. Everything lives in one localStorage key. This is the most significant architectural limitation remaining.
-
-#### Design Approach
-
-**Option A — Local Multi-Profile (no server required)**
-- Multiple profiles stored in localStorage: `gainr_profiles: { id1: {...}, id2: {...} }`
-- Profile switcher on the landing screen — tap your name to load your data
-- Each profile has its own full state: exercise history, nutrition, goal, settings
-- PIN-lock optional per profile for privacy on shared devices
-- Export/import works per-profile
-
-**Option B — Coach / Athlete Mode (requires cloud)**
-- Coach account has visibility across all athlete profiles
-- Athletes log their own sessions; coach sees aggregated analytics
-- Requires Supabase or similar for real-time sync
-- More complex but the right long-term architecture
-
-**Recommended sequencing:** Ship Option A first (local multi-profile, no new infrastructure). This solves the shared-device problem immediately. Then layer cloud sync on top for cross-device + coach mode in v4.1.
-
-#### Key Design Decisions Deferred
-- How many profiles per device? (Suggested cap: 6)
-- Does switching profiles require a re-onboarding or just name selection?
-- Should AI settings (API key) be per-profile or shared across profiles?
-- How does demo mode work with multiple profiles?
-
-#### Technical Notes
-- Schema change: `gainr_profiles` replaces `gainr_v1` as the root key
-- Migration: existing `gainr_v1` becomes Profile 1 automatically
-- Active profile ID stored separately: `gainr_active_profile`
-- All existing functions read from `S` — minimal changes needed if profile switching just swaps the `S` object
-
----
-
-### Phase 10 — v4.1: Wearables + Health APIs
-
-#### The Problem
-MET-based calorie burn estimates (current approach) are approximations. A 60-minute Push day estimated at 5.0 MET × weight = ~330 kcal. A fitness tracker reading heart rate and movement gives a far more accurate number. The caloric balance feature is only as good as the burn estimate.
-
-#### Design Approach
-- Apple Health (iOS): read active calories via HealthKit Web API
-- Google Fit (Android): read active calories via Fitness REST API
-- Fallback: keep MET estimates if no wearable connected
-- Show data source on caloric balance card (Estimated vs From Apple Health)
-
-#### Pre-requisites
-- Cloud sync (v4.0) makes the wearable data persistent across sessions
-- User must grant health permissions explicitly — needs clear consent UI
-
----
-
-### Phase 11 — v5.0: Social + Community
-
-#### The Problem
-GAINR is entirely private. There's no accountability mechanism, no way to share achievements, and no way to see how your progress compares to anything external. For many users, social accountability is the strongest driver of consistency.
-
-#### Possible Features
-- Share a workout summary as an image (generated client-side)
-- Public profile with cumulative stats (opt-in)
-- Challenges: set a goal, invite someone to match it
-- Leaderboard for custom groups (gym friends, office challenge)
-
-#### Constraint
-This requires cloud infrastructure. Not appropriate before v4.0 cloud sync is stable.
-
----
-
-### Decision Log (open)
-
-| Decision | Options | Status |
-|---|---|---|
-| Multi-profile local vs cloud-first | Local first → cloud later | ✅ Decided |
-| Coach mode architecture | Supabase + role-based access | 📋 Deferred to v4.1 |
-| AI API key per-profile vs shared | Likely shared (convenience) | ❓ Open |
-| Profile cap per device | 6 suggested | ❓ Open |
-| Wearable priority: Apple or Google | Both, Apple first (iOS traffic) | ❓ Open |
-
+*This roadmap is a complete record of the project from inception to wind-down. It reflects reality at every stage — including the resequencing decisions, the honest limitations, and the deliberate scope choices. That's what a PM roadmap should do.*
