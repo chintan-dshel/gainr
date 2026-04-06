@@ -7,7 +7,14 @@ Versioning follows [Semantic Versioning](https://semver.org/).
 
 ---
 
-## [Unreleased] — v4.0
+## [Unreleased] — Project closed at v3.1
+
+### Status
+Project wound down intentionally at v3.1. Cloud sync, wearables, and multi-profile features were scoped and designed (see roadmap) but deliberately excluded from this portfolio project. The work achieved its objectives.
+
+---
+
+## [Archive] — Planned but not built
 
 ### Planned
 - Multi-profile support — multiple users on one device, switchable without data loss
@@ -15,6 +22,40 @@ Versioning follows [Semantic Versioning](https://semver.org/).
 - Cloud sync — cross-device data via Supabase (required for multi-profile)
 - Pre-workout AI briefing — session plan generated from history before you train
 - Apple Health / Google Fit integration
+
+---
+
+## [3.1.0] — 2026-04-06 — Profile Page (Final Release)
+
+### Summary
+The last feature shipped before project wind-down. Users can now view and manage their full account information in one place — the Profile tab replaces the Program nav button (Program remains accessible from Profile). All data collected during onboarding is now visible and editable, with per-field validation and instant save. This closes the loop: onboarding collects it, Profile displays and maintains it.
+
+### Added — Profile Page
+- **Identity card:** gold initial avatar, display name, RPG level, session count, XP, streak
+- **Goal banner:** active goal (Bulk/Recomp/Cut) in goal colour, caloric target, weeks in / weeks remaining
+- **Personal details:** name, age, sex, weight, height, activity level — all editable inline
+- **Goal section:** goal type (visual button toggle), timeline in weeks, start date
+- **Daily targets:** 4-tile macro grid — calories, protein, carbs, fat
+- **Recalculate targets button:** reruns Mifflin-St Jeor TDEE from current profile, applies goal offset, saves to S.nt.targets
+- **Quick links:** Workout program, Progress charts, AI settings — all one tap from Profile
+
+### Changed — Navigation
+- Profile tab replaces Program in the bottom nav (5th position)
+- Program accessible from Profile → Workout program row
+- No loss of Program functionality — swap, custom exercises, all intact
+
+### UX Design Decisions
+- Field editing uses bottom sheet modal (not inline) — prevents keyboard pushing layout
+- Sex and goal type use button toggles, not dropdowns — clearer selection state
+- All fields validate before saving with specific error messages
+- Dashboard name greeting updates immediately after name change
+- "Recalculate targets" is explicit user action — TDEE not auto-updated on every field save (avoids surprising macro changes mid-day)
+
+### QA
+- Node.js --check: ✅ valid
+- Automated QA: 37/37 checks
+- UAT: 6 scenarios, 34 steps — all passed
+- Personas tested: onboarded user, demo user, user updating weight, user switching goal
 
 ---
 
