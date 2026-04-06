@@ -152,6 +152,11 @@ body{background:var(--bg);color:var(--text);font-family:var(--fb);min-height:100
 .analytics-section{background:var(--bg2);border:1px solid var(--border);border-radius:14px;margin-bottom:10px;overflow:hidden}
 .analytics-section-header{display:flex;justify-content:space-between;align-items:center;padding:14px 16px;cursor:pointer}
 .analytics-section-header:active{background:rgba(255,255,255,.03)}
+.profile-row{display:flex;align-items:center;padding:14px 16px;border-bottom:1px solid var(--border);cursor:pointer;transition:background .15s}
+.profile-row:active{background:rgba(255,255,255,.04)}
+.profile-row-label{font-size:14px;color:var(--text);flex:1}
+.profile-row-value{font-size:14px;color:var(--muted);text-align:right;margin-right:8px;max-width:55%}
+.profile-row-chevron{font-size:18px;color:var(--muted);flex-shrink:0}
 .toast.green{border-color:var(--green);color:var(--green)}
 .toast.red{border-color:var(--red);color:var(--red)}
 ::-webkit-scrollbar{width:4px}
@@ -374,6 +379,122 @@ body{background:var(--bg);color:var(--text);font-family:var(--fb);min-height:100
     <div class="metric-card"><div class="metric-icon">🏆</div><div><span class="metric-val" id="p-xp">0</span></div><div class="metric-label">Total XP</div></div>
     <div class="metric-card"><div class="metric-icon">📉</div><div><span class="metric-val" id="p-wchg">—</span><span class="metric-unit"> lbs</span></div><div class="metric-label">Weight Δ</div></div>
     <div class="metric-card"><div class="metric-icon">📐</div><div><span class="metric-val" id="p-wachg">—</span><span class="metric-unit">"</span></div><div class="metric-label">Waist Δ</div></div>
+  </div>
+</div>
+
+<!-- PROFILE -->
+<div id="page-profile" class="page">
+  <div class="page-header">
+    <div><div class="page-title">PROFILE</div><div class="page-subtitle">Your account</div></div>
+    <button onclick="saveProfile()" id="profile-save-btn" style="background:var(--gold);color:#000;border:none;border-radius:10px;padding:8px 16px;font-family:var(--fb);font-size:13px;font-weight:700;cursor:pointer;display:none">Save</button>
+  </div>
+
+  <!-- IDENTITY CARD -->
+  <div id="profile-identity-card" style="background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:20px;margin-bottom:12px;display:flex;align-items:center;gap:16px">
+    <div id="profile-avatar" style="width:60px;height:60px;border-radius:50%;background:linear-gradient(135deg,var(--gold),#e8a020);display:flex;align-items:center;justify-content:center;font-family:var(--fd);font-size:28px;color:#000;flex-shrink:0"></div>
+    <div style="flex:1;min-width:0">
+      <div id="profile-display-name" style="font-family:var(--fd);font-size:24px;letter-spacing:1px;color:var(--text)"></div>
+      <div id="profile-display-level" style="font-size:12px;color:var(--gold);font-weight:600;text-transform:uppercase;letter-spacing:1px;margin-top:2px"></div>
+      <div id="profile-display-stats" style="font-size:11px;color:var(--muted);margin-top:4px"></div>
+    </div>
+  </div>
+
+  <!-- GOAL BANNER -->
+  <div id="profile-goal-banner" style="border-radius:14px;padding:14px 16px;margin-bottom:12px;display:flex;justify-content:space-between;align-items:center"></div>
+
+  <!-- EDITABLE PROFILE SECTION -->
+  <div style="font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin-bottom:10px;font-weight:600;padding-left:2px">Personal details</div>
+  <div style="background:var(--bg2);border:1px solid var(--border);border-radius:14px;overflow:hidden;margin-bottom:12px">
+    <div class="profile-row" onclick="editProfileField('name')">
+      <div class="profile-row-label">Name</div>
+      <div class="profile-row-value" id="pf-name"></div>
+      <div class="profile-row-chevron">›</div>
+    </div>
+    <div class="profile-row" onclick="editProfileField('age')">
+      <div class="profile-row-label">Age</div>
+      <div class="profile-row-value" id="pf-age"></div>
+      <div class="profile-row-chevron">›</div>
+    </div>
+    <div class="profile-row" onclick="editProfileField('sex')">
+      <div class="profile-row-label">Sex</div>
+      <div class="profile-row-value" id="pf-sex"></div>
+      <div class="profile-row-chevron">›</div>
+    </div>
+    <div class="profile-row" onclick="editProfileField('wt')">
+      <div class="profile-row-label">Weight</div>
+      <div class="profile-row-value" id="pf-wt"></div>
+      <div class="profile-row-chevron">›</div>
+    </div>
+    <div class="profile-row" onclick="editProfileField('ht')">
+      <div class="profile-row-label">Height</div>
+      <div class="profile-row-value" id="pf-ht"></div>
+      <div class="profile-row-chevron">›</div>
+    </div>
+    <div class="profile-row" style="border-bottom:none" onclick="editProfileField('act')">
+      <div class="profile-row-label">Activity level</div>
+      <div class="profile-row-value" id="pf-act"></div>
+      <div class="profile-row-chevron">›</div>
+    </div>
+  </div>
+
+  <!-- GOAL SECTION -->
+  <div style="font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin-bottom:10px;font-weight:600;padding-left:2px">Current goal</div>
+  <div style="background:var(--bg2);border:1px solid var(--border);border-radius:14px;overflow:hidden;margin-bottom:12px">
+    <div class="profile-row" onclick="editProfileField('goal')">
+      <div class="profile-row-label">Goal type</div>
+      <div class="profile-row-value" id="pf-goal"></div>
+      <div class="profile-row-chevron">›</div>
+    </div>
+    <div class="profile-row" onclick="editProfileField('weeks')">
+      <div class="profile-row-label">Timeline</div>
+      <div class="profile-row-value" id="pf-weeks"></div>
+      <div class="profile-row-chevron">›</div>
+    </div>
+    <div class="profile-row" style="border-bottom:none">
+      <div class="profile-row-label">Started</div>
+      <div class="profile-row-value" id="pf-started"></div>
+      <div class="profile-row-chevron" style="opacity:0">›</div>
+    </div>
+  </div>
+
+  <!-- NUTRITION TARGETS -->
+  <div style="font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin-bottom:10px;font-weight:600;padding-left:2px">Daily targets</div>
+  <div style="background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:16px;margin-bottom:12px">
+    <div id="profile-targets" style="display:grid;grid-template-columns:1fr 1fr;gap:10px"></div>
+    <button onclick="recalcTargets()" style="width:100%;margin-top:12px;padding:10px;border-radius:10px;border:1px solid var(--border);background:var(--bg3);color:var(--text);font-family:var(--fb);font-size:13px;font-weight:600;cursor:pointer">↻ Recalculate targets from profile</button>
+  </div>
+
+  <!-- QUICK LINKS -->
+  <div style="font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin-bottom:10px;font-weight:600;padding-left:2px">More</div>
+  <div style="background:var(--bg2);border:1px solid var(--border);border-radius:14px;overflow:hidden;margin-bottom:12px">
+    <div class="profile-row" onclick="showPage('program')">
+      <div class="profile-row-label">Workout program</div>
+      <div class="profile-row-value" style="color:var(--muted)">PPLUL v2.0</div>
+      <div class="profile-row-chevron">›</div>
+    </div>
+    <div class="profile-row" onclick="showPage('progress')">
+      <div class="profile-row-label">Progress charts</div>
+      <div class="profile-row-value" style="color:var(--muted)">Weight & measurements</div>
+      <div class="profile-row-chevron">›</div>
+    </div>
+    <div class="profile-row" style="border-bottom:none" onclick="openAPISettings()">
+      <div class="profile-row-label">AI settings</div>
+      <div class="profile-row-value" id="pf-ai-status" style="color:var(--muted)"></div>
+      <div class="profile-row-chevron">›</div>
+    </div>
+  </div>
+
+</div>
+
+<!-- PROFILE EDIT MODAL -->
+<div id="profile-edit-modal" style="display:none;position:fixed;inset:0;z-index:1000;background:rgba(0,0,0,.75);align-items:flex-end;justify-content:center" onclick="if(event.target===this)closeProfileEdit()">
+  <div style="background:var(--bg2);border-radius:20px 20px 0 0;width:100%;max-width:480px;padding:24px">
+    <div id="profile-edit-title" style="font-family:var(--fd);font-size:20px;letter-spacing:1px;margin-bottom:16px"></div>
+    <div id="profile-edit-body" style="margin-bottom:16px"></div>
+    <div style="display:flex;gap:10px">
+      <button onclick="closeProfileEdit()" style="flex:1;padding:13px;border-radius:12px;border:1px solid var(--border);background:var(--bg3);color:var(--text);font-family:var(--fb);font-size:14px;font-weight:600;cursor:pointer">Cancel</button>
+      <button onclick="saveProfileField()" style="flex:1;padding:13px;border-radius:12px;border:none;background:var(--gold);color:#000;font-family:var(--fb);font-size:14px;font-weight:700;cursor:pointer">Save</button>
+    </div>
   </div>
 </div>
 
@@ -670,8 +791,8 @@ body{background:var(--bg);color:var(--text);font-family:var(--fb);min-height:100
   <button class="nav-btn" onclick="showPage('analytics')" id="nav-analytics">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>Analytics
   </button>
-  <button class="nav-btn" onclick="showPage('program')" id="nav-program">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>Program
+  <button class="nav-btn" onclick="showPage('profile')" id="nav-profile">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>Profile
   </button>
 </nav>
 
@@ -796,7 +917,7 @@ function getSDP(ex){
 // NAV
 function showPage(n){
   // Use precise IDs not class selector which matches page-header, page-title etc
-  ['dashboard','workout','log','progress','program','analytics'].forEach(p=>{
+  ['dashboard','workout','log','progress','program','analytics','profile'].forEach(p=>{
     const el=document.getElementById('page-'+p);
     if(el) el.classList.remove('active');
   });
@@ -810,6 +931,7 @@ function showPage(n){
   if(n==='workout')renderWorkout();
   if(n==='analytics')renderAnalytics();
   if(n==='log')renderNutritionPage();
+  if(n==='profile')renderProfile();
 }
 
 // TOAST
@@ -2736,6 +2858,256 @@ function testWorkoutSummary(){
     {name:'Tricep Rope Pushdown', w:95, r:13, s:3, prev:{w:90, r:12}},
   ];
   showWorkoutSummary(mockLog, 45, 2);
+}
+
+// ═══════════════════════════════════════════════
+// PROFILE ENGINE
+// ═══════════════════════════════════════════════
+
+const ACT_LABELS = {
+  '1.2':'Sedentary (desk job)',
+  '1.375':'Light (1–3 days/wk)',
+  '1.55':'Moderate (4–5 days/wk)',
+  '1.725':'Active (6–7 days/wk)',
+  '1.9':'Very active (2× daily)'
+};
+const GOAL_LABELS = { bulk:'Bulk — build muscle', recomp:'Recomp — build & burn', cut:'Cut — lose fat' };
+const GOAL_COLORS = { bulk:'#2ed573', recomp:'#f5c842', cut:'#ff4757' };
+
+function renderProfile(){
+  const p = S.profile || {};
+  const g = S.goal || {};
+  const r = S.rpg;
+  const lv = getLv(r.xp);
+
+  // Identity card
+  const initials = (p.name||'?').charAt(0).toUpperCase();
+  document.getElementById('profile-avatar').textContent = initials;
+  document.getElementById('profile-display-name').textContent = p.name || 'Set your name';
+  document.getElementById('profile-display-level').textContent = lv.name + ' · Level ' + (lv.i+1);
+  document.getElementById('profile-display-stats').textContent =
+    r.sc + ' sessions · ' + r.xp + ' XP · ' + (r.streak||0) + ' day streak';
+
+  // Goal banner
+  const goalColor = GOAL_COLORS[g.type] || 'var(--gold)';
+  const goalLabel = GOAL_LABELS[g.type] || 'No goal set';
+  const weeksIn = g.startDate ? Math.max(0,Math.round((new Date()-new Date(g.startDate))/(7*86400000))) : 0;
+  const weeksLeft = g.weeks ? Math.max(0, g.weeks - weeksIn) : 0;
+  const banner = document.getElementById('profile-goal-banner');
+  banner.style.background = goalColor + '12';
+  banner.style.border = '1px solid ' + goalColor + '44';
+  banner.innerHTML = `
+    <div>
+      <div style="font-family:var(--fd);font-size:20px;color:${goalColor};letter-spacing:1px">${goalLabel}</div>
+      <div style="font-size:12px;color:var(--muted);margin-top:4px">
+        ${g.startDate ? 'Week '+weeksIn+' of '+g.weeks+' · '+weeksLeft+' weeks left' : 'Complete profile to set a goal'}
+      </div>
+    </div>
+    <div style="text-align:right">
+      <div style="font-family:var(--fd);font-size:24px;color:${goalColor}">${S.nt?.targets?.cal||'—'}</div>
+      <div style="font-size:10px;color:var(--muted);text-transform:uppercase">kcal / day</div>
+    </div>`;
+
+  // Profile rows
+  const sex = p.sex==='f' ? 'Female' : 'Male';
+  const ht = p.ht ? `${p.ht}" (${Math.floor(p.ht/12)}'${p.ht%12}")` : '—';
+  document.getElementById('pf-name').textContent = p.name || '—';
+  document.getElementById('pf-age').textContent = p.age ? p.age + ' yrs' : '—';
+  document.getElementById('pf-sex').textContent = p.sex ? sex : '—';
+  document.getElementById('pf-wt').textContent = p.wt ? p.wt + ' lbs' : '—';
+  document.getElementById('pf-ht').textContent = ht;
+  document.getElementById('pf-act').textContent = ACT_LABELS[String(p.act)] || '—';
+  document.getElementById('pf-goal').textContent = GOAL_LABELS[g.type] || '—';
+  document.getElementById('pf-weeks').textContent = g.weeks ? g.weeks + ' weeks' : '—';
+  document.getElementById('pf-started').textContent = g.startDate
+    ? new Date(g.startDate).toLocaleDateString('en-CA',{month:'short',day:'numeric',year:'numeric'})
+    : '—';
+
+  // Nutrition targets
+  const t = S.nt?.targets || {};
+  const targEl = document.getElementById('profile-targets');
+  const tileHtml = (val, label, color) =>
+    `<div style="background:var(--bg3);border-radius:10px;padding:12px;text-align:center">
+      <div style="font-family:var(--fd);font-size:22px;color:${color}">${val||'—'}</div>
+      <div style="font-size:10px;color:var(--muted);text-transform:uppercase;margin-top:2px">${label}</div>
+    </div>`;
+  targEl.innerHTML =
+    tileHtml(t.cal ? t.cal+' kcal' : null, 'Calories', 'var(--gold)') +
+    tileHtml(t.pro ? t.pro+'g' : null, 'Protein', '#4fc3f7') +
+    tileHtml(t.carb ? t.carb+'g' : null, 'Carbs', '#2ed573') +
+    tileHtml(t.fat ? t.fat+'g' : null, 'Fat', '#f5c842');
+
+  // AI status
+  const {provider, key} = getStoredAPI();
+  const aiEl = document.getElementById('pf-ai-status');
+  if(aiEl) aiEl.textContent = key
+    ? '✅ ' + (AI_PROVIDERS[provider]?.label || provider)
+    : 'Not set up';
+}
+
+// ── INLINE FIELD EDITING ─────────────────────────────────────────
+let _editingField = null;
+
+function editProfileField(field) {
+  _editingField = field;
+  const modal = document.getElementById('profile-edit-modal');
+  const title = document.getElementById('profile-edit-title');
+  const body = document.getElementById('profile-edit-body');
+  const p = S.profile || {};
+  const g = S.goal || {};
+
+  const configs = {
+    name: {
+      label: 'Your name',
+      html: `<input class="input-field" type="text" id="pf-edit-val" placeholder="e.g. Chintan" value="${p.name||''}" autocomplete="given-name" style="width:100%;font-size:16px">`
+    },
+    age: {
+      label: 'Age',
+      html: `<div class="input-row"><input class="input-field" type="number" id="pf-edit-val" placeholder="35" value="${p.age||''}" min="16" max="80"><div class="input-unit">yrs</div></div>`
+    },
+    sex: {
+      label: 'Sex',
+      html: `<div style="display:flex;flex-direction:column;gap:10px">
+        <button onclick="setPFSex('m')" id="pf-sex-m" style="padding:14px;border-radius:12px;border:2px solid ${p.sex==='m'?'var(--gold)':'var(--border)'};background:${p.sex==='m'?'rgba(245,200,66,.08)':'var(--bg3)'};color:${p.sex==='m'?'var(--gold)':'var(--text)'};font-family:var(--fb);font-size:14px;font-weight:600;cursor:pointer">Male</button>
+        <button onclick="setPFSex('f')" id="pf-sex-f" style="padding:14px;border-radius:12px;border:2px solid ${p.sex==='f'?'var(--gold)':'var(--border)'};background:${p.sex==='f'?'rgba(245,200,66,.08)':'var(--bg3)'};color:${p.sex==='f'?'var(--gold)':'var(--text)'};font-family:var(--fb);font-size:14px;font-weight:600;cursor:pointer">Female</button>
+      </div><input type="hidden" id="pf-edit-val" value="${p.sex||'m'}">`
+    },
+    wt: {
+      label: 'Body weight',
+      html: `<div class="input-row"><input class="input-field" type="number" id="pf-edit-val" placeholder="155" value="${p.wt||''}" step="0.5" min="80" max="400"><div class="input-unit">lbs</div></div>
+      <div style="font-size:12px;color:var(--muted);margin-top:8px">This updates your TDEE and macro targets when you recalculate.</div>`
+    },
+    ht: {
+      label: 'Height',
+      html: `<div class="input-row"><input class="input-field" type="number" id="pf-edit-val" placeholder="71" value="${p.ht||''}" step="1" min="48" max="96"><div class="input-unit">inches</div></div>
+      <div style="font-size:12px;color:var(--muted);margin-top:8px">${p.ht ? `${Math.floor((p.ht||0)/12)}'${(p.ht||0)%12}" — enter total inches` : 'Enter total inches (e.g. 71 = 5\'11")'}</div>`
+    },
+    act: {
+      label: 'Activity level',
+      html: `<select class="input-field" id="pf-edit-val" style="cursor:pointer">
+        ${Object.entries(ACT_LABELS).map(([v,l])=>`<option value="${v}" ${String(p.act)===v?'selected':''}>${l}</option>`).join('')}
+      </select>`
+    },
+    goal: {
+      label: 'Goal type',
+      html: `<div style="display:flex;flex-direction:column;gap:10px">
+        ${['bulk','recomp','cut'].map(gt=>`
+        <button onclick="setPFGoal('${gt}')" id="pf-goal-${gt}" style="padding:14px;border-radius:12px;border:2px solid ${g.type===gt?GOAL_COLORS[gt]:'var(--border)'};background:${g.type===gt?GOAL_COLORS[gt]+'12':'var(--bg3)'};color:${g.type===gt?GOAL_COLORS[gt]:'var(--text)'};font-family:var(--fb);font-size:14px;font-weight:600;cursor:pointer;text-align:left">
+          <div>${GOAL_LABELS[gt]}</div>
+          <div style="font-size:11px;font-weight:400;opacity:.7;margin-top:2px">${gt==='bulk'?'+250 kcal surplus':gt==='recomp'?'Maintenance calories':'−400 kcal deficit'}</div>
+        </button>`).join('')}
+      </div><input type="hidden" id="pf-edit-val" value="${g.type||'recomp'}">`
+    },
+    weeks: {
+      label: 'Goal timeline',
+      html: `<div class="input-row"><input class="input-field" type="number" id="pf-edit-val" placeholder="12" value="${g.weeks||12}" min="4" max="52"><div class="input-unit">weeks</div></div>
+      <div style="font-size:12px;color:var(--muted);margin-top:8px">12 weeks is recommended for a first goal cycle.</div>`
+    }
+  };
+
+  const cfg = configs[field];
+  if(!cfg) return;
+  title.textContent = cfg.label;
+  body.innerHTML = cfg.html;
+  modal.style.display = 'flex';
+  // Auto-focus text/number inputs
+  setTimeout(()=>{ const inp=document.getElementById('pf-edit-val'); if(inp&&inp.type!=='hidden')inp.focus(); },100);
+}
+
+function setPFSex(val) {
+  document.getElementById('pf-edit-val').value = val;
+  ['m','f'].forEach(s => {
+    const btn = document.getElementById('pf-sex-'+s);
+    if(btn) {
+      btn.style.borderColor = s===val ? 'var(--gold)' : 'var(--border)';
+      btn.style.background = s===val ? 'rgba(245,200,66,.08)' : 'var(--bg3)';
+      btn.style.color = s===val ? 'var(--gold)' : 'var(--text)';
+    }
+  });
+}
+
+function setPFGoal(val) {
+  document.getElementById('pf-edit-val').value = val;
+  ['bulk','recomp','cut'].forEach(g => {
+    const btn = document.getElementById('pf-goal-'+g);
+    if(btn) {
+      const c = GOAL_COLORS[g];
+      btn.style.borderColor = g===val ? c : 'var(--border)';
+      btn.style.background = g===val ? c+'12' : 'var(--bg3)';
+      btn.style.color = g===val ? c : 'var(--text)';
+    }
+  });
+}
+
+function saveProfileField() {
+  if(!_editingField) return;
+  const inp = document.getElementById('pf-edit-val');
+  const val = inp?.value?.trim();
+  if(!val) { toast('Please enter a value','red'); return; }
+
+  if(!S.profile) S.profile = {name:'',age:0,sex:'m',wt:0,ht:0,act:1.55};
+  if(!S.goal) S.goal = {type:'recomp',weeks:12,startDate:'',startWt:0,targetCal:0};
+
+  switch(_editingField) {
+    case 'name': S.profile.name = val; break;
+    case 'age':
+      const age = parseInt(val);
+      if(isNaN(age)||age<16||age>80) { toast('Enter a valid age (16–80)','red'); return; }
+      S.profile.age = age; break;
+    case 'sex': S.profile.sex = val; break;
+    case 'wt':
+      const wt = parseFloat(val);
+      if(isNaN(wt)||wt<80||wt>400) { toast('Enter a valid weight in lbs','red'); return; }
+      S.profile.wt = wt; break;
+    case 'ht':
+      const ht = parseInt(val);
+      if(isNaN(ht)||ht<48||ht>96) { toast('Enter height in inches (e.g. 71 for 5\'11\")','red'); return; }
+      S.profile.ht = ht; break;
+    case 'act': S.profile.act = parseFloat(val); break;
+    case 'goal': S.goal.type = val; break;
+    case 'weeks':
+      const wks = parseInt(val);
+      if(isNaN(wks)||wks<4||wks>52) { toast('Timeline must be 4–52 weeks','red'); return; }
+      S.goal.weeks = wks; break;
+  }
+
+  saveS();
+  closeProfileEdit();
+  renderProfile();
+  renderDash(); // refresh dashboard name
+  toast('✅ Saved','green');
+}
+
+function closeProfileEdit() {
+  document.getElementById('profile-edit-modal').style.display = 'none';
+  _editingField = null;
+}
+
+function recalcTargets() {
+  const p = S.profile;
+  const g = S.goal;
+  if(!p||!p.wt||!p.ht||!p.age) {
+    toast('Complete your profile first — weight, height, and age are required','red');
+    return;
+  }
+  const wKg = p.wt/2.205;
+  const hCm = p.ht*2.54;
+  const bmr = p.sex==='f'
+    ? 10*wKg + 6.25*hCm - 5*p.age - 161
+    : 10*wKg + 6.25*hCm - 5*p.age + 5;
+  const tdee = Math.round(bmr * (p.act||1.55));
+  const offsets = {bulk:250, recomp:0, cut:-400};
+  const targetCal = tdee + (offsets[g?.type||'recomp']||0);
+  const pro = Math.round(p.wt*0.82);
+  const fat = Math.round(targetCal*0.25/9);
+  const carb = Math.round((targetCal - pro*4 - fat*9)/4);
+  if(!S.nt) S.nt = {meals:[],tdee:0,targets:{cal:0,pro:0,carb:0,fat:0}};
+  S.nt.tdee = tdee;
+  S.nt.targets = {cal:targetCal, pro, carb, fat};
+  if(S.goal) S.goal.targetCal = targetCal;
+  saveS();
+  renderProfile();
+  toast('✅ Targets updated','green');
 }
 
 // INIT
