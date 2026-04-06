@@ -3,7 +3,8 @@
 > A fully functional fitness tracking web app built entirely through human-AI collaboration, applying professional project management methodology from discovery to delivery.
 
 [![Status](https://img.shields.io/badge/status-active-2ed573)](#)
-[![Version](https://img.shields.io/badge/version-3.0-f5c842)](#)
+[![Version](https://img.shields.io/badge/version-3.1-f5c842)](#)
+[![Status](https://img.shields.io/badge/status-complete-2ed573)](#)
 [![Built With](https://img.shields.io/badge/built%20with-Claude%20AI-b39ddb)](#)
 [![License](https://img.shields.io/badge/license-MIT-4fc3f7)](#)
 
@@ -52,6 +53,13 @@ This repository is also a live demonstration of what modern AI-assisted project 
 - Guided 4-step onboarding wizard — profile, goal, timeline, targets
 - Daily caloric balance: meals consumed vs estimated session calories burned
 - Weekly goal progress tracking with on-track/off-track indicator
+
+### 👤 Profile (v3.1)
+- Identity card: avatar, name, level, sessions, XP, streak
+- Inline editing for all fields: name, age, sex, weight, height, activity, goal, timeline
+- Recalculate TDEE and macros on demand
+- Goal progress banner with weeks in / weeks remaining
+- Quick links to Program, Progress charts, and AI settings
 
 ### 🤖 AI Coaching (v3.0)
 - Bring your own API key — OpenAI (GPT-4o) or Google Gemini (2.0-flash-lite), both free-tier friendly
@@ -202,9 +210,8 @@ Zero budget + no coding background + personal use = the simplest architecture th
 | v2.0 | Nutrition module — TDEE, macros, meal logging, 7th radar axis | ✅ Released |
 | v2.1 | Program customisation — custom exercises, swap, Train integration | ✅ Released |
 | v3.0 | AI coaching, onboarding wizard, physique goals, caloric balance, post-workout analysis | ✅ Released |
-| v4.0 | Multi-profile support, cloud sync, Apple Health / Google Fit | 🔭 Next |
-| v2.1 | Export & backup — download data from within app | 📋 Planned |
-| v3.0 | Claude API integration — live AI coaching | 🔭 Future |
+| v3.1 | Profile page — identity card, inline editing, goal management (final release) | ✅ Released |
+| v4.0+ | Multi-profile, cloud sync, wearables — designed, not built (scope decision) | 🚫 Descoped |
 
 ---
 
