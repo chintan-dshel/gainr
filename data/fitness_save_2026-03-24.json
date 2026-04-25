@@ -1,0 +1,233 @@
+{
+  "meta": {
+    "version": "1.0",
+    "created": "2026-03-24",
+    "last_updated": "2026-03-24",
+    "project": "AI Personal Fitness Platform",
+    "save_instructions": "Paste this entire block at the start of every Claude session to restore full context"
+  },
+
+  "profile": {
+    "sex": "male",
+    "age_bracket": "late 30s",
+    "height_cm": 180,
+    "height_in": 70.9,
+    "weight_lbs": 155,
+    "weight_kg": 70.3,
+    "bmi": 21.7,
+    "estimated_body_fat_pct": 18.6,
+    "estimated_fat_mass_lbs": 28.8,
+    "estimated_lean_mass_lbs": 126.2,
+    "experience": "early_intermediate",
+    "training_days_per_week": 5,
+    "session_duration_mins": "60-90",
+    "gym": "Anytime Fitness Fort York, 177 Fort York Blvd, Toronto ON, 24/7",
+    "units_primary": "imperial",
+    "units_secondary": "metric",
+    "injuries": "none"
+  },
+
+  "health_markers": {
+    "date": "2026-03-24",
+    "bmi": 21.7,
+    "bmi_status": "healthy",
+    "waist_to_height_ratio": 0.50,
+    "waist_to_height_status": "borderline — monitor",
+    "waist_to_hip_ratio": 0.91,
+    "waist_to_hip_status": "slightly elevated — target under 0.90",
+    "recheck_date": "2026-04-21"
+  },
+
+  "goals": {
+    "primary": ["body_recomposition", "muscle_gain", "fat_loss", "general_health"],
+    "secondary": ["endurance"],
+    "approach": "simultaneous_recomp",
+    "body_fat_target_pct": 12,
+    "fat_to_lose_lbs": 10.2,
+    "notes": "Early intermediate recomp window active. Maintenance calories + high protein + progressive overload = optimal approach"
+  },
+
+  "nutrition_targets": {
+    "status": "preliminary — full module Phase 5",
+    "bmr_calories": 1643,
+    "tdee_calories": 2547,
+    "recomp_calorie_target": 2547,
+    "protein_target_g": 127,
+    "protein_per_lb": 0.82,
+    "dietary_approach": "high_protein_focus",
+    "notes": "Eat at TDEE, hit protein target daily — this drives recomp"
+  },
+
+  "rpg": {
+    "overall_level": 1,
+    "title": "Recruit",
+    "next_title": "Warrior",
+    "xp_total": 0,
+    "xp_to_next_level": 500,
+    "stats": {
+      "strength":    {"level": 1, "xp": 0, "note": "Tracks progressive overload across all lifts"},
+      "endurance":   {"level": 1, "xp": 0, "note": "Tracks cardio, walking, session duration"},
+      "consistency": {"level": 1, "xp": 0, "note": "Tracks session streaks and weekly adherence"},
+      "nutrition":   {"level": 1, "xp": 0, "note": "Tracks protein targets and calorie adherence"},
+      "recovery":    {"level": 1, "xp": 0, "note": "Tracks sleep, deload compliance, rest days"}
+    },
+    "level_thresholds": {
+      "Recruit":   "0 — 499 XP",
+      "Warrior":   "500 — 1499 XP",
+      "Beast":     "1500 — 3499 XP",
+      "Olympian":  "3500+ XP"
+    },
+    "xp_rules": {
+      "completed_workout_session": 10,
+      "hit_progressive_overload_on_lift": 5,
+      "completed_full_training_week": 25,
+      "completed_deload_week": 15,
+      "personal_record_on_any_lift": 20,
+      "hit_protein_target": 5,
+      "logged_sleep": 3,
+      "logged_steps": 3,
+      "completed_daily_checkin": 5,
+      "first_unassisted_pullup": 50
+    },
+    "badges": [],
+    "badge_definitions": {
+      "First Blood":        "Complete your first session with new program",
+      "Consistent Recruit": "Complete 4 weeks without missing a session",
+      "Iron Will":          "Hit progressive overload 10 sessions in a row",
+      "Pull Up Warrior":    "Reduce assisted pull-up weight by 30 lbs",
+      "Deadlift Initiate":  "Conventional deadlift 135 lbs",
+      "Century Squat":      "Squat 225 lbs",
+      "Lean Machine":       "Reduce waist-to-hip ratio below 0.90",
+      "Warrior Unlocked":   "Reach 500 XP"
+    },
+    "session_count": 0,
+    "current_streak_days": 0,
+    "longest_streak_days": 0,
+    "last_session_date": null
+  },
+
+  "tracking": {
+    "weight_log": [
+      {
+        "date": "2026-03-24",
+        "lbs": 155,
+        "kg": 70.3,
+        "notes": "Baseline — start of program v2.0"
+      }
+    ],
+    "measurements_log": [
+      {
+        "date": "2026-03-24",
+        "chest_in": 40.0,
+        "waist_in": 35.5,
+        "hips_in": 39.0,
+        "right_arm_in": 13.0,
+        "left_arm_in": 13.5,
+        "right_thigh_in": 24.0,
+        "left_thigh_in": 24.0,
+        "chest_cm": 101.6,
+        "waist_cm": 90.2,
+        "hips_cm": 99.1,
+        "right_arm_cm": 33.0,
+        "left_arm_cm": 34.3,
+        "right_thigh_cm": 61.0,
+        "left_thigh_cm": 61.0,
+        "notes": "Official baseline — program v2.0 start. Next measurement: 2026-04-21"
+      }
+    ],
+    "sleep_log": [],
+    "steps_log": [],
+    "checkin_log": [],
+    "next_measurement_date": "2026-04-21"
+  },
+
+  "current_program": {
+    "name": "Optimised PPLUL v2.0",
+    "version": "2.0",
+    "started": "2026-03-30",
+    "type": "hypertrophy_strength_hybrid",
+    "science_principles": [
+      "Progressive overload — add weight when all target reps achieved with 0-2 RIR",
+      "Dual frequency — each muscle group hit twice per week",
+      "PPL days = hypertrophy focus (8-15 reps), UL days = strength focus (4-8 reps)",
+      "Compound movements anchor every session",
+      "Deload every 4th week at 30-40% reduction"
+    ],
+    "schedule": {
+      "sunday":    "Push — hypertrophy (Chest / Shoulders / Triceps)",
+      "monday":    "Pull — hypertrophy (Back / Biceps / Rear Delts)",
+      "tuesday":   "Legs — hypertrophy (Quads / Hamstrings / Glutes / Calves)",
+      "wednesday": "Rest",
+      "thursday":  "Upper — strength (Full Upper Body)",
+      "friday":    "Lower — strength (Full Lower Body)",
+      "saturday":  "Rest"
+    },
+    "baseline_weights": {
+      "push": {
+        "barbell_bench_press":        "65-75 lbs — new movement, build fast",
+        "incline_db_press":           "40 lbs each hand",
+        "cable_chest_fly":            "50 lbs",
+        "lateral_raise_db":           "20 lbs",
+        "tricep_rope_pushdown":       "65 lbs",
+        "overhead_tricep_extension":  "40 lbs — new movement",
+        "cable_crunch":               "105 lbs"
+      },
+      "pull": {
+        "pullup_assisted":            "60 lbs assistance — reduce 5 lbs every 2 weeks",
+        "lat_pulldown":               "105 lbs",
+        "seated_cable_row_vgrip":     "110 lbs",
+        "rear_delt_reverse_fly":      "80 lbs",
+        "bicep_curl_db":              "30 lbs each hand",
+        "hammer_curl_cable":          "70 lbs"
+      },
+      "legs": {
+        "squat_barbell":              "145 lbs",
+        "romanian_deadlift":          "155 lbs",
+        "leg_press":                  "250 lbs",
+        "seated_leg_curl":            "120 lbs",
+        "seated_calf_raise":          "110 lbs"
+      },
+      "upper": {
+        "overhead_press_barbell":     "75 lbs",
+        "tbar_row":                   "45 lbs",
+        "incline_db_press":           "40 lbs each hand",
+        "single_arm_lat_pulldown":    "55 lbs",
+        "lateral_raise_machine":      "55 lbs",
+        "tricep_extension_machine":   "65 lbs",
+        "preacher_curl":              "60 lbs"
+      },
+      "lower": {
+        "conventional_deadlift":      "95 lbs — new movement, form first",
+        "hip_thrust_machine":         "230 lbs",
+        "bulgarian_split_squat":      "30 lbs",
+        "leg_extension":              "100 lbs",
+        "standing_leg_curl":          "50 lbs"
+      }
+    },
+    "deload_schedule": {
+      "frequency":        "every_4_weeks",
+      "reduction":        "30-40 percent",
+      "last_deload":      "week of 2026-03-23",
+      "next_deload":      "week of 2026-04-20",
+      "current_week":     1
+    },
+    "pullup_progression": {
+      "current_assistance_lbs": 60,
+      "reduce_by_lbs":          5,
+      "reduce_every_weeks":     2,
+      "next_reduction_date":    "2026-04-06",
+      "goal":                   "unassisted pull-up"
+    }
+  },
+
+  "workout_history": [],
+
+  "session_log": [],
+
+  "notes": [
+    "Smith Machine bench outlier on 2026-03-22 (60 lbs) ignored — true baseline is Week 11 peak",
+    "Current week is deload week — new program starts week of 2026-03-30",
+    "Left arm 0.5 inch larger than right — track for imbalance correction over time",
+    "Waist-to-hip ratio 0.91 — target under 0.90, recheck 2026-04-21"
+  ]
+}
